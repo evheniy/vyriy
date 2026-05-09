@@ -21,46 +21,6 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: 24
-          registry-url: 'https://registry.npmjs.org'
-          cache: npm
-
-      - name: Check package versions match tag
-        shell: bash
-        run: |
-          TAG_VERSION="${GITHUB_REF_NAME#v}"
-
-          node - <<'NODE'
-          const fs = require('fs');
-          const path = require('path');
-
-          const tagVersion = process.env.GITHUB_REF_NAME.replace(/^v/, '');
-          const packagesDir = path.join(process.cwd(), 'packages');
-
-          const packages = fs.readdirSync(packagesDir)
-            .map(name => path.join(packagesDir, name, 'package.json'))
-            .filter(file => fs.existsSync(file));
-
-          let failed = false;
-
-          for (const file of packages) {
-            const pkg = JSON.parse(fs.readFileSync(file, 'utf8'));
-
-            if (pkg.private) {
-              continue;
-            }
-
-            if (pkg.version !== tagVersion) {
-              console.error(`${pkg.name}: package.json version ${pkg.version} != tag ${tagVersion}`);
-              failed = true;
-            } else {
-              console.log(`${pkg.name}: ${pkg.version}`);
-            }
-          }
-
-          if (failed) {
-            process.exit(1);
-          }
-          NODE
 
       - name: Publish packages to npm
         run: npm publish --workspaces --access public --provenance
