@@ -24,4 +24,4 @@ jobs:
           registry-url: 'https://registry.npmjs.org/'
 
       - name: Publish packages to npm
-        run: npm publish --workspaces --access public --provenance
+        run: npm publish --workspaces --access public
