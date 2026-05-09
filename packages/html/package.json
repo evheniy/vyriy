@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/html",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "HTML document utility for Vyriy projects",
   "type": "module",
   "main": "./index.js",
