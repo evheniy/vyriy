@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/router",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Router utility for Vyriy projects",
   "type": "module",
   "main": "./index.js",

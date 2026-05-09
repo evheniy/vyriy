@@ -1,4 +1,3 @@
-import { AwsRegion, GetEnvWithValue } from './types.js';
-export declare const getCdkAccount: GetEnvWithValue;
-export declare const getCdkRegion: GetEnvWithValue<AwsRegion>;
-export declare const getStack: GetEnvWithValue;
+export declare const getCdkAccount: () => string;
+export declare const getCdkRegion: () => string;
+export declare const getStack: () => string;

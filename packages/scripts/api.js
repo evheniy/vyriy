@@ -11,5 +11,5 @@ export const api = (stackApiResource = 'ApiGatewayUrl', healthcheckUrl = 'health
     const testingUrl = `${url}${healthcheckUrl}`;
     logger.info(`Testing: ${testingUrl}`);
     await retry(async () => request(testingUrl), { retries: 2, delay: 2000 });
-    logger.info('\nAPI Smoke testing finished!');
+    logger.info('API Smoke testing finished!');
 });

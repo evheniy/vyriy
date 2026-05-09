@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/env",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Shared env utility for Vyriy projects",
   "type": "module",
   "main": "./index.js",
@@ -36,16 +36,6 @@
       "types": "./cdk.d.ts",
       "import": "./cdk.js",
       "default": "./cdk.js"
-    },
-    "./chaos": {
-      "types": "./chaos.d.ts",
-      "import": "./chaos.js",
-      "default": "./chaos.js"
-    },
-    "./chaos.js": {
-      "types": "./chaos.d.ts",
-      "import": "./chaos.js",
-      "default": "./chaos.js"
     },
     "./ecs": {
       "types": "./ecs.d.ts",
@@ -126,16 +116,6 @@
       "types": "./stage.d.ts",
       "import": "./stage.js",
       "default": "./stage.js"
-    },
-    "./types": {
-      "types": "./types.d.ts",
-      "import": "./types.js",
-      "default": "./types.js"
-    },
-    "./types.js": {
-      "types": "./types.d.ts",
-      "import": "./types.js",
-      "default": "./types.js"
     },
     "./vpc": {
       "types": "./vpc.d.ts",

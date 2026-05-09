@@ -68,13 +68,6 @@ CI / local tooling:
 - `getLocalstackPort()`
 - `getLogLevel()`
 
-Chaos:
-
-- `getChaosEnabled()`
-- `getChaosErrorEnabled()`
-- `getChaosTimeoutEnabled()`
-- `getChaosTimeoutMs()`
-
 Server:
 
 - `getPort()`
@@ -100,6 +93,5 @@ Stage helpers:
 
 - `existsEnv` only checks whether the variable is defined.
 - `getEnv` throws if the variable is missing and no default value is provided.
-- chaos helpers default to `CHAOS_ENABLED=false`, `CHAOS_ERROR_ENABLED=true`, `CHAOS_TIMEOUT_ENABLED=true`, and `CHAOS_TIMEOUT_MS=1000`.
 - Stage helpers are based on the `STAGE` environment variable.
 - `getNodeEnv` defaults to `'development'`.

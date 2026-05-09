@@ -1,5 +1,4 @@
-import { GetEnvWithValue } from './types.js';
-export declare const getEcsClusterName: GetEnvWithValue;
-export declare const getEcsTaskDefinition: GetEnvWithValue;
-export declare const getEcsContainerName: GetEnvWithValue;
-export declare const getTask: GetEnvWithValue;
+export declare const getEcsClusterName: () => string;
+export declare const getEcsTaskDefinition: () => string;
+export declare const getEcsContainerName: () => string;
+export declare const getTask: () => string;

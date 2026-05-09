@@ -253,16 +253,16 @@ Options:
 ```
 
 - `enabled`
-  Turns chaos injection on. By default the wrapper reads `CHAOS_ENABLED` from `@vyriy/env`.
+  Turns chaos injection on. By default the wrapper reads `CHAOS_ENABLED` through `@vyriy/config`.
 
 - `probability`
-  Probability from `0` to `1` that a failure is injected. By default the wrapper reads `CHAOS_PROBABILITY`.
+  Probability from `0` to `1` that a failure is injected.
 
 - `strategy`
   Chooses whether to throw an error, wait and time out, or pick one randomly. Defaults to `'random'`.
 
 - `timeoutMs`
-  Timeout delay used when the timeout strategy is selected. By default the wrapper reads `CHAOS_TIMEOUT_MS`.
+  Timeout delay used when the timeout strategy is selected. By default the wrapper reads `CHAOS_TIMEOUT_MS` through `@vyriy/config`.
 
 - `error`
   Error value normalized through `@vyriy/error` when the error strategy is selected.

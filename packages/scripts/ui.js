@@ -11,7 +11,7 @@ export const ui = (resourceName = 'DistributionUrl', hasJs = true) => script(asy
         delay: 2000,
     };
     const uiUrl = output()[resourceName];
-    logger.info('\nUI domain:', uiUrl);
+    logger.info('UI domain:', uiUrl);
     await retry(async () => {
         logger.info(`Testing: ${uiUrl}`);
         await request(uiUrl);

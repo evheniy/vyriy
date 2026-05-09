@@ -1,6 +1,10 @@
 import { chaos } from '@vyriy/chaos';
-import { getChaosEnabled, getChaosErrorEnabled, getChaosTimeoutEnabled, getChaosTimeoutMs } from '@vyriy/env';
+import { getConfig } from '@vyriy/config';
 import { factory } from '../factory.js';
+const getChaosEnabled = () => getConfig('CHAOS_ENABLED', false, 'boolean');
+const getChaosErrorEnabled = () => getConfig('CHAOS_ERROR_ENABLED', true, 'boolean');
+const getChaosTimeoutEnabled = () => getConfig('CHAOS_TIMEOUT_ENABLED', true, 'boolean');
+const getChaosTimeoutMs = () => getConfig('CHAOS_TIMEOUT_MS', 10000, 'number');
 const getStrategy = (options) => {
     if (options.strategy) {
         return options.strategy;

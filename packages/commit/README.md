@@ -30,7 +30,7 @@ yarn add @vyriy/commit
 
 ## Usage
 
-Example `bin/commit.js`:
+Example `.bin/commit.js`:
 
 ```js
 #!/usr/bin/env node
@@ -58,7 +58,7 @@ Example `.husky/commit-msg`:
 ```sh
 #!/bin/sh
 
-node bin/commit.js
+node .bin/commit.js
 ```
 
 ## API

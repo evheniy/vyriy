@@ -1,4 +1,3 @@
-import { GetEnvWithValue } from './types.js';
-export declare const getVpc: GetEnvWithValue;
-export declare const getVpcSecurityGroup: GetEnvWithValue;
-export declare const getVpcSubnets: GetEnvWithValue;
+export declare const getVpc: () => string;
+export declare const getVpcSecurityGroup: () => string;
+export declare const getVpcSubnets: () => string;
