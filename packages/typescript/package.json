@@ -1,11 +1,16 @@
 {
   "name": "@vyriy/typescript-config",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "Shared TypeScript configs for Vyriy projects",
   "type": "module",
   "main": "index.json",
   "dependencies": {
     "typescript": "^6.0.3"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/typescript"
+  }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/stack",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "AWS CDK stack helpers for Vyriy infrastructure",
   "type": "module",
   "main": "./index.js",
@@ -9,6 +9,11 @@
     "constructs": "^10.6.0"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/stack"
+  },
   "types": "./index.d.ts",
   "exports": {
     ".": {

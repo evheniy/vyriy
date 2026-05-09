@@ -1,13 +1,18 @@
 {
   "name": "@vyriy/config",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "Environment config parsing utility for Vyriy projects",
   "type": "module",
   "main": "./index.js",
   "dependencies": {
-    "@vyriy/env": "0.1.11"
+    "@vyriy/env": "0.1.12"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/config"
+  },
   "types": "./index.d.ts",
   "exports": {
     ".": {

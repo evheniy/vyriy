@@ -1,17 +1,22 @@
 {
   "name": "@vyriy/server",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "Small HTTP server adapter for Lambda-style Vyriy handlers",
   "type": "module",
   "main": "./index.js",
   "dependencies": {
     "@types/aws-lambda": "^8.10.161",
-    "@vyriy/env": "0.1.11",
-    "@vyriy/error": "0.1.11",
-    "@vyriy/handler": "0.1.11",
-    "@vyriy/logger": "0.1.11"
+    "@vyriy/env": "0.1.12",
+    "@vyriy/error": "0.1.12",
+    "@vyriy/handler": "0.1.12",
+    "@vyriy/logger": "0.1.12"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/server"
+  },
   "types": "./index.d.ts",
   "exports": {
     ".": {

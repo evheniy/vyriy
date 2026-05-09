@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/storybook-config",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "Shared Storybook config for Vyriy projects",
   "type": "module",
   "main": "./main.js",
@@ -15,6 +15,11 @@
     "style-loader": "^4.0.0"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/storybook"
+  },
   "types": "./main.d.ts",
   "exports": {
     ".": {

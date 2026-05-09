@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/hoc",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "React higher-order component utilities for Vyriy projects",
   "type": "module",
   "main": "./index.js",
@@ -9,6 +9,11 @@
     "react": "^19.2.6"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/hoc"
+  },
   "types": "./index.d.ts",
   "exports": {
     ".": {

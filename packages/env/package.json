@@ -1,10 +1,15 @@
 {
   "name": "@vyriy/env",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "Shared env utility for Vyriy projects",
   "type": "module",
   "main": "./index.js",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/env"
+  },
   "types": "./index.d.ts",
   "exports": {
     ".": {
