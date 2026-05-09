@@ -1,11 +1,11 @@
 {
   "name": "@vyriy/exec",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "Command execution utility for Vyriy projects",
   "type": "module",
   "main": "./index.js",
   "dependencies": {
-    "@vyriy/logger": "0.1.10"
+    "@vyriy/logger": "0.1.11"
   },
   "license": "MIT",
   "types": "./index.d.ts",

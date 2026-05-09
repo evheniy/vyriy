@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/webpack-config",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "Shared Webpack config for Vyriy projects",
   "type": "module",
   "main": "./index.js",
@@ -12,8 +12,8 @@
     "@babel/preset-typescript": "^7.28.5",
     "@babel/runtime": "^7.29.2",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.2",
-    "@vyriy/env": "0.1.10",
-    "@vyriy/path": "0.1.10",
+    "@vyriy/env": "0.1.11",
+    "@vyriy/path": "0.1.11",
     "babel-loader": "^10.1.1",
     "css-loader": "^7.1.4",
     "cssnano": "^8.0.1",
