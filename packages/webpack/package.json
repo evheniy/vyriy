@@ -1,0 +1,142 @@
+{
+  "name": "@vyriy/webpack-config",
+  "version": "0.1.9",
+  "description": "Shared Webpack config for Vyriy projects",
+  "type": "module",
+  "main": "./index.js",
+  "dependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/plugin-transform-runtime": "^7.29.0",
+    "@babel/preset-env": "^7.29.5",
+    "@babel/preset-react": "^7.28.5",
+    "@babel/preset-typescript": "^7.28.5",
+    "@babel/runtime": "^7.29.2",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.6.2",
+    "@vyriy/env": "0.1.9",
+    "@vyriy/path": "0.1.9",
+    "babel-loader": "^10.1.1",
+    "css-loader": "^7.1.4",
+    "cssnano": "^8.0.1",
+    "mini-css-extract-plugin": "^2.10.2",
+    "null-loader": "^4.0.1",
+    "postcss": "^8.5.14",
+    "postcss-loader": "^8.2.1",
+    "postcss-preset-env": "^11.2.1",
+    "react-refresh": "^0.18.0",
+    "sass": "^1.99.0",
+    "sass-loader": "^16.0.8",
+    "style-loader": "^4.0.0",
+    "terser-webpack-plugin": "^5.6.0",
+    "webpack": "^5.106.2",
+    "webpack-cli": "^7.0.2"
+  },
+  "license": "MIT",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./babel": {
+      "types": "./babel.d.ts",
+      "import": "./babel.js",
+      "default": "./babel.js"
+    },
+    "./babel.js": {
+      "types": "./babel.d.ts",
+      "import": "./babel.js",
+      "default": "./babel.js"
+    },
+    "./csr": {
+      "types": "./csr.d.ts",
+      "import": "./csr.js",
+      "default": "./csr.js"
+    },
+    "./csr.js": {
+      "types": "./csr.d.ts",
+      "import": "./csr.js",
+      "default": "./csr.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./mode": {
+      "types": "./mode.d.ts",
+      "import": "./mode.js",
+      "default": "./mode.js"
+    },
+    "./mode.js": {
+      "types": "./mode.d.ts",
+      "import": "./mode.js",
+      "default": "./mode.js"
+    },
+    "./optimization": {
+      "types": "./optimization.d.ts",
+      "import": "./optimization.js",
+      "default": "./optimization.js"
+    },
+    "./optimization.js": {
+      "types": "./optimization.d.ts",
+      "import": "./optimization.js",
+      "default": "./optimization.js"
+    },
+    "./performance": {
+      "types": "./performance.d.ts",
+      "import": "./performance.js",
+      "default": "./performance.js"
+    },
+    "./performance.js": {
+      "types": "./performance.d.ts",
+      "import": "./performance.js",
+      "default": "./performance.js"
+    },
+    "./postcss": {
+      "types": "./postcss.d.ts",
+      "import": "./postcss.js",
+      "default": "./postcss.js"
+    },
+    "./postcss.js": {
+      "types": "./postcss.d.ts",
+      "import": "./postcss.js",
+      "default": "./postcss.js"
+    },
+    "./resolve": {
+      "types": "./resolve.d.ts",
+      "import": "./resolve.js",
+      "default": "./resolve.js"
+    },
+    "./resolve.js": {
+      "types": "./resolve.d.ts",
+      "import": "./resolve.js",
+      "default": "./resolve.js"
+    },
+    "./rules": {
+      "types": "./rules.d.ts",
+      "import": "./rules.js",
+      "default": "./rules.js"
+    },
+    "./rules.js": {
+      "types": "./rules.d.ts",
+      "import": "./rules.js",
+      "default": "./rules.js"
+    },
+    "./ssr": {
+      "types": "./ssr.d.ts",
+      "import": "./ssr.js",
+      "default": "./ssr.js"
+    },
+    "./ssr.js": {
+      "types": "./ssr.d.ts",
+      "import": "./ssr.js",
+      "default": "./ssr.js"
+    }
+  }
+}

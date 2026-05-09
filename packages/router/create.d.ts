@@ -1,0 +1,2 @@
+import type { RouterApi } from './types.js';
+export declare const createRouter: () => RouterApi;

@@ -1,0 +1,36 @@
+{
+  "name": "@vyriy/error",
+  "version": "0.1.9",
+  "description": "Shared error utilities for Vyriy projects",
+  "type": "module",
+  "main": "./index.js",
+  "license": "MIT",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./error": {
+      "types": "./error.d.ts",
+      "import": "./error.js",
+      "default": "./error.js"
+    },
+    "./error.js": {
+      "types": "./error.d.ts",
+      "import": "./error.js",
+      "default": "./error.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    }
+  }
+}

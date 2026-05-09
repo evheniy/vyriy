@@ -1,0 +1,39 @@
+{
+  "name": "@vyriy/timeout",
+  "version": "0.1.9",
+  "description": "Timeout utility for Vyriy projects",
+  "type": "module",
+  "main": "./index.js",
+  "dependencies": {
+    "@vyriy/pause": "0.1.9"
+  },
+  "license": "MIT",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./timeout": {
+      "types": "./timeout.d.ts",
+      "import": "./timeout.js",
+      "default": "./timeout.js"
+    },
+    "./timeout.js": {
+      "types": "./timeout.d.ts",
+      "import": "./timeout.js",
+      "default": "./timeout.js"
+    }
+  }
+}

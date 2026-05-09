@@ -1,0 +1,102 @@
+# @vyriy/stack
+
+AWS CDK stack helpers for Vyriy projects.
+
+## Purpose
+
+This package keeps small, reusable CDK construction helpers close to the AWS primitives they wrap. The helpers are intentionally thin: they provide calm defaults for common Vyriy infrastructure while leaving the full CDK prop objects available to callers.
+
+## API
+
+- `s3.createBucket(scope, id, props?)` creates a private S3 bucket with static-site-friendly defaults.
+- `cf.createDefaultBehavior(bucket, options?)` creates a CloudFront S3 origin behavior that redirects viewers to HTTPS.
+- `cf.createWebsiteRedirectBehavior(bucket, options?)` creates a CloudFront behavior for an S3 website redirect bucket.
+- `cf.createCloudFrontFunction(scope, id, props)` creates a CloudFront Function from inline JavaScript source.
+- `cf.createDistribution(scope, id, props)` creates a CloudFront distribution.
+- `route53.getHostedZone(scope, id, props)` looks up an existing Route 53 hosted zone.
+- `route53.createARecord(scope, id, props)` creates a Route 53 A record.
+- `route53.createCloudFrontTarget(distribution)` creates a Route 53 alias target for CloudFront.
+- `acm.createCertificate(scope, id, props)` creates an ACM certificate.
+- `deployment.createBucketDeployment(scope, id, props)` deploys files to S3 with a `512` MB default memory limit.
+- `deployment.createImmutableCacheControl(days?)` creates long-lived immutable cache-control headers.
+- `deployment.Source` and `deployment.CacheControl` are re-exported from `aws-cdk-lib/aws-s3-deployment`.
+
+## Static Site Example
+
+This example wires the package helpers into a static website stack:
+
+- find an existing hosted zone
+- create a private S3 bucket for `vyriy.dev`
+- create a redirect S3 bucket for `www.vyriy.dev`
+- create a DNS-validated ACM certificate
+- create one CloudFront distribution for the main site
+- create one CloudFront distribution for the `www` redirect
+- create Route 53 alias records
+- deploy local site files into the main bucket and invalidate CloudFront
+
+CloudFront requires ACM certificates for custom aliases to be in `us-east-1`, so deploy this stack in `us-east-1` or split the certificate into a dedicated us-east-1 stack.
+
+```ts
+import { CfnOutput, Stack, type StackProps } from 'aws-cdk-lib';
+import type { Construct } from 'constructs';
+
+import { stack } from '@vyriy/cdk';
+import { acm, cf, deployment, route53, s3 } from '@vyriy/stack';
+import { path } from '@vyriy/path';
+
+stack(
+  class StaticSiteStack extends Stack {
+    constructor(scope: Construct, id: string, props?: StackProps) {
+      super(scope, id, props);
+
+      const domain = 'site.com';
+
+      const hostedZone = route53.getHostedZone(this, 'HostedZone', {
+        domainName: domain,
+      });
+
+      const bucket = s3.createBucket(this, 'Bucket', {
+        bucketName: domain,
+      });
+
+      const certificate = acm.createCertificate(this, 'Certificate', {
+        domainName: domain,
+        subjectAlternativeNames: [`*.${domain}`],
+        validation: acm.CertificateValidation.fromDns(hostedZone),
+      });
+
+      const distribution = cf.createDistribution(this, 'Distribution', {
+        certificate,
+        defaultBehavior: cf.createDefaultBehavior(bucket),
+        defaultRootObject: 'index.html',
+        domainNames: [domain],
+        errorResponses: [
+          {
+            httpStatus: 403,
+            responseHttpStatus: 404,
+            responsePagePath: '/404.html',
+          },
+          {
+            httpStatus: 404,
+            responseHttpStatus: 404,
+            responsePagePath: '/404.html',
+          },
+        ],
+      });
+
+      route53.createARecord(this, 'RootRecord', {
+        target: route53.createCloudFrontTarget(distribution),
+        zone: hostedZone,
+      });
+
+      deployment.createBucketDeployment(this, 'DeploySite', {
+        cacheControl: deployment.createImmutableCacheControl(),
+        destinationBucket: bucket,
+        distribution,
+        distributionPaths: ['/*'],
+        sources: [deployment.Source.asset(path('dist'))],
+      });
+    }
+  },
+);
+```

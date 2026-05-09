@@ -1,0 +1,126 @@
+{
+  "name": "@vyriy/event",
+  "version": "0.1.9",
+  "description": "Shared event package for Vyriy projects",
+  "type": "module",
+  "main": "./index.js",
+  "license": "MIT",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./analytics/constants": {
+      "types": "./analytics/constants.d.ts",
+      "import": "./analytics/constants.js",
+      "default": "./analytics/constants.js"
+    },
+    "./analytics/constants.js": {
+      "types": "./analytics/constants.d.ts",
+      "import": "./analytics/constants.js",
+      "default": "./analytics/constants.js"
+    },
+    "./analytics/event": {
+      "types": "./analytics/event.d.ts",
+      "import": "./analytics/event.js",
+      "default": "./analytics/event.js"
+    },
+    "./analytics/event.js": {
+      "types": "./analytics/event.d.ts",
+      "import": "./analytics/event.js",
+      "default": "./analytics/event.js"
+    },
+    "./analytics/index": {
+      "types": "./analytics/index.d.ts",
+      "import": "./analytics/index.js",
+      "default": "./analytics/index.js"
+    },
+    "./analytics/index.js": {
+      "types": "./analytics/index.d.ts",
+      "import": "./analytics/index.js",
+      "default": "./analytics/index.js"
+    },
+    "./analytics/target": {
+      "types": "./analytics/target.d.ts",
+      "import": "./analytics/target.js",
+      "default": "./analytics/target.js"
+    },
+    "./analytics/target.js": {
+      "types": "./analytics/target.d.ts",
+      "import": "./analytics/target.js",
+      "default": "./analytics/target.js"
+    },
+    "./analytics/validation": {
+      "types": "./analytics/validation.d.ts",
+      "import": "./analytics/validation.js",
+      "default": "./analytics/validation.js"
+    },
+    "./analytics/validation.js": {
+      "types": "./analytics/validation.d.ts",
+      "import": "./analytics/validation.js",
+      "default": "./analytics/validation.js"
+    },
+    "./custom/constants": {
+      "types": "./custom/constants.d.ts",
+      "import": "./custom/constants.js",
+      "default": "./custom/constants.js"
+    },
+    "./custom/constants.js": {
+      "types": "./custom/constants.d.ts",
+      "import": "./custom/constants.js",
+      "default": "./custom/constants.js"
+    },
+    "./custom/event": {
+      "types": "./custom/event.d.ts",
+      "import": "./custom/event.js",
+      "default": "./custom/event.js"
+    },
+    "./custom/event.js": {
+      "types": "./custom/event.d.ts",
+      "import": "./custom/event.js",
+      "default": "./custom/event.js"
+    },
+    "./custom/index": {
+      "types": "./custom/index.d.ts",
+      "import": "./custom/index.js",
+      "default": "./custom/index.js"
+    },
+    "./custom/index.js": {
+      "types": "./custom/index.d.ts",
+      "import": "./custom/index.js",
+      "default": "./custom/index.js"
+    },
+    "./custom/target": {
+      "types": "./custom/target.d.ts",
+      "import": "./custom/target.js",
+      "default": "./custom/target.js"
+    },
+    "./custom/target.js": {
+      "types": "./custom/target.d.ts",
+      "import": "./custom/target.js",
+      "default": "./custom/target.js"
+    },
+    "./custom/validation": {
+      "types": "./custom/validation.d.ts",
+      "import": "./custom/validation.js",
+      "default": "./custom/validation.js"
+    },
+    "./custom/validation.js": {
+      "types": "./custom/validation.d.ts",
+      "import": "./custom/validation.js",
+      "default": "./custom/validation.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    }
+  }
+}

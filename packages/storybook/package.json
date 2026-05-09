@@ -1,0 +1,46 @@
+{
+  "name": "@vyriy/storybook-config",
+  "version": "0.1.9",
+  "description": "Shared Storybook config for Vyriy projects",
+  "type": "module",
+  "main": "./main.js",
+  "dependencies": {
+    "@storybook/addon-docs": "^10.3.6",
+    "@storybook/react-webpack5": "^10.3.6",
+    "@vueless/storybook-dark-mode": "^10.0.8",
+    "css-loader": "^7.1.4",
+    "react": "^19.2.6",
+    "sass-loader": "^16.0.8",
+    "storybook": "^10.3.6",
+    "style-loader": "^4.0.0"
+  },
+  "license": "MIT",
+  "types": "./main.d.ts",
+  "exports": {
+    ".": {
+      "types": "./main.d.ts",
+      "import": "./main.js",
+      "default": "./main.js"
+    },
+    "./main": {
+      "types": "./main.d.ts",
+      "import": "./main.js",
+      "default": "./main.js"
+    },
+    "./main.js": {
+      "types": "./main.d.ts",
+      "import": "./main.js",
+      "default": "./main.js"
+    },
+    "./preview": {
+      "types": "./preview.d.ts",
+      "import": "./preview.js",
+      "default": "./preview.js"
+    },
+    "./preview.js": {
+      "types": "./preview.d.ts",
+      "import": "./preview.js",
+      "default": "./preview.js"
+    }
+  }
+}

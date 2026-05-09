@@ -1,0 +1,36 @@
+{
+  "name": "@vyriy/cn",
+  "version": "0.1.9",
+  "description": "Class name utility for Vyriy projects",
+  "type": "module",
+  "main": "./index.js",
+  "license": "MIT",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./cn": {
+      "types": "./cn.d.ts",
+      "import": "./cn.js",
+      "default": "./cn.js"
+    },
+    "./cn.js": {
+      "types": "./cn.d.ts",
+      "import": "./cn.js",
+      "default": "./cn.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    }
+  }
+}

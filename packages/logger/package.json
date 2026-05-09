@@ -1,0 +1,56 @@
+{
+  "name": "@vyriy/logger",
+  "version": "0.1.9",
+  "description": "Shared logger utility for Vyriy projects",
+  "type": "module",
+  "main": "./index.js",
+  "license": "MIT",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./create": {
+      "types": "./create.d.ts",
+      "import": "./create.js",
+      "default": "./create.js"
+    },
+    "./create.js": {
+      "types": "./create.d.ts",
+      "import": "./create.js",
+      "default": "./create.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./levels": {
+      "types": "./levels.d.ts",
+      "import": "./levels.js",
+      "default": "./levels.js"
+    },
+    "./levels.js": {
+      "types": "./levels.d.ts",
+      "import": "./levels.js",
+      "default": "./levels.js"
+    },
+    "./logger": {
+      "types": "./logger.d.ts",
+      "import": "./logger.js",
+      "default": "./logger.js"
+    },
+    "./logger.js": {
+      "types": "./logger.d.ts",
+      "import": "./logger.js",
+      "default": "./logger.js"
+    }
+  }
+}

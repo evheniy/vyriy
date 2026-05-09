@@ -1,0 +1,40 @@
+{
+  "name": "@vyriy/commit",
+  "version": "0.1.9",
+  "description": "Shared commit package for Vyriy projects",
+  "type": "module",
+  "main": "./index.js",
+  "dependencies": {
+    "@vyriy/logger": "0.1.9",
+    "@vyriy/path": "0.1.9"
+  },
+  "license": "MIT",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./commit": {
+      "types": "./commit.d.ts",
+      "import": "./commit.js",
+      "default": "./commit.js"
+    },
+    "./commit.js": {
+      "types": "./commit.d.ts",
+      "import": "./commit.js",
+      "default": "./commit.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    }
+  }
+}

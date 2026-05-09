@@ -1,0 +1,30 @@
+import { Router } from './router.js';
+export const createRouter = () => {
+    const router = new Router();
+    const api = {
+        get(path, handler) {
+            router.on('GET', path, handler);
+            return api;
+        },
+        post(path, handler) {
+            router.on('POST', path, handler);
+            return api;
+        },
+        put(path, handler) {
+            router.on('PUT', path, handler);
+            return api;
+        },
+        delete(path, handler) {
+            router.on('DELETE', path, handler);
+            return api;
+        },
+        patch(path, handler) {
+            router.on('PATCH', path, handler);
+            return api;
+        },
+        route(event) {
+            return router.route(event);
+        },
+    };
+    return api;
+};

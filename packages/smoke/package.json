@@ -1,0 +1,36 @@
+{
+  "name": "@vyriy/smoke",
+  "version": "0.1.9",
+  "description": "Smoke request matcher for short-circuiting handlers in Vyriy projects",
+  "type": "module",
+  "main": "./index.js",
+  "license": "MIT",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./smoke": {
+      "types": "./smoke.d.ts",
+      "import": "./smoke.js",
+      "default": "./smoke.js"
+    },
+    "./smoke.js": {
+      "types": "./smoke.d.ts",
+      "import": "./smoke.js",
+      "default": "./smoke.js"
+    }
+  }
+}

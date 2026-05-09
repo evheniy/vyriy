@@ -1,0 +1,39 @@
+{
+  "name": "@vyriy/package",
+  "version": "0.1.9",
+  "description": "Shared package.json helpers for Vyriy projects",
+  "type": "module",
+  "main": "./index.js",
+  "dependencies": {
+    "@vyriy/path": "0.1.9"
+  },
+  "license": "MIT",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./package": {
+      "types": "./package.d.ts",
+      "import": "./package.js",
+      "default": "./package.js"
+    },
+    "./package.js": {
+      "types": "./package.d.ts",
+      "import": "./package.js",
+      "default": "./package.js"
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "name": "@vyriy/stack",
+  "version": "0.1.9",
+  "description": "AWS CDK stack helpers for Vyriy infrastructure",
+  "type": "module",
+  "main": "./index.js",
+  "dependencies": {
+    "aws-cdk-lib": "^2.253.1",
+    "constructs": "^10.6.0"
+  },
+  "license": "MIT",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./certificatemanager/index": {
+      "types": "./certificatemanager/index.d.ts",
+      "import": "./certificatemanager/index.js",
+      "default": "./certificatemanager/index.js"
+    },
+    "./certificatemanager/index.js": {
+      "types": "./certificatemanager/index.d.ts",
+      "import": "./certificatemanager/index.js",
+      "default": "./certificatemanager/index.js"
+    },
+    "./cloudfront/index": {
+      "types": "./cloudfront/index.d.ts",
+      "import": "./cloudfront/index.js",
+      "default": "./cloudfront/index.js"
+    },
+    "./cloudfront/index.js": {
+      "types": "./cloudfront/index.d.ts",
+      "import": "./cloudfront/index.js",
+      "default": "./cloudfront/index.js"
+    },
+    "./deployment/index": {
+      "types": "./deployment/index.d.ts",
+      "import": "./deployment/index.js",
+      "default": "./deployment/index.js"
+    },
+    "./deployment/index.js": {
+      "types": "./deployment/index.d.ts",
+      "import": "./deployment/index.js",
+      "default": "./deployment/index.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./route53/index": {
+      "types": "./route53/index.d.ts",
+      "import": "./route53/index.js",
+      "default": "./route53/index.js"
+    },
+    "./route53/index.js": {
+      "types": "./route53/index.d.ts",
+      "import": "./route53/index.js",
+      "default": "./route53/index.js"
+    },
+    "./s3/index": {
+      "types": "./s3/index.d.ts",
+      "import": "./s3/index.js",
+      "default": "./s3/index.js"
+    },
+    "./s3/index.js": {
+      "types": "./s3/index.d.ts",
+      "import": "./s3/index.js",
+      "default": "./s3/index.js"
+    }
+  }
+}
