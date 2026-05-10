@@ -33,13 +33,15 @@ export { default } from '@vyriy/prettier-config';
 
 If you need local overrides:
 
-```js
-import baseConfig from '@vyriy/prettier-config';
+```ts
+import baseConfig, { type Config } from '@vyriy/prettier-config';
 
-export default {
+const config: Config = {
   ...baseConfig,
   printWidth: 100,
 };
+
+export default config;
 ```
 
 ## Formatting Scope

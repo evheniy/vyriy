@@ -64,17 +64,32 @@ export default csr(
     clean: true,
   },
   {
-    output: {
-      filename: 'app.js',
+    optimization: {
+      splitChunks: true,
     },
   },
 );
+```
+
+With types:
+
+```ts
+import { csr, type WebpackConfig } from '@vyriy/webpack-config';
+
+const config: WebpackConfig = csr('./src/index.tsx', {
+  path: '/absolute/path/to/dist/client',
+  filename: 'index.js',
+  clean: true,
+});
+
+export default config;
 ```
 
 ## API
 
 - `csr(entry, output, config?)` creates a browser-oriented Webpack config.
 - `ssr(entry, output, config?)` creates a node-oriented SSR Webpack config.
+- `WebpackConfig`, `WebpackEntry`, and `WebpackOutput` expose the shared config helper types.
 
 Shared defaults:
 

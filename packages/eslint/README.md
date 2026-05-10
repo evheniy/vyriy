@@ -40,10 +40,10 @@ export { default } from '@vyriy/eslint-config';
 
 If you need local overrides:
 
-```js
-import baseConfig from '@vyriy/eslint-config';
+```ts
+import baseConfig, { type Linter } from '@vyriy/eslint-config';
 
-export default [
+const config: Linter.Config[] = [
   ...baseConfig,
   {
     rules: {
@@ -51,6 +51,8 @@ export default [
     },
   },
 ];
+
+export default config;
 ```
 
 ## Relative ESM Imports

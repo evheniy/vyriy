@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/prettier-config",
-  "version": "0.1.13",
+  "version": "0.1.16",
   "description": "Shared Prettier config for Vyriy projects",
   "type": "module",
   "main": "./index.js",

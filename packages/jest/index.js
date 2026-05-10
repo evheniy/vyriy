@@ -50,7 +50,6 @@ const config = {
     modulePathIgnorePatterns: [
         '<rootDir>/dist',
     ],
-    preset: 'ts-jest',
     reporters: [
         'default',
         [

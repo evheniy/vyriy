@@ -1,2 +1,2 @@
-import type { Configuration } from 'webpack';
-export declare const ssr: (entry: Configuration["entry"], output: Configuration["output"], config?: Configuration) => Configuration;
+import type { WebpackConfig, WebpackEntry, WebpackOutput } from './types.js';
+export declare const ssr: (entry: WebpackEntry, output: WebpackOutput, config?: WebpackConfig) => WebpackConfig;

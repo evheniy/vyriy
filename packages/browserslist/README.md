@@ -61,10 +61,12 @@ import browserslistConfig from '@vyriy/browserslist-config';
 export default browserslistConfig;
 ```
 
-If you use it from TypeScript, the package also exposes types from `@vyriy/browserslist-config/types`.
+If you use it from TypeScript, the package also exposes types from the root entry.
 
 ```ts
-import type { BrowserslistConfig, BrowserslistEnv } from '@vyriy/browserslist-config/types';
+import browserslistConfig, { type BrowserslistConfig } from '@vyriy/browserslist-config';
+
+const config: BrowserslistConfig = browserslistConfig;
 ```
 
 ## CLI

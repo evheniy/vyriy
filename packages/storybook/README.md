@@ -33,22 +33,35 @@ Install `storybook` in the consumer project so CLI commands are available.
 Create `.storybook/main.ts`:
 
 ```ts
-import config from '@vyriy/storybook-config/main';
+import config, { type StorybookConfig } from '@vyriy/storybook-config/main';
 import { path } from '@vyriy/path';
 
-export default {
+const mainConfig: StorybookConfig = {
   ...config,
   stories: [
     path('packages', '**/*.mdx'),
     path('packages', '**/*.stories.@(js|jsx|mjs|ts|tsx)'),
   ],
 };
+
+export default mainConfig;
 ```
 
 Create `.storybook/preview.ts`:
 
 ```ts
 export { default } from '@vyriy/storybook-config/preview';
+```
+
+If you customize preview locally, the preview module also exposes `Preview`.
+
+```ts
+import config, { type Preview } from '@vyriy/storybook-config/main';
+
+const preview: Preview = {
+  ...config,
+  tags: ['autodocs'],
+};
 ```
 
 ## Current Vyriy Usage

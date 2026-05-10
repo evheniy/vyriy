@@ -1,15 +1,15 @@
 {
   "name": "@vyriy/jest-config",
-  "version": "0.1.13",
+  "version": "0.1.16",
   "description": "Shared Jest config for Vyriy projects",
   "type": "module",
   "main": "./index.js",
   "dependencies": {
+    "@swc/core": "^1.15.33",
     "@swc/jest": "^0.2.39",
     "jest": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
-    "jest-junit": "^17.0.0",
-    "ts-jest": "^29.4.9"
+    "jest-junit": "^17.0.0"
   },
   "license": "MIT",
   "repository": {

@@ -38,10 +38,10 @@ export { default } from '@vyriy/jest-config';
 
 If you need local overrides:
 
-```js
-import baseConfig from '@vyriy/jest-config';
+```ts
+import baseConfig, { type Config } from '@vyriy/jest-config';
 
-export default {
+const config: Config = {
   ...baseConfig,
   coverageThreshold: {
     global: {
@@ -52,6 +52,8 @@ export default {
     },
   },
 };
+
+export default config;
 ```
 
 ## Current Vyriy Usage

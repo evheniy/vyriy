@@ -39,6 +39,7 @@ Current packages are grouped by purpose. Each package has its own README in `pac
 | `@vyriy/eslint-config`       | Shared ESLint flat config for TypeScript, React, Storybook, Jest, imports, and Prettier integration. |
 | `@vyriy/jest-config`         | Shared Jest config for TypeScript test runs, SWC transforms, JSDOM, coverage, and JUnit reporting.   |
 | `@vyriy/prettier-config`     | Shared Prettier config with the multiline arrays plugin.                                             |
+| `@vyriy/stylelint-config`    | Shared Stylelint config for SCSS-friendly CSS linting and property order.                            |
 | `@vyriy/storybook-config`    | Shared Storybook config for React projects.                                                          |
 | `@vyriy/typescript-config`   | Shared TypeScript configs for base, build, config-file, and package output use cases.                |
 | `@vyriy/webpack-config`      | Shared Webpack config for browser-oriented builds.                                                   |
@@ -51,6 +52,7 @@ Some config packages intentionally document executable tools in their install co
 | `@vyriy/eslint-config`       | `npm install -D @vyriy/eslint-config eslint jiti`        |
 | `@vyriy/jest-config`         | `npm install -D @vyriy/jest-config jest`                 |
 | `@vyriy/prettier-config`     | `npm install -D @vyriy/prettier-config prettier`         |
+| `@vyriy/stylelint-config`    | `npm install -D @vyriy/stylelint-config stylelint`       |
 | `@vyriy/storybook-config`    | `npm install -D @vyriy/storybook-config storybook`       |
 | `@vyriy/typescript-config`   | `npm install -D @vyriy/typescript-config typescript`     |
 | `@vyriy/webpack-config`      | `npm install -D @vyriy/webpack-config webpack`           |
