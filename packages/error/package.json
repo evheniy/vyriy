@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/error",
-  "version": "0.1.16",
+  "version": "0.1.18",
   "description": "Shared error utilities for Vyriy projects",
   "type": "module",
   "main": "./index.js",

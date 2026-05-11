@@ -1,11 +1,11 @@
 {
   "name": "@vyriy/timeout",
-  "version": "0.1.16",
+  "version": "0.1.18",
   "description": "Timeout utility for Vyriy projects",
   "type": "module",
   "main": "./index.js",
   "dependencies": {
-    "@vyriy/pause": "0.1.16"
+    "@vyriy/pause": "0.1.18"
   },
   "license": "MIT",
   "repository": {

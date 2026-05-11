@@ -19,16 +19,16 @@ This package provides the base ESLint setup used in Vyriy repositories for:
 With npm:
 
 ```bash
-npm install -D @vyriy/eslint-config eslint jiti
+npm install -D @vyriy/eslint-config eslint
 ```
 
 With Yarn:
 
 ```bash
-yarn add -D @vyriy/eslint-config eslint jiti
+yarn add -D @vyriy/eslint-config eslint
 ```
 
-Install `eslint` and `jiti` in the consumer project so CLI binaries are available.
+Install `eslint` in the consumer project so the ESLint CLI is available.
 
 ## Usage
 

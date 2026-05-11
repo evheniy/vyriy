@@ -11,16 +11,16 @@ This package centralizes reusable Browserslist target sets for applications and 
 With npm:
 
 ```bash
-npm install -D @vyriy/browserslist-config browserslist
+npm install -D @vyriy/browserslist-config
 ```
 
 With Yarn:
 
 ```bash
-yarn add -D @vyriy/browserslist-config browserslist
+yarn add -D @vyriy/browserslist-config
 ```
 
-Install `browserslist` in the consumer project so CLI commands are available.
+Install `browserslist` separately only when the consumer project needs the Browserslist CLI binary.
 
 ## Usage
 
