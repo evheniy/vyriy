@@ -10,3 +10,8 @@ export const createImmutableCacheControl = (days = 365) => [
     CacheControl.maxAge(Duration.days(days)),
     CacheControl.immutable(),
 ];
+export const createHtmlCacheControl = () => [
+    CacheControl.setPublic(),
+    CacheControl.maxAge(Duration.seconds(0)),
+    CacheControl.mustRevalidate(),
+];

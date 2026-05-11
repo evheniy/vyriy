@@ -3,3 +3,4 @@ import { BucketDeployment, BucketDeploymentProps, CacheControl, Source } from 'a
 export { Source, CacheControl };
 export declare const createBucketDeployment: (scope: Construct, id: string, props: BucketDeploymentProps) => BucketDeployment;
 export declare const createImmutableCacheControl: (days?: number) => CacheControl[];
+export declare const createHtmlCacheControl: () => CacheControl[];

@@ -6,7 +6,7 @@ import { optimization } from './optimization.js';
 import { performance } from './performance.js';
 import { resolve } from './resolve.js';
 import { rules } from './rules.js';
-export const csr = (entry, output, config = {}) => {
+export const csr = (entry, output, transform) => {
     const webpackMode = mode();
     const isProduction = webpackMode === 'production';
     const base = {
@@ -22,28 +22,7 @@ export const csr = (entry, output, config = {}) => {
         optimization: optimization(isProduction),
         performance,
         plugins: isProduction ? [new MiniCssExtractPlugin()] : [new ReactRefreshWebpackPlugin()],
-        resolve: resolve(config.resolve),
+        resolve: resolve(),
     };
-    return {
-        ...base,
-        ...config,
-        output: {
-            ...base.output,
-            ...config.output,
-        },
-        module: {
-            ...base.module,
-            ...config.module,
-            rules: config.module?.rules ?? base.module?.rules,
-        },
-        optimization: base.optimization
-            ? {
-                ...base.optimization,
-                ...config.optimization,
-            }
-            : config.optimization,
-        performance: config.performance ?? performance,
-        plugins: config.plugins ?? base.plugins,
-        resolve: resolve(config.resolve),
-    };
+    return transform ? transform(base) : base;
 };

@@ -18,6 +18,7 @@ This package keeps small, reusable CDK construction helpers close to the AWS pri
 - `route53.createCloudFrontTarget(distribution)` creates a Route 53 alias target for CloudFront.
 - `acm.createCertificate(scope, id, props)` creates an ACM certificate.
 - `deployment.createBucketDeployment(scope, id, props)` deploys files to S3 with a `512` MB default memory limit.
+- `deployment.createHtmlCacheControl()` creates cache-control headers for HTML files that should revalidate before reuse.
 - `deployment.createImmutableCacheControl(days?)` creates long-lived immutable cache-control headers.
 - `deployment.Source` and `deployment.CacheControl` are re-exported from `aws-cdk-lib/aws-s3-deployment`.
 
@@ -26,13 +27,12 @@ This package keeps small, reusable CDK construction helpers close to the AWS pri
 This example wires the package helpers into a static website stack:
 
 - find an existing hosted zone
-- create a private S3 bucket for `vyriy.dev`
-- create a redirect S3 bucket for `www.vyriy.dev`
+- create a private S3 bucket for `site.com`
 - create a DNS-validated ACM certificate
-- create one CloudFront distribution for the main site
-- create one CloudFront distribution for the `www` redirect
-- create Route 53 alias records
-- deploy local site files into the main bucket and invalidate CloudFront
+- create a CloudFront distribution for the site
+- create a Route 53 alias record
+- deploy immutable assets and revalidating HTML files into the bucket
+- invalidate CloudFront after each deployment
 
 CloudFront requires ACM certificates for custom aliases to be in `us-east-1`, so deploy this stack in `us-east-1` or split the certificate into a dedicated us-east-1 stack.
 
@@ -46,7 +46,7 @@ import { path } from '@vyriy/path';
 
 stack(
   class StaticSiteStack extends Stack {
-    constructor(scope: Construct, id: string, props?: StackProps) {
+    constructor(scope: Construct, id: string, props: StackProps & { env: { account: string; region: string } }) {
       super(scope, id, props);
 
       const domain = 'site.com';
@@ -55,7 +55,7 @@ stack(
         domainName: domain,
       });
 
-      const bucket = s3.createBucket(this, 'Bucket', {
+      const siteBucket = s3.createBucket(this, 'Bucket', {
         bucketName: domain,
       });
 
@@ -65,9 +65,9 @@ stack(
         validation: acm.CertificateValidation.fromDns(hostedZone),
       });
 
-      const distribution = cf.createDistribution(this, 'Distribution', {
+      const siteDistribution = cf.createDistribution(this, 'Distribution', {
         certificate,
-        defaultBehavior: cf.createDefaultBehavior(bucket),
+        defaultBehavior: cf.createDefaultBehavior(siteBucket),
         defaultRootObject: 'index.html',
         domainNames: [domain],
         errorResponses: [
@@ -85,17 +85,43 @@ stack(
       });
 
       route53.createARecord(this, 'RootRecord', {
-        target: route53.createCloudFrontTarget(distribution),
+        target: route53.createCloudFrontTarget(siteDistribution),
         zone: hostedZone,
       });
 
-      deployment.createBucketDeployment(this, 'DeploySite', {
+      const assetDeployment = deployment.createBucketDeployment(this, 'DeploySiteAssets', {
         cacheControl: deployment.createImmutableCacheControl(),
-        destinationBucket: bucket,
-        distribution,
+        destinationBucket: siteBucket,
+        distribution: siteDistribution,
+        exclude: ['index.html', '404.html'],
         distributionPaths: ['/*'],
         sources: [deployment.Source.asset(path('dist'))],
       });
+
+      const htmlDeployment = deployment.createBucketDeployment(this, 'DeploySiteHtml', {
+        cacheControl: deployment.createHtmlCacheControl(),
+        destinationBucket: siteBucket,
+        distribution: siteDistribution,
+        distributionPaths: ['/*'],
+        exclude: ['*'],
+        include: ['index.html', '404.html'],
+        prune: false,
+        sources: [deployment.Source.asset(path('dist'))],
+      });
+
+      htmlDeployment.node.addDependency(assetDeployment);
+
+      new CfnOutput(this, 'Account', { value: props.env.account });
+      new CfnOutput(this, 'Region', { value: props.env.region });
+      new CfnOutput(this, 'Tags', { value: JSON.stringify(props.tags ?? {}) });
+
+      new CfnOutput(this, 'BucketName', { value: siteBucket.bucketName });
+
+      new CfnOutput(this, 'DistributionDomainName', { value: siteDistribution.domainName });
+      new CfnOutput(this, 'DistributionId', { value: siteDistribution.distributionId });
+      new CfnOutput(this, 'DistributionUrl', { value: `https://${siteDistribution.domainName}/` });
+
+      new CfnOutput(this, 'SiteUrl', { value: `https://${domain}/` });
     }
   },
 );

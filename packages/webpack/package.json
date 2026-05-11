@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/webpack-config",
-  "version": "0.1.18",
+  "version": "0.1.20",
   "description": "Shared Webpack config for Vyriy projects",
   "type": "module",
   "main": "./index.js",
@@ -12,8 +12,8 @@
     "@babel/preset-typescript": "^7.28.5",
     "@babel/runtime": "^7.29.2",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.2",
-    "@vyriy/env": "0.1.18",
-    "@vyriy/path": "0.1.18",
+    "@vyriy/env": "0.1.20",
+    "@vyriy/path": "0.1.20",
     "babel-loader": "^10.1.1",
     "css-loader": "^7.1.4",
     "cssnano": "^8.0.1",
@@ -27,8 +27,7 @@
     "sass-loader": "^16.0.8",
     "style-loader": "^4.0.0",
     "terser-webpack-plugin": "^5.6.0",
-    "webpack": "^5.106.2",
-    "webpack-cli": "^7.0.2"
+    "webpack": "^5.106.2"
   },
   "license": "MIT",
   "repository": {

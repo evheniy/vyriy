@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/event",
-  "version": "0.1.18",
+  "version": "0.1.20",
   "description": "Shared event package for Vyriy projects",
   "type": "module",
   "main": "./index.js",

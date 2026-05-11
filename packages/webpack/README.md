@@ -11,16 +11,16 @@ This package provides two small typed Webpack config generators for Vyriy client
 With npm:
 
 ```bash
-npm install @vyriy/webpack-config webpack webpack-cli
+npm install @vyriy/webpack-config webpack
 ```
 
 With Yarn:
 
 ```bash
-yarn add @vyriy/webpack-config webpack webpack-cli
+yarn add @vyriy/webpack-config webpack
 ```
 
-Install `webpack` and `webpack-cli` in the consumer project so Webpack CLI commands are available.
+The `webpack` package is listed in the install command because the shared config is consumed by Webpack at build time. Add `webpack-cli` only when the consumer project runs Webpack through CLI commands.
 
 ## Usage
 
@@ -51,7 +51,7 @@ export default ssr(['@w/api'], {
 
 The second parameter is a regular Webpack `output` config passed as-is.
 
-Both generators accept a third parameter with local Webpack overrides that are merged over the shared defaults:
+Both generators accept a third parameter with a local Webpack config transform. The transform receives the shared config and returns the final config, so the consumer can choose where to extend defaults and where to replace them:
 
 ```js
 import { csr } from '@vyriy/webpack-config';
@@ -63,11 +63,35 @@ export default csr(
     filename: 'index.js',
     clean: true,
   },
-  {
+  (config) => ({
+    ...config,
     optimization: {
+      ...config.optimization,
       splitChunks: true,
     },
+  }),
+);
+```
+
+For example, append a local CSR plugin while keeping the shared CSR plugin:
+
+```js
+import { csr } from '@vyriy/webpack-config';
+
+export default csr(
+  './src/index.tsx',
+  {
+    path: '/absolute/path/to/dist/client',
+    filename: 'index.js',
+    clean: true,
   },
+  (config) => ({
+    ...config,
+    plugins: [
+      ...(config.plugins ?? []),
+      new LocalPlugin(),
+    ],
+  }),
 );
 ```
 
@@ -87,9 +111,9 @@ export default config;
 
 ## API
 
-- `csr(entry, output, config?)` creates a browser-oriented Webpack config.
-- `ssr(entry, output, config?)` creates a node-oriented SSR Webpack config.
-- `WebpackConfig`, `WebpackEntry`, and `WebpackOutput` expose the shared config helper types.
+- `csr(entry, output, transform?)` creates a browser-oriented Webpack config.
+- `ssr(entry, output, transform?)` creates a node-oriented SSR Webpack config.
+- `WebpackConfig`, `WebpackConfigTransform`, `WebpackEntry`, and `WebpackOutput` expose the shared config helper types.
 
 Shared defaults:
 

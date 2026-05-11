@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/stylelint-config",
-  "version": "0.1.18",
+  "version": "0.1.20",
   "description": "Shared Stylelint config for Vyriy projects",
   "type": "module",
   "main": "./index.js",
