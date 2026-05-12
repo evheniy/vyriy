@@ -7,7 +7,8 @@ const config = {
         '!<rootDir>/**/*.stories.{ts,tsx}',
         '!<rootDir>/**/*.types.ts',
         '!<rootDir>/**/types.ts',
-        '!<rootDir>/*.config.ts',
+        '!<rootDir>/*.config.{ts,mjs}',
+        '!<rootDir>/**/*.config.{ts,mjs}',
     ],
     coverageDirectory: 'coverage',
     coveragePathIgnorePatterns: [
@@ -20,6 +21,7 @@ const config = {
         '<rootDir>/.storybook/',
         '<rootDir>/coverage/',
         '<rootDir>/.yarn/',
+        '<rootDir>/e2e/',
     ],
     coverageProvider: 'v8',
     coverageReporters: [
