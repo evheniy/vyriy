@@ -11,13 +11,13 @@ This package provides two small typed Webpack config generators for Vyriy client
 With npm:
 
 ```bash
-npm install @vyriy/webpack-config webpack
+npm install @vyriy/webpack-config webpack webpack-cli
 ```
 
 With Yarn:
 
 ```bash
-yarn add @vyriy/webpack-config webpack
+yarn add @vyriy/webpack-config webpack webpack-cli
 ```
 
 The `webpack` package is listed in the install command because the shared config is consumed by Webpack at build time. Add `webpack-cli` only when the consumer project runs Webpack through CLI commands.

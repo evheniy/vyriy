@@ -5,6 +5,7 @@ Shared Browserslist config for Vyriy projects.
 ## Purpose
 
 This package centralizes reusable Browserslist target sets for applications and libraries in the Vyriy monorepo. It provides separate environments for local development, SSR, default production builds, and a narrower modern browser target.
+This keeps browser and runtime targets consistent between local development, client-side production bundles, modern builds, and server-side rendering.
 
 ## Install
 
@@ -40,12 +41,23 @@ extends @vyriy/browserslist-config
 extends @vyriy/browserslist-config
 ```
 
+The same shared config is used for each environment, while Browserslist resolves the actual target list from the selected environment.
+
+## Environments
+
 Available environments:
 
 - `development`
 - `ssr`
 - `production`
 - `modern`
+
+Typical usage:
+
+- `development` for fast local builds and debugging.
+- `production` for public client bundles shipped to users.
+- `ssr` for Node.js server-side rendering or server-side build output.
+- `modern` for evergreen-browser-only builds, documentation, or experiments.
 
 Programmatic usage is also supported:
 
@@ -87,3 +99,7 @@ npx browserslist --config .browserslistrc --env modern
 - `ssr` targets Node.js 24 for server-side rendering.
 - `production` targets a broad, safe browser baseline for public builds.
 - `modern` targets the latest Chrome, Safari, and Firefox versions.
+
+## Full Example
+
+See the article with resolved target examples for each environment: <https://vyriy.dev/examples/vyriy-browserslist-config/>.

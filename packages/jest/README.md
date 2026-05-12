@@ -12,6 +12,43 @@ This package provides the base Jest setup used in Vyriy repositories for:
 - coverage defaults
 - JUnit reporting
 
+## Coverage
+
+Coverage is enabled by default and collected from:
+
+```ts
+[
+  '<rootDir>/**/*.{ts,tsx,js,jsx,mjs,cjs}',
+  '!<rootDir>/**/*.d.ts',
+  '!<rootDir>/**/*.stories.{ts,tsx}',
+  '!<rootDir>/**/*.types.ts',
+  '!<rootDir>/**/types.ts',
+  '!<rootDir>/*.config.ts',
+];
+```
+
+Coverage paths ignore generated output, package manager state, Storybook output, and common build folders:
+
+```ts
+[
+  '/node_modules/',
+  '<rootDir>/storybook-static/',
+  '<rootDir>/dist/',
+  '<rootDir>/build/',
+  '<rootDir>/bin/',
+  '<rootDir>/.bin/',
+  '<rootDir>/.storybook/',
+  '<rootDir>/coverage/',
+  '<rootDir>/.yarn/',
+];
+```
+
+Reports are written to `coverage` using `json`, `text`, `text-summary`, `lcov`, `clover`, and `cobertura` reporters. The shared default requires 100% global coverage for branches, functions, lines, and statements.
+
+## CI Reports
+
+The config includes `jest-junit` alongside the default Jest reporter. This writes a JUnit report to `coverage/junit.xml`, which CI systems such as GitLab can publish as a test report artifact.
+
 ## Install
 
 With npm:

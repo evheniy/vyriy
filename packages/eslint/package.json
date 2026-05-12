@@ -1,14 +1,14 @@
 {
   "name": "@vyriy/eslint-config",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "description": "Shared ESLint config for Vyriy projects",
   "type": "module",
   "main": "./index.js",
   "dependencies": {
-    "@eslint-react/eslint-plugin": "^5.7.5",
+    "@eslint-react/eslint-plugin": "^5.7.7",
     "@eslint/js": "^10.0.1",
-    "@typescript-eslint/eslint-plugin": "^8.59.2",
-    "@typescript-eslint/parser": "^8.59.2",
+    "@typescript-eslint/eslint-plugin": "^8.59.3",
+    "@typescript-eslint/parser": "^8.59.3",
     "eslint": "^10.3.0",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import-x": "^4.16.2",

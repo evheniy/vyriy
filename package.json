@@ -1,6 +1,6 @@
 {
   "name": "vyriy",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "description": "Calm cloud-oriented React architecture and toolkit",
   "private": true,
   "type": "module",

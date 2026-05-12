@@ -6,6 +6,22 @@ AWS CDK stack helpers for Vyriy projects.
 
 This package keeps small, reusable CDK construction helpers close to the AWS primitives they wrap. The helpers are intentionally thin: they provide calm defaults for common Vyriy infrastructure while leaving the full CDK prop objects available to callers.
 
+## Install
+
+With npm:
+
+```bash
+npm install @vyriy/stack aws-cdk-lib
+```
+
+With Yarn:
+
+```bash
+yarn add @vyriy/stack aws-cdk-lib
+```
+
+The `aws-cdk-lib` package is listed because CDK apps and bin entrypoints use CDK stack, app, prop, and resource types directly.
+
 ## API
 
 - `s3.createBucket(scope, id, props?)` creates a private S3 bucket with static-site-friendly defaults.

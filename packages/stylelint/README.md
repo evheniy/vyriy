@@ -5,6 +5,7 @@ Shared Stylelint config for Vyriy projects.
 ## Purpose
 
 This package provides the base Stylelint setup used in Vyriy repositories for SCSS-friendly CSS linting and conventional property ordering.
+It keeps CSS and SCSS linting consistent across applications, libraries, examples, and internal packages without copying the same Stylelint rules into every project.
 
 ## Install
 
@@ -48,6 +49,13 @@ export default {
 };
 ```
 
+Run Stylelint against CSS or SCSS files:
+
+```bash
+npx stylelint styles.scss
+npx stylelint "src/**/*.{css,scss}"
+```
+
 ## Ignore Files
 
 The shared config ignores common generated and dependency directories:
@@ -64,3 +72,7 @@ Project-specific generated output, such as `coverage/**` or framework-specific o
 - `customSyntax` is `postcss-scss`.
 - `ignoreFiles` contains common generated and dependency directories.
 - selected rules are disabled where the shared Vyriy style stays intentionally flexible.
+
+## Full Example
+
+See the article with a complete SCSS linting walkthrough: <https://vyriy.dev/examples/vyriy-stylelint-config/>.

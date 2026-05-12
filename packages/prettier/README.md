@@ -7,6 +7,8 @@ Shared Prettier config for Vyriy projects.
 This package provides the base Prettier setup used in Vyriy repositories, including the multiline arrays plugin and common formatting defaults.
 Arrays with more than three elements are formatted across multiple lines.
 
+Prettier is responsible for formatting syntactically valid code. It does not replace TypeScript, ESLint, Stylelint, or tests; it is one small validation and formatting step in the shared Vyriy workflow.
+
 ## Install
 
 With npm:
@@ -44,9 +46,22 @@ const config: Config = {
 export default config;
 ```
 
+Run Prettier against a file or folder:
+
+```bash
+npx prettier index.ts
+npx prettier index.ts --write
+```
+
+If Prettier cannot parse a file, it stops and reports the syntax error location instead of rewriting the file.
+
 ## Formatting Scope
 
 Prettier controls multiline arrays through `prettier-plugin-multiline-arrays`.
 Object multiline checks are handled by `@vyriy/eslint-config`.
 
 Prettier does not support a stable count-based rule for import or export specifiers. If import or export specifiers fit within `printWidth`, Prettier may keep them on one line.
+
+## Full Example
+
+See the article with a complete usage walkthrough: <https://vyriy.dev/examples/vyriy-prettier-config/>.
