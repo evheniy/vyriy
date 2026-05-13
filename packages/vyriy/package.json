@@ -1,0 +1,312 @@
+{
+  "name": "vyriy",
+  "version": "0.2.0",
+  "description": "Interactive project master for calm cloud-ready applications.",
+  "type": "module",
+  "main": "./index.js",
+  "bin": "./bin/vyriy.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/vyriy"
+  },
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./bin/vyriy": {
+      "types": "./bin/vyriy.d.ts",
+      "import": "./bin/vyriy.js",
+      "default": "./bin/vyriy.js"
+    },
+    "./bin/vyriy.js": {
+      "types": "./bin/vyriy.d.ts",
+      "import": "./bin/vyriy.js",
+      "default": "./bin/vyriy.js"
+    },
+    "./checks/node/index": {
+      "types": "./checks/node/index.d.ts",
+      "import": "./checks/node/index.js",
+      "default": "./checks/node/index.js"
+    },
+    "./checks/node/index.js": {
+      "types": "./checks/node/index.d.ts",
+      "import": "./checks/node/index.js",
+      "default": "./checks/node/index.js"
+    },
+    "./checks/node/node": {
+      "types": "./checks/node/node.d.ts",
+      "import": "./checks/node/node.js",
+      "default": "./checks/node/node.js"
+    },
+    "./checks/node/node.js": {
+      "types": "./checks/node/node.d.ts",
+      "import": "./checks/node/node.js",
+      "default": "./checks/node/node.js"
+    },
+    "./checks/yarn/index": {
+      "types": "./checks/yarn/index.d.ts",
+      "import": "./checks/yarn/index.js",
+      "default": "./checks/yarn/index.js"
+    },
+    "./checks/yarn/index.js": {
+      "types": "./checks/yarn/index.d.ts",
+      "import": "./checks/yarn/index.js",
+      "default": "./checks/yarn/index.js"
+    },
+    "./checks/yarn/yarn": {
+      "types": "./checks/yarn/yarn.d.ts",
+      "import": "./checks/yarn/yarn.js",
+      "default": "./checks/yarn/yarn.js"
+    },
+    "./checks/yarn/yarn.js": {
+      "types": "./checks/yarn/yarn.d.ts",
+      "import": "./checks/yarn/yarn.js",
+      "default": "./checks/yarn/yarn.js"
+    },
+    "./cli/args/args": {
+      "types": "./cli/args/args.d.ts",
+      "import": "./cli/args/args.js",
+      "default": "./cli/args/args.js"
+    },
+    "./cli/args/args.js": {
+      "types": "./cli/args/args.d.ts",
+      "import": "./cli/args/args.js",
+      "default": "./cli/args/args.js"
+    },
+    "./cli/args/index": {
+      "types": "./cli/args/index.d.ts",
+      "import": "./cli/args/index.js",
+      "default": "./cli/args/index.js"
+    },
+    "./cli/args/index.js": {
+      "types": "./cli/args/index.d.ts",
+      "import": "./cli/args/index.js",
+      "default": "./cli/args/index.js"
+    },
+    "./cli/cli": {
+      "types": "./cli/cli.d.ts",
+      "import": "./cli/cli.js",
+      "default": "./cli/cli.js"
+    },
+    "./cli/cli.js": {
+      "types": "./cli/cli.d.ts",
+      "import": "./cli/cli.js",
+      "default": "./cli/cli.js"
+    },
+    "./cli/index": {
+      "types": "./cli/index.d.ts",
+      "import": "./cli/index.js",
+      "default": "./cli/index.js"
+    },
+    "./cli/index.js": {
+      "types": "./cli/index.d.ts",
+      "import": "./cli/index.js",
+      "default": "./cli/index.js"
+    },
+    "./commands/doctor/doctor": {
+      "types": "./commands/doctor/doctor.d.ts",
+      "import": "./commands/doctor/doctor.js",
+      "default": "./commands/doctor/doctor.js"
+    },
+    "./commands/doctor/doctor.js": {
+      "types": "./commands/doctor/doctor.d.ts",
+      "import": "./commands/doctor/doctor.js",
+      "default": "./commands/doctor/doctor.js"
+    },
+    "./commands/doctor/index": {
+      "types": "./commands/doctor/index.d.ts",
+      "import": "./commands/doctor/index.js",
+      "default": "./commands/doctor/index.js"
+    },
+    "./commands/doctor/index.js": {
+      "types": "./commands/doctor/index.d.ts",
+      "import": "./commands/doctor/index.js",
+      "default": "./commands/doctor/index.js"
+    },
+    "./commands/init/index": {
+      "types": "./commands/init/index.d.ts",
+      "import": "./commands/init/index.js",
+      "default": "./commands/init/index.js"
+    },
+    "./commands/init/index.js": {
+      "types": "./commands/init/index.d.ts",
+      "import": "./commands/init/index.js",
+      "default": "./commands/init/index.js"
+    },
+    "./commands/init/init": {
+      "types": "./commands/init/init.d.ts",
+      "import": "./commands/init/init.js",
+      "default": "./commands/init/init.js"
+    },
+    "./commands/init/init.js": {
+      "types": "./commands/init/init.d.ts",
+      "import": "./commands/init/init.js",
+      "default": "./commands/init/init.js"
+    },
+    "./commands/new/index": {
+      "types": "./commands/new/index.d.ts",
+      "import": "./commands/new/index.js",
+      "default": "./commands/new/index.js"
+    },
+    "./commands/new/index.js": {
+      "types": "./commands/new/index.d.ts",
+      "import": "./commands/new/index.js",
+      "default": "./commands/new/index.js"
+    },
+    "./commands/new/new": {
+      "types": "./commands/new/new.d.ts",
+      "import": "./commands/new/new.js",
+      "default": "./commands/new/new.js"
+    },
+    "./commands/new/new.js": {
+      "types": "./commands/new/new.d.ts",
+      "import": "./commands/new/new.js",
+      "default": "./commands/new/new.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./project-plan/api/api": {
+      "types": "./project-plan/api/api.d.ts",
+      "import": "./project-plan/api/api.js",
+      "default": "./project-plan/api/api.js"
+    },
+    "./project-plan/api/api.js": {
+      "types": "./project-plan/api/api.d.ts",
+      "import": "./project-plan/api/api.js",
+      "default": "./project-plan/api/api.js"
+    },
+    "./project-plan/api/index": {
+      "types": "./project-plan/api/index.d.ts",
+      "import": "./project-plan/api/index.js",
+      "default": "./project-plan/api/index.js"
+    },
+    "./project-plan/api/index.js": {
+      "types": "./project-plan/api/index.d.ts",
+      "import": "./project-plan/api/index.js",
+      "default": "./project-plan/api/index.js"
+    },
+    "./project-plan/ci/ci": {
+      "types": "./project-plan/ci/ci.d.ts",
+      "import": "./project-plan/ci/ci.js",
+      "default": "./project-plan/ci/ci.js"
+    },
+    "./project-plan/ci/ci.js": {
+      "types": "./project-plan/ci/ci.d.ts",
+      "import": "./project-plan/ci/ci.js",
+      "default": "./project-plan/ci/ci.js"
+    },
+    "./project-plan/ci/index": {
+      "types": "./project-plan/ci/index.d.ts",
+      "import": "./project-plan/ci/index.js",
+      "default": "./project-plan/ci/index.js"
+    },
+    "./project-plan/ci/index.js": {
+      "types": "./project-plan/ci/index.d.ts",
+      "import": "./project-plan/ci/index.js",
+      "default": "./project-plan/ci/index.js"
+    },
+    "./project-plan/create/create": {
+      "types": "./project-plan/create/create.d.ts",
+      "import": "./project-plan/create/create.js",
+      "default": "./project-plan/create/create.js"
+    },
+    "./project-plan/create/create.js": {
+      "types": "./project-plan/create/create.d.ts",
+      "import": "./project-plan/create/create.js",
+      "default": "./project-plan/create/create.js"
+    },
+    "./project-plan/create/index": {
+      "types": "./project-plan/create/index.d.ts",
+      "import": "./project-plan/create/index.js",
+      "default": "./project-plan/create/index.js"
+    },
+    "./project-plan/create/index.js": {
+      "types": "./project-plan/create/index.d.ts",
+      "import": "./project-plan/create/index.js",
+      "default": "./project-plan/create/index.js"
+    },
+    "./project-plan/index": {
+      "types": "./project-plan/index.d.ts",
+      "import": "./project-plan/index.js",
+      "default": "./project-plan/index.js"
+    },
+    "./project-plan/index.js": {
+      "types": "./project-plan/index.d.ts",
+      "import": "./project-plan/index.js",
+      "default": "./project-plan/index.js"
+    },
+    "./project-plan/kind/index": {
+      "types": "./project-plan/kind/index.d.ts",
+      "import": "./project-plan/kind/index.js",
+      "default": "./project-plan/kind/index.js"
+    },
+    "./project-plan/kind/index.js": {
+      "types": "./project-plan/kind/index.d.ts",
+      "import": "./project-plan/kind/index.js",
+      "default": "./project-plan/kind/index.js"
+    },
+    "./project-plan/kind/kind": {
+      "types": "./project-plan/kind/kind.d.ts",
+      "import": "./project-plan/kind/kind.js",
+      "default": "./project-plan/kind/kind.js"
+    },
+    "./project-plan/kind/kind.js": {
+      "types": "./project-plan/kind/kind.d.ts",
+      "import": "./project-plan/kind/kind.js",
+      "default": "./project-plan/kind/kind.js"
+    },
+    "./project-plan/print/index": {
+      "types": "./project-plan/print/index.d.ts",
+      "import": "./project-plan/print/index.js",
+      "default": "./project-plan/print/index.js"
+    },
+    "./project-plan/print/index.js": {
+      "types": "./project-plan/print/index.d.ts",
+      "import": "./project-plan/print/index.js",
+      "default": "./project-plan/print/index.js"
+    },
+    "./project-plan/print/print": {
+      "types": "./project-plan/print/print.d.ts",
+      "import": "./project-plan/print/print.js",
+      "default": "./project-plan/print/print.js"
+    },
+    "./project-plan/print/print.js": {
+      "types": "./project-plan/print/print.d.ts",
+      "import": "./project-plan/print/print.js",
+      "default": "./project-plan/print/print.js"
+    },
+    "./prompts/project-plan/index": {
+      "types": "./prompts/project-plan/index.d.ts",
+      "import": "./prompts/project-plan/index.js",
+      "default": "./prompts/project-plan/index.js"
+    },
+    "./prompts/project-plan/index.js": {
+      "types": "./prompts/project-plan/index.d.ts",
+      "import": "./prompts/project-plan/index.js",
+      "default": "./prompts/project-plan/index.js"
+    },
+    "./prompts/project-plan/project-plan": {
+      "types": "./prompts/project-plan/project-plan.d.ts",
+      "import": "./prompts/project-plan/project-plan.js",
+      "default": "./prompts/project-plan/project-plan.js"
+    },
+    "./prompts/project-plan/project-plan.js": {
+      "types": "./prompts/project-plan/project-plan.d.ts",
+      "import": "./prompts/project-plan/project-plan.js",
+      "default": "./prompts/project-plan/project-plan.js"
+    }
+  }
+}

@@ -122,3 +122,5 @@ Shared defaults:
 - `performance.hints: false`
 - production `optimization` with `TerserPlugin`
 - merged `resolve` defaults
+
+See the article with a complete browser and SSR bundling walkthrough: <https://vyriy.dev/examples/vyriy-webpack-config/>.

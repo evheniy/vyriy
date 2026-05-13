@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/hoc",
-  "version": "0.1.23",
+  "version": "0.2.0",
   "description": "React higher-order component utilities for Vyriy projects",
   "type": "module",
   "main": "./index.js",
@@ -100,6 +100,16 @@
       "types": "./react.d.ts",
       "import": "./react.js",
       "default": "./react.js"
+    },
+    "./react.stories": {
+      "types": "./react.stories.d.ts",
+      "import": "./react.stories.js",
+      "default": "./react.stories.js"
+    },
+    "./react.stories.js": {
+      "types": "./react.stories.d.ts",
+      "import": "./react.stories.js",
+      "default": "./react.stories.js"
     },
     "./wrapper": {
       "types": "./wrapper.d.ts",

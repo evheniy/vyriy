@@ -1,16 +1,16 @@
 {
   "name": "@vyriy/handler",
-  "version": "0.1.23",
+  "version": "0.2.0",
   "description": "Composable AWS Lambda handler chains and wrappers for Vyriy projects",
   "type": "module",
   "main": "./index.js",
   "dependencies": {
     "@types/aws-lambda": "^8.10.161",
-    "@vyriy/chaos": "0.1.23",
-    "@vyriy/config": "0.1.23",
-    "@vyriy/logger": "0.1.23",
-    "@vyriy/smoke": "0.1.23",
-    "@vyriy/timeout": "0.1.23"
+    "@vyriy/chaos": "0.2.0",
+    "@vyriy/config": "0.2.0",
+    "@vyriy/logger": "0.2.0",
+    "@vyriy/smoke": "0.2.0",
+    "@vyriy/timeout": "0.2.0"
   },
   "license": "MIT",
   "repository": {

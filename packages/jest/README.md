@@ -100,3 +100,5 @@ In this repository the root Jest config is a thin wrapper:
 ```js
 export { default } from '@vyriy/jest-config';
 ```
+
+See the article with a complete testing setup walkthrough: <https://vyriy.dev/examples/vyriy-jest-config/>.

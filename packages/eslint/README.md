@@ -127,3 +127,5 @@ Formatting issues are reported by ESLint as warnings through `prettier/prettier`
 The package depends on `prettier` directly so consumers of `@vyriy/eslint-config` do not need to install Prettier only to satisfy the plugin runtime.
 
 Projects that also run the Prettier CLI should still install or expose `prettier` in that project so commands like `prettier . --check` are available.
+
+See the article with a complete linting setup walkthrough: <https://vyriy.dev/examples/vyriy-eslint-config/>.

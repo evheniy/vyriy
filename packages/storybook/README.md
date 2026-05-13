@@ -70,3 +70,5 @@ In this repository:
 
 - `.storybook/main.ts` re-exports `@vyriy/storybook-config/main`
 - `.storybook/preview.ts` imports local styles and re-exports `@vyriy/storybook-config/preview`
+
+See the article with a complete Storybook setup walkthrough: <https://vyriy.dev/examples/vyriy-storybook-config/>.

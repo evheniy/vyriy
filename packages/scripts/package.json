@@ -1,18 +1,18 @@
 {
   "name": "@vyriy/scripts",
-  "version": "0.1.23",
+  "version": "0.2.0",
   "description": "Shared scripts package for Vyriy projects",
   "type": "module",
   "main": "./index.js",
   "dependencies": {
-    "@vyriy/cdk": "0.1.23",
-    "@vyriy/exec": "0.1.23",
-    "@vyriy/logger": "0.1.23",
-    "@vyriy/request": "0.1.23",
-    "@vyriy/retry": "0.1.23",
-    "@vyriy/script": "0.1.23",
-    "@vyriy/services": "0.1.23",
-    "@vyriy/smoke": "0.1.23"
+    "@vyriy/cdk": "0.2.0",
+    "@vyriy/exec": "0.2.0",
+    "@vyriy/logger": "0.2.0",
+    "@vyriy/request": "0.2.0",
+    "@vyriy/retry": "0.2.0",
+    "@vyriy/script": "0.2.0",
+    "@vyriy/services": "0.2.0",
+    "@vyriy/smoke": "0.2.0"
   },
   "license": "MIT",
   "repository": {

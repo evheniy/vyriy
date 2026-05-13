@@ -17,6 +17,7 @@ const config = {
         '<rootDir>/dist/',
         '<rootDir>/build/',
         '<rootDir>/bin/',
+        '<rootDir>/packages/.*/bin/',
         '<rootDir>/.bin/',
         '<rootDir>/.storybook/',
         '<rootDir>/coverage/',

@@ -28,6 +28,8 @@ The `aws-cdk-lib` package is listed because CDK apps and bin entrypoints use CDK
 - `cf.createDefaultBehavior(bucket, options?)` creates a CloudFront S3 origin behavior that redirects viewers to HTTPS.
 - `cf.createWebsiteRedirectBehavior(bucket, options?)` creates a CloudFront behavior for an S3 website redirect bucket.
 - `cf.createCloudFrontFunction(scope, id, props)` creates a CloudFront Function from inline JavaScript source.
+- `cf.createIndexRewriteFunctionCode({ rootDomain, wwwDomain })` creates CloudFront Function source for www redirects and clean URL index rewrites.
+- `cf.createFunctionAssociations(scope, id, { rootDomain, wwwDomain, ...props })` creates a viewer-request CloudFront Function association for www redirects and index rewrites.
 - `cf.createDistribution(scope, id, props)` creates a CloudFront distribution.
 - `route53.getHostedZone(scope, id, props)` looks up an existing Route 53 hosted zone.
 - `route53.createARecord(scope, id, props)` creates a Route 53 A record.
@@ -83,9 +85,14 @@ stack(
 
       const siteDistribution = cf.createDistribution(this, 'Distribution', {
         certificate,
-        defaultBehavior: cf.createDefaultBehavior(siteBucket),
+        defaultBehavior: cf.createDefaultBehavior(siteBucket, {
+          functionAssociations: cf.createFunctionAssociations(this, 'IndexRewriteFunction', {
+            rootDomain: domain,
+            wwwDomain: `www.${domain}`,
+          }),
+        }),
         defaultRootObject: 'index.html',
-        domainNames: [domain],
+        domainNames: [domain, `www.${domain}`],
         errorResponses: [
           {
             httpStatus: 403,
