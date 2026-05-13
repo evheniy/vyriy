@@ -1,8 +1,8 @@
 import { runDoctorCommand } from '../commands/doctor/index.js';
 import { runInitCommand } from '../commands/init/index.js';
 import { runNewCommand } from '../commands/new/index.js';
+import packageJson from '../package.json' with { type: 'json' };
 import { parseArgs } from './args/index.js';
-const version = '0.1.23';
 const helpText = `Vyriy Project Master
 
 Usage:
@@ -36,7 +36,7 @@ export const runVyriyCli = async (args = [], { output = console } = {}) => {
             output.log(helpText);
             break;
         case 'version':
-            output.log(version);
+            output.log(packageJson.version);
             break;
         case 'unknown':
             output.error(`Unknown command: ${command.command}\n`);

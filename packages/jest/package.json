@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/jest-config",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Shared Jest config for Vyriy projects",
   "type": "module",
   "main": "./index.js",
@@ -11,6 +11,7 @@
     "jest-environment-jsdom": "^30.4.1",
     "jest-junit": "^17.0.0"
   },
+  "agents": "./AGENTS.md",
   "license": "MIT",
   "repository": {
     "type": "git",

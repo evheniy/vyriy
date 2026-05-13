@@ -1,10 +1,11 @@
 {
   "name": "vyriy",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Interactive project master for calm cloud-ready applications.",
   "type": "module",
   "main": "./index.js",
   "bin": "./bin/vyriy.js",
+  "agents": "./AGENTS.md",
   "license": "MIT",
   "repository": {
     "type": "git",

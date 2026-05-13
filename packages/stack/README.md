@@ -149,3 +149,322 @@ stack(
   },
 );
 ```
+
+## API Gateway Lambda Example
+
+This example wires a Lambda-backed REST API to an API Gateway custom domain:
+
+- find an existing hosted zone
+- create a DNS-validated ACM certificate
+- create a Lambda from built API assets
+- create an edge REST API with proxy Lambda integration
+- map the API to a custom domain
+- create a Route 53 alias record for the API Gateway domain
+
+Edge API Gateway custom domains use edge-optimized CloudFront distributions, so keep the certificate in `us-east-1`.
+
+```ts
+import { CfnOutput, Stack, type StackProps } from 'aws-cdk-lib';
+import { ApiGatewayDomain } from 'aws-cdk-lib/aws-route53-targets';
+import type { Construct } from 'constructs';
+
+import { stack } from '@vyriy/cdk';
+import { acm, apigateway, lambda, route53 } from '@vyriy/stack';
+import { getPackage } from '@vyriy/package';
+import { path } from '@vyriy/path';
+
+stack(
+  class ApiStack extends Stack {
+    constructor(scope: Construct, id: string, props: StackProps & { env: { account: string; region: string } }) {
+      super(scope, id, props);
+
+      const domain = 'api.site.com';
+      const hostedZoneName = 'site.com';
+      const { description } = getPackage();
+
+      const zone = route53.getHostedZone(this, 'HostedZone', {
+        zoneName: hostedZoneName,
+      });
+
+      const certificate = acm.createCertificate(this, 'Certificate', {
+        domainName: domain,
+        validation: acm.CertificateValidation.fromDns(zone),
+      });
+
+      const apiLambda = lambda.createLambda(this, 'ApiLambda', {
+        code: lambda.Code.fromAsset(path('dist', 'api')),
+        description,
+        functionName: 'api',
+        handler: 'index.handler',
+      });
+
+      const apiGateway = apigateway.createApiGateway(this, 'ApiGateway', {
+        defaultIntegration: apigateway.createIntegration(apiLambda, { proxy: true }),
+        description,
+        restApiName: `${id}-api-gateway`,
+      });
+
+      const apiDomainName = apigateway.createDomainName(this, 'ApiGatewayDomain', {
+        certificate,
+        domainName: domain,
+      });
+
+      apigateway.createBasePathMapping(this, 'ApiBasePathMapping', {
+        domainName: apiDomainName,
+        restApi: apiGateway,
+      });
+
+      route53.createARecord(this, 'ARecord', {
+        recordName: domain,
+        target: route53.RecordTarget.fromAlias(new ApiGatewayDomain(apiDomainName)),
+        zone,
+      });
+
+      new CfnOutput(this, 'Account', { value: props.env.account });
+      new CfnOutput(this, 'Region', { value: props.env.region });
+
+      new CfnOutput(this, 'LambdaName', { value: apiLambda.functionName });
+
+      new CfnOutput(this, 'ApiGatewayId', { value: apiGateway.restApiId });
+      new CfnOutput(this, 'ApiGatewayUrl', { value: apiGateway.url });
+
+      new CfnOutput(this, 'ApiUrl', { value: `https://${domain}/` });
+    }
+  },
+);
+```
+
+## Fargate Worker Example
+
+This example wires a Fargate task foundation to an existing VPC:
+
+- read the VPC id from the environment
+- load package metadata for reusable descriptions
+- create a security group for the workload
+- create an ECR repository for the task image
+- create an ECS cluster in the VPC
+- create a Fargate task definition with AWS Logs configured
+
+```ts
+import { CfnOutput, Stack, type StackProps } from 'aws-cdk-lib';
+import type { Construct } from 'constructs';
+
+import { stack } from '@vyriy/cdk';
+import { getVpc } from '@vyriy/env';
+import { getPackage } from '@vyriy/package';
+import { ec2, ecr, ecs } from '@vyriy/stack';
+
+stack(
+  class FargateWorkerStack extends Stack {
+    constructor(scope: Construct, id: string, props: StackProps & { env: { account: string; region: string } }) {
+      super(scope, id, props);
+
+      const { description } = getPackage();
+      const vpc = ec2.findVpc(this, 'Vpc', { vpcId: getVpc() });
+      const subnets = vpc.privateSubnets;
+
+      const securityGroup = ec2.createSecurityGroup(this, 'SecurityGroup', {
+        allowAllOutbound: true,
+        description,
+        securityGroupName: `${id}-${vpc.vpcId}-securityGroup`,
+        vpc,
+      });
+
+      const repository = ecr.createRepository(this, 'SyncRepository', {
+        repositoryName: `${id}-repository`,
+      });
+
+      const cluster = ecs.createCluster(this, 'FargateCluster', {
+        clusterName: `${id}-cluster`,
+        vpc,
+      });
+
+      const taskDefinition = ecs.createTaskDefinition(this, 'SyncFargateTaskDefinition', {
+        cpu: 256,
+        family: `${id}-task-definition`,
+        memoryLimitMiB: 512,
+      });
+
+      taskDefinition.addContainer('SyncTaskDefinition', {
+        cpu: 256,
+        image: ecs.ContainerImage.fromEcrRepository(repository),
+        logging: ecs.setLogs({ streamPrefix: `${id}-cluster-logs` }),
+        memoryLimitMiB: 512,
+      });
+
+      new CfnOutput(this, 'Account', { value: props.env.account });
+      new CfnOutput(this, 'Region', { value: props.env.region });
+
+      new CfnOutput(this, 'VpcId', { value: vpc.vpcId });
+      new CfnOutput(this, 'PrivateSubnetIds', { value: subnets.map((subnet) => subnet.subnetId).join(',') });
+      new CfnOutput(this, 'SecurityGroupId', { value: securityGroup.securityGroupId });
+
+      new CfnOutput(this, 'RepositoryName', { value: repository.repositoryName });
+      new CfnOutput(this, 'ClusterName', { value: cluster.clusterName });
+
+      new CfnOutput(this, 'TaskDefinitionArn', { value: taskDefinition.taskDefinitionArn });
+    }
+  },
+);
+```
+
+## DynamoDB Access Examples
+
+These examples show small DynamoDB table definitions and common IAM access patterns for Lambda and Fargate workloads.
+
+Create two country tables:
+
+```ts
+import { dynamodb } from '@vyriy/stack';
+
+const countriesIndexTable = dynamodb.createTable(this, 'CountriesIndexTable', {
+  partitionKey: {
+    name: 'key',
+    type: dynamodb.AttributeType.STRING,
+  },
+  tableName: `${id}-countries-index`,
+});
+
+const countriesTable = dynamodb.createTable(this, 'CountriesTable', {
+  partitionKey: {
+    name: 'key',
+    type: dynamodb.AttributeType.STRING,
+  },
+  sortKey: {
+    name: 'code',
+    type: dynamodb.AttributeType.STRING,
+  },
+  tableName: `${id}-countries`,
+});
+```
+
+Grant Lambda access to the tables:
+
+```ts
+countriesIndexTable.grantReadData(apiLambda);
+countriesTable.grantReadWriteData(apiLambda);
+
+// Use full access only for maintenance or sync jobs that really need table-level control.
+countriesIndexTable.grantFullAccess(apiLambda);
+```
+
+Grant Fargate task access through the task role:
+
+```ts
+countriesIndexTable.grantReadData(taskDefinition.taskRole);
+countriesTable.grantReadWriteData(taskDefinition.taskRole);
+
+// Full access is useful for controlled backfill or indexing tasks.
+countriesIndexTable.grantFullAccess(taskDefinition.taskRole);
+```
+
+Allow a Lambda to run the Fargate task definition:
+
+```ts
+taskDefinition.grantRun(apiLambda);
+```
+
+## Messaging And Parameter Examples
+
+These examples show simple SNS, SQS, and SSM helper usage for application stacks.
+
+Create an SNS topic and grant publishers/subscribers:
+
+```ts
+import { sns } from '@vyriy/stack';
+
+const eventsTopic = sns.createTopic(this, 'EventsTopic', {
+  topicName: `${id}-events`,
+});
+
+eventsTopic.grantPublish(apiLambda);
+eventsTopic.grantSubscribe(taskDefinition.taskRole);
+```
+
+Import an existing SNS topic:
+
+```ts
+const importedEventsTopic = sns.fromTopicArn(
+  this,
+  'ImportedEventsTopic',
+  `arn:aws:sns:${this.region}:${this.account}:${id}-events`,
+);
+
+importedEventsTopic.grantPublish(taskDefinition.taskRole);
+```
+
+Create an SQS queue and allow Lambda/Fargate workers to use it:
+
+```ts
+import { Duration } from 'aws-cdk-lib';
+
+import { sqs } from '@vyriy/stack';
+
+const jobsQueue = sqs.createQueue(this, 'JobsQueue', {
+  queueName: `${id}-jobs`,
+  visibilityTimeout: Duration.seconds(60),
+});
+
+jobsQueue.grantSendMessages(apiLambda);
+jobsQueue.grantConsumeMessages(taskDefinition.taskRole);
+```
+
+Import an existing SQS queue:
+
+```ts
+const importedJobsQueue = sqs.fromQueueAttributes(this, 'ImportedJobsQueue', {
+  queueArn: `arn:aws:sqs:${this.region}:${this.account}:${id}-jobs`,
+  queueUrl: `https://sqs.${this.region}.amazonaws.com/${this.account}/${id}-jobs`,
+});
+
+importedJobsQueue.grantConsumeMessages(apiLambda);
+```
+
+Read SSM parameter values and import parameters:
+
+```ts
+import { ssm } from '@vyriy/stack';
+
+const apiBaseUrl = ssm.valueForStringParameter(this, `/${id}/api/base-url`);
+
+const importedApiKey = ssm.fromSecureStringParameterAttributes(this, 'ImportedApiKey', {
+  parameterName: `/${id}/api/key`,
+  version: 1,
+});
+
+importedApiKey.grantRead(apiLambda);
+importedApiKey.grantRead(taskDefinition.taskRole);
+```
+
+Pass SSM parameter values into Lambda and Fargate environment variables:
+
+```ts
+const apiBaseUrlParameterName = `/${id}/api/base-url`;
+const apiKeyParameterName = `/${id}/api/key`;
+
+const apiBaseUrl = ssm.valueForStringParameter(this, apiBaseUrlParameterName);
+const apiKey = ssm.valueForStringParameter(this, apiKeyParameterName);
+
+const apiLambda = lambda.createLambda(this, 'ApiLambda', {
+  code: lambda.Code.fromAsset(path('dist', 'api')),
+  environment: {
+    API_BASE_URL: apiBaseUrl,
+    API_KEY_PARAMETER_NAME: apiKeyParameterName,
+  },
+  handler: 'index.handler',
+});
+
+taskDefinition.addContainer('WorkerContainer', {
+  environment: {
+    API_BASE_URL: apiBaseUrl,
+    API_KEY: apiKey,
+  },
+  image: ecs.ContainerImage.fromEcrRepository(repository),
+  logging: ecs.setLogs({ streamPrefix: `${id}-worker-logs` }),
+});
+
+const importedApiKeyForEnv = ssm.fromStringParameterName(this, 'ImportedApiKeyForEnv', apiKeyParameterName);
+
+importedApiKeyForEnv.grantRead(apiLambda);
+importedApiKeyForEnv.grantRead(taskDefinition.taskRole);
+```

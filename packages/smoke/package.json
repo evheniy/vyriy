@@ -1,9 +1,10 @@
 {
   "name": "@vyriy/smoke",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Smoke request matcher for short-circuiting handlers in Vyriy projects",
   "type": "module",
   "main": "./index.js",
+  "agents": "./AGENTS.md",
   "license": "MIT",
   "repository": {
     "type": "git",

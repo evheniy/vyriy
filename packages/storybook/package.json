@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/storybook-config",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Shared Storybook config for Vyriy projects",
   "type": "module",
   "main": "./main.js",
@@ -23,6 +23,7 @@
     "typescript": "^6.0.3",
     "webpack": "^5.106.2"
   },
+  "agents": "./AGENTS.md",
   "license": "MIT",
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/stylelint-config",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Shared Stylelint config for Vyriy projects",
   "type": "module",
   "main": "./index.js",
@@ -12,6 +12,7 @@
     "stylelint-config-standard-scss": "^17.0.0",
     "stylelint-order": "^8.1.1"
   },
+  "agents": "./AGENTS.md",
   "license": "MIT",
   "repository": {
     "type": "git",
