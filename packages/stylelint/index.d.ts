@@ -1,7 +1,8 @@
+import postcssScss from 'postcss-scss';
 declare const config: {
-    extends: string[];
-    customSyntax: string;
+    customSyntax: typeof postcssScss;
     ignoreFiles: string[];
+    plugins: unknown[];
     rules: {
         'color-hex-length': null;
         'custom-property-empty-line-before': null;

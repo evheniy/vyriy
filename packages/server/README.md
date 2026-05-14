@@ -32,58 +32,54 @@ server(async () => ({
 }));
 ```
 
+Use `api(...)` when you want the handler package wrappers. It keeps the same `(event, context)` Lambda handler shape.
+
+```ts
+import { api } from '@vyriy/handler';
+import { server } from '@vyriy/server';
+
+const handler = api(async (event) => ({
+  statusCode: 200,
+  body: JSON.stringify({
+    ok: true,
+    path: event.path,
+  }),
+}));
+
+server(handler);
+```
+
 Run a Lambda response streaming handler locally:
 
 ```ts
-import { api, streamify } from '@vyriy/handler';
-import { server } from '@vyriy/server';
+import { streamServer } from '@vyriy/server';
 
-server(
-  streamify(
-    api(async (event, responseStream) => {
-      responseStream.setContentType?.('text/plain');
-      responseStream.write(`Path: ${event.path}\n`);
-      responseStream.end('Done');
-    }),
-  ),
-);
+streamServer(async (event, responseStream) => {
+  responseStream.setContentType?.('text/plain');
+  responseStream.write(`Path: ${event.path}\n`);
+  responseStream.end('Done');
+});
+```
+
+The stream handler receives the API Gateway-style event first, the response stream second, and the Lambda context third.
+
+Use `streamApi(...)` when you want the handler package wrappers. It keeps the same `(event, responseStream, context)` stream handler shape.
+
+```ts
+import { streamApi } from '@vyriy/handler';
+import { streamServer } from '@vyriy/server';
+
+const handler = streamApi((event, responseStream) => {
+  responseStream.setContentType?.('text/plain');
+  responseStream.write(`Path: ${event.path}\n`);
+  responseStream.end('Done');
+});
+
+streamServer(handler);
 ```
 
 Keep the AWS-specific `awslambda.streamifyResponse(handler)` wrapper in a separate Lambda entrypoint.
 
-Serve static files through `@vyriy/router` prefix routes:
-
-```ts
-import { createRouter } from '@vyriy/router';
-import { staticFiles } from '@vyriy/server/static';
-
-const router = createRouter().prefix('/static', staticFiles('./public'));
-```
-
-Serve a static directory directly when the server only needs files:
-
-```ts
-import { server, staticFiles } from '@vyriy/server';
-
-server(
-  staticFiles('./public', {
-    fallback: 'index.html',
-    fallbackStatusCode: 200,
-  }),
-);
-```
-
-By default, missing static files fall back to `404.html` from the same directory with status `404` when that file exists.
-For static apps that should fall back to `index.html`, configure the fallback explicitly:
-
-```ts
-const router = createRouter().prefix(
-  '/static',
-  staticFiles('./public', {
-    fallback: 'index.html',
-    fallbackStatusCode: 200,
-  }),
-);
-```
+Static files are intentionally left to the Docker/web-server layer, for example Nginx, Caddy, or the platform serving assets in front of this Node process.
 
 The server listens on `PORT` from `@vyriy/env`. The default port is `3000`.

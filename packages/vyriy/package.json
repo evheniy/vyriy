@@ -1,6 +1,6 @@
 {
   "name": "vyriy",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "description": "Interactive project master for calm cloud-ready applications.",
   "type": "module",
   "main": "./index.js",

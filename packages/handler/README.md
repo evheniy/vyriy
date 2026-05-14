@@ -45,33 +45,31 @@ export const handler = api(async (event) => ({
 }));
 ```
 
-For Lambda response streaming, keep the reusable handler separate from the runtime entrypoints:
+For Lambda response streaming, use the separate stream chain:
 
 ```ts
 // handler.ts
-import { api, streamify } from '@vyriy/handler';
+import { streamApi } from '@vyriy/handler';
 
-export const handler = streamify(
-  api(async (event, responseStream, context) => {
-    responseStream.setContentType?.('text/plain');
-    responseStream.write(`Request path: ${event.path}\n`);
-    responseStream.write(`Request id: ${context.awsRequestId}\n`);
-    responseStream.write('Part 1 of the response...');
-    responseStream.write('Part 2 of the response...');
-    responseStream.end();
-  }),
-);
+export const handler = streamApi(async (event, responseStream) => {
+  responseStream.setContentType?.('text/plain');
+  responseStream.write(`Request path: ${event.path}\n`);
+  responseStream.write('Part 1 of the response...');
+  responseStream.end('Part 2 of the response...');
+});
 ```
+
+`streamApi(...)` handlers receive `(event, responseStream, context)` and write directly to the response stream.
 
 Use the same handler locally, in Docker, or in a Fargate-style HTTP runtime:
 
 ```ts
 // server.ts
-import { server } from '@vyriy/server';
+import { streamServer } from '@vyriy/server';
 
 import { handler } from './handler.js';
 
-server(handler);
+streamServer(handler);
 ```
 
 Use the same handler in AWS Lambda response streaming:
@@ -83,24 +81,20 @@ import { handler } from './handler.js';
 export const main = awslambda.streamifyResponse(handler);
 ```
 
-That `handler.ts` shape is already streamified. For a standard non-streaming Lambda, export an `api(...)` handler directly without `streamify(...)` and without `responseStream`.
+That `handler.ts` shape already matches Lambda response streaming. For a standard non-streaming Lambda, export an `api(...)` handler directly without `responseStream`.
 
 You can also inline the same shape in one file when a separate local entrypoint is not needed:
 
 ```ts
-import { api, streamify } from '@vyriy/handler';
+import { streamApi } from '@vyriy/handler';
 
 export const main = awslambda.streamifyResponse(
-  streamify(
-    api(async (event, responseStream, context) => {
-      responseStream.setContentType?.('text/plain');
-      responseStream.write(`Request path: ${event.path}\n`);
-      responseStream.write(`Request id: ${context.awsRequestId}\n`);
-      responseStream.write('Part 1 of the response...');
-      responseStream.write('Part 2 of the response...');
-      responseStream.end();
-    }),
-  ),
+  streamApi(async (event, responseStream) => {
+    responseStream.setContentType?.('text/plain');
+    responseStream.write(`Request path: ${event.path}\n`);
+    responseStream.write('Part 1 of the response...');
+    responseStream.end('Part 2 of the response...');
+  }),
 );
 ```
 
@@ -141,15 +135,14 @@ export const handler = schedule(async (event) => {
 Compose a custom handler pipeline from individual helpers:
 
 ```ts
-import { compose, withChaos, withContext, withError, withLogger, withSmoke, withTimeout } from '@vyriy/handler';
+import { compose, withChaos, withContext, withError, withLogger, withTimeout } from '@vyriy/handler';
 
 export const handler = compose(
-  withError({ throwError: true }),
+  withError(),
   withLogger(),
   withChaos(),
   withTimeout(),
   withContext(),
-  withSmoke(),
 )(async (event) => {
   return {
     ok: true,
@@ -179,7 +172,7 @@ const withRequestId = factory<{ headerName?: string }>(async (handler, args, opt
 });
 
 export const handler = compose(
-  withError({ throwError: true }),
+  withError(),
   withLogger(),
   withTimeout(),
   withRequestId({
@@ -196,11 +189,9 @@ export const handler = compose(
 ## Prebuilt Chains
 
 - `api`
-  API Gateway chain with error handling, logging, timeout handling, context setup, smoke checks, healthcheck handling, default headers, CORS preflight handling, and structural support for streaming/static-file response results.
-- `streamifyApiResponse`
-  Adapts an `api(...)` handler that returns a streaming result to the three-argument handler shape expected by `awslambda.streamifyResponse`.
-- `streamify`
-  Alias for `streamifyApiResponse` intended for direct Lambda response streaming handlers.
+  API Gateway chain with error handling, logging, timeout handling, context setup, smoke checks, healthcheck handling, default headers, and CORS preflight handling.
+- `streamApi`
+  Response streaming API Gateway chain with the same wrapper behavior as `api`. Handlers receive `(event, responseStream, context)` and write directly to the Lambda response stream.
 
 - `schedule`
   EventBridge schedule chain with logging, timeout handling, context setup, smoke checks, and rethrown errors.
@@ -215,22 +206,18 @@ export const handler = compose(
 
 ### `withError(options?)`
 
-Catches handler failures, optionally runs an async error handler, and rethrows only when `throwError` is enabled.
+Catches handler failures, optionally runs a side-effect `errorHandler`, and rethrows the original error.
 
 Options:
 
 ```ts
 {
-  errorHandler?: (error: unknown) => Promise<void>;
-  throwError?: boolean;
+  errorHandler?: (error: unknown, args: HandlerParams<Event>) => Promise<void> | void;
 }
 ```
 
 - `errorHandler`
-  Async callback invoked with the caught error.
-
-- `throwError`
-  Re-throws the original error after `errorHandler` runs. Defaults to `false`.
+  Callback invoked with the caught error and handler arguments before the original error is rethrown.
 
 Example:
 
@@ -241,11 +228,14 @@ export const handler = withError({
   errorHandler: async (error) => {
     console.error('Handler failed:', error);
   },
-  throwError: true,
 })(async () => {
   throw new Error('boom');
 });
 ```
+
+### `withApiError(options?)`
+
+Catches API handler failures and converts them to an API Gateway result. Without a custom `errorHandler`, it returns a JSON `500`.
 
 ### `withLogger(options?)`
 
@@ -357,7 +347,7 @@ export const handler = withChaos({
 
 ### `withSmoke()`
 
-Returns the smoke response when the incoming event matches the smoke request payload.
+Returns the smoke response when the incoming event has `isSmoke: true`.
 
 Example:
 
@@ -374,16 +364,18 @@ export const handler = withSmoke()(async () => {
 });
 ```
 
+`withSmoke()` is used by the API, schedule, SNS, and SQS chains.
+
 ## Types
 
 The package also exports shared handler types:
 
 ```ts
-import type { Context, Decorator, Handler, Response } from '@vyriy/handler';
+import type { Context, Decorator, Handler, HandlerParams, Response } from '@vyriy/handler';
 ```
 
 ## Notes
 
 - `api` includes API-specific wrappers such as healthcheck handling, default headers, and CORS preflight handling
-- `schedule`, `sns`, and `sqs` enable `throwError: true` in `withError(...)`
-- `withSmoke()` delegates matching to `@vyriy/smoke`
+- `schedule`, `sns`, and `sqs` use `withError()` so failures are rethrown for event-source retry behavior
+- `withSmoke()` delegates matching to `@vyriy/smoke` and returns its API Gateway-compatible response

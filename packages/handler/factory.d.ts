@@ -1,4 +1,7 @@
 import type { Context } from 'aws-lambda';
-import type { Factory, HandlerArgs, HandlerParams } from './types.js';
-export declare const getContext: <Event, Args extends HandlerArgs>(args: HandlerParams<Event, Args>) => Context;
+import type { Factory, HandlerParams, ResponseStream, StreamFactory, StreamHandlerParams } from './types.js';
+export declare const getContext: <Event>(args: HandlerParams<Event>) => Context;
+export declare const getResponseStream: <Event>(args: StreamHandlerParams<Event>) => ResponseStream;
+export declare const getStreamContext: <Event>(args: StreamHandlerParams<Event>) => Context;
 export declare const factory: Factory;
+export declare const streamFactory: StreamFactory;

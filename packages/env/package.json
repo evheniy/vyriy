@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/env",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "description": "Shared env utility for Vyriy projects",
   "type": "module",
   "main": "./index.js",

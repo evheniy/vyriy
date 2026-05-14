@@ -1,16 +1,15 @@
 {
   "name": "@vyriy/server",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "description": "Small HTTP server adapter for Lambda-style Vyriy handlers",
   "type": "module",
   "main": "./index.js",
   "dependencies": {
     "@types/aws-lambda": "^8.10.161",
-    "@vyriy/env": "0.3.0",
-    "@vyriy/error": "0.3.0",
-    "@vyriy/handler": "0.3.0",
-    "@vyriy/logger": "0.3.0",
-    "@vyriy/router": "0.3.0"
+    "@vyriy/env": "0.3.2",
+    "@vyriy/error": "0.3.2",
+    "@vyriy/handler": "0.3.2",
+    "@vyriy/logger": "0.3.2"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",
@@ -115,16 +114,6 @@
       "types": "./shutdown.d.ts",
       "import": "./shutdown.js",
       "default": "./shutdown.js"
-    },
-    "./static": {
-      "types": "./static.d.ts",
-      "import": "./static.js",
-      "default": "./static.js"
-    },
-    "./static.js": {
-      "types": "./static.d.ts",
-      "import": "./static.js",
-      "default": "./static.js"
     }
   }
 }

@@ -1,7 +1,2 @@
-import type { ApiEvent, ApiResult, Context, Handler, ResponseStream } from './types.js';
-type ApiDecorator = {
-    (handler: Handler<ApiEvent, ApiResult | void, [context: Context]>): Handler<ApiEvent, ApiResult | void, [context: Context]>;
-    (handler: Handler<ApiEvent, ApiResult | void, [responseStream: ResponseStream, context: Context]>): Handler<ApiEvent, ApiResult | void, [responseStream: ResponseStream, context: Context]>;
-};
-export declare const api: ApiDecorator;
-export {};
+export declare const api: import("./types.js").Decorator<import("aws-lambda").APIGatewayProxyEvent, import("aws-lambda").APIGatewayProxyResult>;
+export declare const streamApi: import("./types.js").StreamDecorator<import("aws-lambda").APIGatewayProxyEvent>;

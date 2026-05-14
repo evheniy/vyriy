@@ -1,6 +1,6 @@
 import { chaos } from '@vyriy/chaos';
 import { getConfig } from '@vyriy/config';
-import { factory } from '../factory.js';
+import { factory, streamFactory } from '../factory.js';
 const getChaosEnabled = () => getConfig('CHAOS_ENABLED', false, 'boolean');
 const getChaosErrorEnabled = () => getConfig('CHAOS_ERROR_ENABLED', true, 'boolean');
 const getChaosTimeoutEnabled = () => getConfig('CHAOS_TIMEOUT_ENABLED', true, 'boolean');
@@ -23,6 +23,17 @@ const getStrategy = (options) => {
     return 'random';
 };
 export const withChaos = factory(async (handler, args, options = {}) => {
+    const enabled = options.enabled ?? getChaosEnabled();
+    const strategy = getStrategy(options);
+    await chaos({
+        ...options,
+        enabled: enabled && (strategy !== 'random' || getChaosErrorEnabled() || getChaosTimeoutEnabled()),
+        strategy,
+        timeoutMs: options.timeoutMs ?? getChaosTimeoutMs(),
+    });
+    return handler(...args);
+});
+export const streamWithChaos = streamFactory(async (handler, args, options = {}) => {
     const enabled = options.enabled ?? getChaosEnabled();
     const strategy = getStrategy(options);
     await chaos({

@@ -1,6 +1,8 @@
 import type { APIGatewayProxyEvent, APIGatewayProxyEventQueryStringParameters, APIGatewayProxyResult } from 'aws-lambda';
 export type { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-export type RouteResult = {
+type MaybePromise<Result> = Result | Promise<Result>;
+export type RouteResult = APIGatewayProxyResult;
+export type RouteHandlerResult = {
     body: APIGatewayProxyResult['body'];
     headers?: APIGatewayProxyResult['headers'];
     isBase64Encoded?: APIGatewayProxyResult['isBase64Encoded'];
@@ -21,10 +23,10 @@ export type HandlerParams = {
     body?: string;
     headers?: APIGatewayProxyEvent['headers'];
     pathParameters?: APIGatewayProxyEvent['pathParameters'];
-    responseStream?: ResponseStream;
     event: APIGatewayProxyEvent;
 };
-export type Handler = (params: HandlerParams) => Promise<RouteResult | void>;
+export type Handler = (params: HandlerParams) => MaybePromise<RouteHandlerResult>;
+export type StreamHandler = (params: HandlerParams, responseStream: ResponseStream) => MaybePromise<void>;
 export type RouterApi = {
     get(path: string, handler: Handler): RouterApi;
     post(path: string, handler: Handler): RouterApi;
@@ -32,6 +34,14 @@ export type RouterApi = {
     delete(path: string, handler: Handler): RouterApi;
     fallback(handler: Handler): RouterApi;
     patch(path: string, handler: Handler): RouterApi;
-    prefix(pathPrefix: string, handler: Handler): RouterApi;
-    route(event: APIGatewayProxyEvent, responseStream?: ResponseStream): Promise<RouteResult | void>;
+    route(event: APIGatewayProxyEvent): Promise<RouteResult>;
+};
+export type StreamRouterApi = {
+    get(path: string, handler: StreamHandler): StreamRouterApi;
+    post(path: string, handler: StreamHandler): StreamRouterApi;
+    put(path: string, handler: StreamHandler): StreamRouterApi;
+    delete(path: string, handler: StreamHandler): StreamRouterApi;
+    fallback(handler: StreamHandler): StreamRouterApi;
+    patch(path: string, handler: StreamHandler): StreamRouterApi;
+    route(event: APIGatewayProxyEvent, responseStream: ResponseStream): Promise<void>;
 };

@@ -42,13 +42,21 @@ if (result) {
   Default smoke request payload: `{ isSmoke: true }`.
 
 - `response`
-  Default smoke response payload: `{ status: 'success' }`.
+  Default API Gateway-compatible smoke response:
+
+```ts
+{
+  statusCode: 200,
+  body: JSON.stringify({
+    status: 'success',
+  }),
+}
+```
 
 - `smoke(event)`
   Returns the smoke response when `event` matches the smoke request, otherwise returns `false`.
 
 ## Notes
 
-- matching is performed by comparing `JSON.stringify(event)` and `JSON.stringify(request)`
-- if property order differs, objects that are otherwise structurally equal may not match
+- matching checks whether the incoming event is an object with `isSmoke: true`
 - the helper is best suited for small, stable smoke payloads

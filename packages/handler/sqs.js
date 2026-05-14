@@ -4,4 +4,4 @@ import { withLogger } from './wrapper/logger.js';
 import { withTimeout } from './wrapper/timeout.js';
 import { withContext } from './wrapper/context.js';
 import { withSmoke } from './wrapper/smoke.js';
-export const sqs = compose(withError({ throwError: true }), withLogger(), withTimeout(), withContext(), withSmoke());
+export const sqs = compose(withError(), withLogger(), withTimeout(), withContext(), withSmoke());

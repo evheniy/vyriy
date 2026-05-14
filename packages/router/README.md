@@ -9,7 +9,6 @@ This package provides a small API Gateway router for Lambda handlers.
 It is intentionally kept small:
 
 - matches by HTTP method and exact path
-- supports simple prefix dispatch for handler factories such as static file serving
 - passes API Gateway event data into handlers
 - returns a Lambda-friendly response shape
 
@@ -29,16 +28,14 @@ With Yarn:
 yarn add @vyriy/router
 ```
 
-## Usage
+## Basic Router
 
 ```ts
 import { createRouter } from '@vyriy/router';
-import { staticFiles } from '@vyriy/server/static';
 
 const router = createRouter();
 
 router.get('/health', async ({ event, query, headers, pathParameters, body }) => ({
-  statusCode: 200,
   body: JSON.stringify({
     ok: true,
     method: event.httpMethod,
@@ -49,8 +46,6 @@ router.get('/health', async ({ event, query, headers, pathParameters, body }) =>
   }),
 }));
 
-router.prefix('/static', staticFiles('./public'));
-
 router.fallback(async ({ event }) => ({
   statusCode: 404,
   body: JSON.stringify({
@@ -58,16 +53,98 @@ router.fallback(async ({ event }) => ({
     path: event.path,
   }),
 }));
+
+export const handler = (event: Parameters<typeof router.route>[0]) => router.route(event);
 ```
 
-Prefix handlers receive the relative matched path in `pathParameters.proxy`, so they can behave like normal handlers:
+## Stream Router
+
+Use `createStreamRouter()` when handlers write directly to a Lambda response stream. The stream is passed as the second handler argument, and stream handlers do not return a response object.
 
 ```ts
-router.prefix('/events', async ({ pathParameters, responseStream }) => {
-  responseStream?.setContentType?.('text/plain');
-  responseStream?.write(`Path: ${pathParameters?.proxy}`);
-  responseStream?.end();
+import { createStreamRouter } from '@vyriy/router';
+
+const streamRouter = createStreamRouter();
+
+streamRouter.get('/events', ({ event, query }, responseStream) => {
+  responseStream.setContentType?.('text/plain');
+  responseStream.write(`path: ${event.path}\n`);
+  responseStream.write(`cursor: ${query?.cursor ?? 'start'}\n`);
+  responseStream.end('done');
 });
+
+streamRouter.fallback(({ event }, responseStream) => {
+  responseStream.setContentType?.('application/json');
+  responseStream.end(
+    JSON.stringify({
+      message: 'Not Found',
+      path: event.path,
+    }),
+  );
+});
+
+export const handler = (
+  event: Parameters<typeof streamRouter.route>[0],
+  responseStream: Parameters<typeof streamRouter.route>[1],
+) => streamRouter.route(event, responseStream);
+```
+
+## Calm Composition
+
+The router keeps request matching separate from handler wrappers and local server adapters. A small API can stay as a plain composition of focused packages:
+
+```ts
+import { api } from '@vyriy/handler';
+import { createRouter } from '@vyriy/router';
+import { server } from '@vyriy/server';
+
+const router = createRouter();
+
+router.get('/health', () => ({
+  body: JSON.stringify({
+    ok: true,
+  }),
+}));
+
+const handler = api((event) => router.route(event));
+
+server(handler);
+```
+
+The same shape works for Lambda response streaming:
+
+```ts
+import { streamApi } from '@vyriy/handler';
+import { createStreamRouter } from '@vyriy/router';
+import { streamServer } from '@vyriy/server';
+
+const router = createStreamRouter();
+
+router.get('/events', (_params, responseStream) => {
+  responseStream.setContentType?.('text/plain');
+  responseStream.end('ok');
+});
+
+const handler = streamApi((event, responseStream) => router.route(event, responseStream));
+
+streamServer(handler);
+```
+
+For a Lambda-only entrypoint, keep the same composition and export the handler:
+
+```ts
+import { api } from '@vyriy/handler';
+import { createRouter } from '@vyriy/router';
+
+const router = createRouter();
+
+router.get('/health', () => ({
+  body: JSON.stringify({
+    ok: true,
+  }),
+}));
+
+export const handler = api((event) => router.route(event));
 ```
 
 ## Exports
@@ -75,28 +152,33 @@ router.prefix('/events', async ({ pathParameters, responseStream }) => {
 The package exposes both the root entry and the direct module entry:
 
 ```ts
-import { createRouter } from '@vyriy/router';
-import { Router } from '@vyriy/router/router';
+import { createRouter, createStreamRouter } from '@vyriy/router';
+import { Router, StreamRouter } from '@vyriy/router/router';
 ```
 
 ## API
 
 - `createRouter()` returns a chainable router API.
+- `createStreamRouter()` returns a chainable response streaming router API.
 - `router.get(path, handler)` registers a `GET` handler.
 - `router.post(path, handler)` registers a `POST` handler.
 - `router.put(path, handler)` registers a `PUT` handler.
 - `router.delete(path, handler)` registers a `DELETE` handler.
 - `router.patch(path, handler)` registers a `PATCH` handler.
-- `router.prefix(pathPrefix, handler)` registers a handler for every request under a URL prefix.
 - `router.fallback(handler)` registers a handler for unmatched requests.
 - `router.route(event)` resolves the matching route and returns an API Gateway response.
+- `streamRouter.route(event, responseStream)` resolves the matching route and writes to the stream.
 
-The low-level `Router` class is also available from `@vyriy/router/router` and exposes only:
+Route handlers may omit `statusCode`; the router normalizes missing status codes to `200` before returning from `router.route(event)`.
+
+The low-level `Router` and `StreamRouter` classes are also available from `@vyriy/router/router`:
 
 - `router.on(method, path, handler)`
-- `router.prefix(pathPrefix, handler)`
 - `router.fallback(handler)`
 - `router.route(event)`
+- `streamRouter.on(method, path, handler)`
+- `streamRouter.fallback(handler)`
+- `streamRouter.route(event, responseStream)`
 
 Route handlers receive:
 
@@ -106,7 +188,12 @@ type HandlerParams = {
   body?: string;
   headers?: APIGatewayProxyEvent['headers'];
   pathParameters?: APIGatewayProxyEvent['pathParameters'];
-  responseStream?: ResponseStream;
   event: APIGatewayProxyEvent;
 };
+```
+
+Stream route handlers receive the same `HandlerParams` as the first argument and `ResponseStream` as the second argument:
+
+```ts
+type StreamHandler = (params: HandlerParams, responseStream: ResponseStream) => void | Promise<void>;
 ```

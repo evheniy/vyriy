@@ -56,6 +56,8 @@ npx stylelint styles.scss
 npx stylelint "src/**/*.{css,scss}"
 ```
 
+The shared config imports its parser, plugins, and upstream configs from `@vyriy/stylelint-config` itself, so consumer scripts do not need `--config-basedir`.
+
 ## Ignore Files
 
 The shared config ignores common generated and dependency directories:
@@ -68,8 +70,9 @@ Project-specific generated output, such as `coverage/**` or framework-specific o
 
 ## API
 
-- `extends` uses `stylelint-config-standard-scss` and `stylelint-config-recess-order`.
-- `customSyntax` is `postcss-scss`.
+- upstream `stylelint-config-standard-scss` and `stylelint-config-recess-order` rules are merged into the exported config.
+- `customSyntax` uses the imported `postcss-scss` syntax object.
+- `plugins` uses imported `stylelint-scss` and `stylelint-order` plugin objects.
 - `ignoreFiles` contains common generated and dependency directories.
 - selected rules are disabled where the shared Vyriy style stays intentionally flexible.
 

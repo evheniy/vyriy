@@ -1,4 +1,4 @@
-import { Router } from './router.js';
+import { Router, StreamRouter } from './router.js';
 export const createRouter = () => {
     const router = new Router();
     const api = {
@@ -26,12 +26,41 @@ export const createRouter = () => {
             router.on('PATCH', path, handler);
             return api;
         },
-        prefix(pathPrefix, handler) {
-            router.prefix(pathPrefix, handler);
-            return api;
-        },
         route(event) {
             return router.route(event);
+        },
+    };
+    return api;
+};
+export const createStreamRouter = () => {
+    const router = new StreamRouter();
+    const api = {
+        get(path, handler) {
+            router.on('GET', path, handler);
+            return api;
+        },
+        post(path, handler) {
+            router.on('POST', path, handler);
+            return api;
+        },
+        put(path, handler) {
+            router.on('PUT', path, handler);
+            return api;
+        },
+        delete(path, handler) {
+            router.on('DELETE', path, handler);
+            return api;
+        },
+        fallback(handler) {
+            router.fallback(handler);
+            return api;
+        },
+        patch(path, handler) {
+            router.on('PATCH', path, handler);
+            return api;
+        },
+        route(event, responseStream) {
+            return router.route(event, responseStream);
         },
     };
     return api;

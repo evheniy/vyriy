@@ -7,7 +7,6 @@ export type LambdaEvent = APIGatewayProxyEvent;
 export type LambdaResult = APIGatewayProxyResult;
 export type LambdaHandler = (event: LambdaEvent, context: Context) => Promise<LambdaResult>;
 export type LambdaStreamHandler = (event: LambdaEvent, responseStream: ResponseStream, context: Context) => Promise<LambdaResult | void>;
-export type ServerHandler = LambdaHandler | LambdaStreamHandler;
 export type RequestMessage = {
     headers: IncomingHttpHeaders;
     method?: string;
@@ -42,4 +41,5 @@ export type Listen = (server: Server) => Server;
 export type NormalizeHeaders = (headers: IncomingHttpHeaders) => Record<string, string | undefined>;
 export type WriteResult<Response extends ResponseMessage = ResponseMessage> = (response: Response, result: LambdaResult | void) => Promise<void> | void;
 export type WriteError<Response extends ResponseMessage = ResponseMessage> = (response: Response) => void;
-export type CreateServer = (handler: ServerHandler) => Server;
+export type CreateServer = (handler: LambdaHandler) => Server;
+export type CreateStreamServer = (handler: LambdaStreamHandler) => Server;

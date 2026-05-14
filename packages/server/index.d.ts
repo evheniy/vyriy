@@ -1,3 +1,2 @@
-export { server } from './server.js';
-export { staticFiles } from './static.js';
+export { server, streamServer } from './server.js';
 export type * from './types.js';

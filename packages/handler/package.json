@@ -1,16 +1,16 @@
 {
   "name": "@vyriy/handler",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "description": "Composable AWS Lambda handler chains and wrappers for Vyriy projects",
   "type": "module",
   "main": "./index.js",
   "dependencies": {
     "@types/aws-lambda": "^8.10.161",
-    "@vyriy/chaos": "0.3.0",
-    "@vyriy/config": "0.3.0",
-    "@vyriy/logger": "0.3.0",
-    "@vyriy/smoke": "0.3.0",
-    "@vyriy/timeout": "0.3.0"
+    "@vyriy/chaos": "0.3.2",
+    "@vyriy/config": "0.3.2",
+    "@vyriy/logger": "0.3.2",
+    "@vyriy/smoke": "0.3.2",
+    "@vyriy/timeout": "0.3.2"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",
@@ -96,16 +96,6 @@
       "import": "./sqs.js",
       "default": "./sqs.js"
     },
-    "./streamify": {
-      "types": "./streamify.d.ts",
-      "import": "./streamify.js",
-      "default": "./streamify.js"
-    },
-    "./streamify.js": {
-      "types": "./streamify.d.ts",
-      "import": "./streamify.js",
-      "default": "./streamify.js"
-    },
     "./wrapper/chaos": {
       "types": "./wrapper/chaos.d.ts",
       "import": "./wrapper/chaos.js",
@@ -185,6 +175,16 @@
       "types": "./wrapper/smoke.d.ts",
       "import": "./wrapper/smoke.js",
       "default": "./wrapper/smoke.js"
+    },
+    "./wrapper/stream": {
+      "types": "./wrapper/stream.d.ts",
+      "import": "./wrapper/stream.js",
+      "default": "./wrapper/stream.js"
+    },
+    "./wrapper/stream.js": {
+      "types": "./wrapper/stream.d.ts",
+      "import": "./wrapper/stream.js",
+      "default": "./wrapper/stream.js"
     },
     "./wrapper/timeout": {
       "types": "./wrapper/timeout.d.ts",
