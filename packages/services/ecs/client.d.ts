@@ -1,2 +1,2 @@
-import { ECSClient } from '@aws-sdk/client-ecs';
-export declare const client: ECSClient;
+import { ECSClient, type ECSClientConfig } from '@aws-sdk/client-ecs';
+export declare const createClient: (options?: ECSClientConfig) => ECSClient;

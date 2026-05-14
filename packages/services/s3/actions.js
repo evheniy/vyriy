@@ -1,9 +1,10 @@
 import { GetObjectCommand, HeadObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { createLogger } from '@vyriy/logger';
 import { toError } from '@vyriy/error';
-import { client } from './client.js';
+import { createClient } from './client.js';
 export const download = async (bucketName, path, options = {}) => {
     try {
+        const client = createClient();
         const logger = createLogger();
         logger.log('GetObjectCommand:', { Bucket: bucketName, Key: path, ...options });
         const response = await client.send(new GetObjectCommand({ Bucket: bucketName, Key: path, ...options }));
@@ -18,6 +19,7 @@ export const download = async (bucketName, path, options = {}) => {
 };
 export const upload = async (bucketName, path, body, mimeType = 'application/json;charset=utf-8', options = {}) => {
     try {
+        const client = createClient();
         createLogger().log('PutObjectCommand:', {
             Bucket: bucketName,
             Key: path,
@@ -40,6 +42,7 @@ export const upload = async (bucketName, path, body, mimeType = 'application/jso
 };
 export const exists = async (bucketName, path, options = {}) => {
     try {
+        const client = createClient();
         createLogger().log('HeadObjectCommand:', {
             Bucket: bucketName,
             Key: path,

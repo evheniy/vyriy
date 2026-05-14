@@ -1,2 +1,2 @@
-import type { LambdaHandler, NativeRequestListener } from './types.js';
-export declare const listener: (handler: LambdaHandler) => NativeRequestListener;
+import type { NativeRequestListener, ServerHandler } from './types.js';
+export declare const listener: (handler: ServerHandler) => NativeRequestListener;

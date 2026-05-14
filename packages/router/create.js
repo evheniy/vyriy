@@ -18,8 +18,16 @@ export const createRouter = () => {
             router.on('DELETE', path, handler);
             return api;
         },
+        fallback(handler) {
+            router.fallback(handler);
+            return api;
+        },
         patch(path, handler) {
             router.on('PATCH', path, handler);
+            return api;
+        },
+        prefix(pathPrefix, handler) {
+            router.prefix(pathPrefix, handler);
             return api;
         },
         route(event) {

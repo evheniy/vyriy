@@ -2,9 +2,10 @@ import { CreateTableCommand } from '@aws-sdk/client-dynamodb';
 import { DeleteCommand, GetCommand, PutCommand, QueryCommand, ScanCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { createLogger } from '@vyriy/logger';
 import { toError } from '@vyriy/error';
-import { client } from './client.js';
+import { createClient } from './client.js';
 export const createTable = async (params) => {
     try {
+        const client = createClient();
         createLogger().log('CreateTableCommand:', params);
         await client.send(new CreateTableCommand(params));
     }
@@ -14,6 +15,7 @@ export const createTable = async (params) => {
 };
 export const createItem = async (TableName, Item, options = {}) => {
     try {
+        const client = createClient();
         createLogger().log('PutCommand:', { TableName, Item, ...options });
         await client.send(new PutCommand({ TableName, Item, ...options }));
     }
@@ -23,6 +25,7 @@ export const createItem = async (TableName, Item, options = {}) => {
 };
 export const updateItem = async (TableName, Key, UpdateExpression, ExpressionAttributeValues, options = {}) => {
     try {
+        const client = createClient();
         const logger = createLogger();
         const params = {
             TableName,
@@ -40,6 +43,7 @@ export const updateItem = async (TableName, Key, UpdateExpression, ExpressionAtt
 };
 export const getItem = async (TableName, Key, options = {}) => {
     try {
+        const client = createClient();
         createLogger().log('GetCommand:', { TableName, Key, ...options });
         return await client.send(new GetCommand({ TableName, Key, ...options })).then(({ Item }) => Item);
     }
@@ -49,6 +53,7 @@ export const getItem = async (TableName, Key, options = {}) => {
 };
 export const deleteItem = async (TableName, Key, options = {}) => {
     try {
+        const client = createClient();
         createLogger().log('DeleteCommand:', { TableName, Key, ...options });
         await client.send(new DeleteCommand({ TableName, Key, ...options }));
     }
@@ -58,6 +63,7 @@ export const deleteItem = async (TableName, Key, options = {}) => {
 };
 export const getItems = async (TableName, keys, options = {}) => {
     try {
+        const client = createClient();
         const logger = createLogger();
         const expressionList = [];
         const ExpressionAttributeNames = {};
@@ -93,6 +99,7 @@ export const getItems = async (TableName, keys, options = {}) => {
 };
 export const getAllItems = async (TableName, options = {}) => {
     try {
+        const client = createClient();
         const logger = createLogger();
         const params = { TableName, ...options };
         const items = [];
@@ -113,6 +120,7 @@ export const getAllItems = async (TableName, options = {}) => {
 };
 export const getAllItemsWithHandler = async (TableName, handler, options = {}) => {
     try {
+        const client = createClient();
         const logger = createLogger();
         const params = { TableName, ...options };
         const scanUntilDone = async (ExclusiveStartKey) => {

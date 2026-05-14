@@ -4,6 +4,7 @@ export * from './factory.js';
 export * from './schedule.js';
 export * from './sns.js';
 export * from './sqs.js';
+export * from './streamify.js';
 export * from './wrapper/context.js';
 export * from './wrapper/cors.js';
 export * from './wrapper/chaos.js';

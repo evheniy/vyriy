@@ -2,9 +2,10 @@ import { CreateInvalidationCommand, GetInvalidationCommand } from '@aws-sdk/clie
 import { createLogger } from '@vyriy/logger';
 import { pause } from '@vyriy/pause';
 import { toError } from '@vyriy/error';
-import { client } from './client.js';
+import { createClient } from './client.js';
 export const invalidate = async (distribution, paths, shouldWait = false) => {
     try {
+        const client = createClient();
         const logger = createLogger();
         logger.info('Distribution:', distribution);
         logger.info('Paths:', paths);

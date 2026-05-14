@@ -1,2 +1,2 @@
 import type { SNSEvent } from 'aws-lambda';
-export declare const sns: import("./types.js").Decorator<SNSEvent, void>;
+export declare const sns: import("./types.js").Decorator<SNSEvent, void, [context: import("aws-lambda").Context]>;

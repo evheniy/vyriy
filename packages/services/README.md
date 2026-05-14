@@ -46,6 +46,9 @@ Some clients are prepared for local AWS-compatible development:
 - `cloudfront`, `lambda`, `sns`, and `ssm` currently use their normal AWS SDK
   client configuration.
 
+Service clients are created lazily inside each helper call. Importing
+`@vyriy/services` or a service subpath does not construct AWS SDK clients.
+
 LocalStack defaults come from `@vyriy/env`:
 
 - `LOCALSTACK_HOST`: defaults to `localhost`
@@ -71,6 +74,16 @@ import { upload } from '@vyriy/services/s3';
 const apiUrl = await getParameter('/app/api-url');
 
 await upload('assets-bucket', 'config/api-url.txt', apiUrl, 'text/plain');
+```
+
+Client factories are also exported from service subpaths when direct AWS SDK
+access is needed. The service path gives the generic `createClient` name its
+context:
+
+```ts
+import { createClient } from '@vyriy/services/s3';
+
+const client = createClient({ region: 'eu-central-1' });
 ```
 
 ## Examples

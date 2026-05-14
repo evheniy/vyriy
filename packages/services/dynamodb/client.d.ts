@@ -1,2 +1,2 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-export declare const client: DynamoDBClient;
+import { DynamoDBClient, type DynamoDBClientConfig } from '@aws-sdk/client-dynamodb';
+export declare const createClient: (options?: DynamoDBClientConfig) => DynamoDBClient;

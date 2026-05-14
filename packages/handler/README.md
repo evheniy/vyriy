@@ -22,6 +22,14 @@ With Yarn:
 yarn add @vyriy/handler
 ```
 
+For TypeScript Lambda projects, install AWS Lambda types as a development dependency:
+
+```bash
+yarn add @types/aws-lambda
+```
+
+The `awslambda` response streaming helper is a global provided by the AWS Lambda Node.js runtime. It is not imported from `aws-lambda`; `@types/aws-lambda` only lets TypeScript type-check that global.
+
 ## Usage
 
 Use a prebuilt API Gateway handler chain:
@@ -35,6 +43,65 @@ export const handler = api(async (event) => ({
     path: event.path,
   }),
 }));
+```
+
+For Lambda response streaming, keep the reusable handler separate from the runtime entrypoints:
+
+```ts
+// handler.ts
+import { api, streamify } from '@vyriy/handler';
+
+export const handler = streamify(
+  api(async (event, responseStream, context) => {
+    responseStream.setContentType?.('text/plain');
+    responseStream.write(`Request path: ${event.path}\n`);
+    responseStream.write(`Request id: ${context.awsRequestId}\n`);
+    responseStream.write('Part 1 of the response...');
+    responseStream.write('Part 2 of the response...');
+    responseStream.end();
+  }),
+);
+```
+
+Use the same handler locally, in Docker, or in a Fargate-style HTTP runtime:
+
+```ts
+// server.ts
+import { server } from '@vyriy/server';
+
+import { handler } from './handler.js';
+
+server(handler);
+```
+
+Use the same handler in AWS Lambda response streaming:
+
+```ts
+// lambda.ts
+import { handler } from './handler.js';
+
+export const main = awslambda.streamifyResponse(handler);
+```
+
+That `handler.ts` shape is already streamified. For a standard non-streaming Lambda, export an `api(...)` handler directly without `streamify(...)` and without `responseStream`.
+
+You can also inline the same shape in one file when a separate local entrypoint is not needed:
+
+```ts
+import { api, streamify } from '@vyriy/handler';
+
+export const main = awslambda.streamifyResponse(
+  streamify(
+    api(async (event, responseStream, context) => {
+      responseStream.setContentType?.('text/plain');
+      responseStream.write(`Request path: ${event.path}\n`);
+      responseStream.write(`Request id: ${context.awsRequestId}\n`);
+      responseStream.write('Part 1 of the response...');
+      responseStream.write('Part 2 of the response...');
+      responseStream.end();
+    }),
+  ),
+);
 ```
 
 Use a prebuilt queue or event handler chain:
@@ -129,7 +196,11 @@ export const handler = compose(
 ## Prebuilt Chains
 
 - `api`
-  API Gateway chain with error handling, logging, timeout handling, context setup, smoke checks, healthcheck handling, default headers, and CORS preflight handling.
+  API Gateway chain with error handling, logging, timeout handling, context setup, smoke checks, healthcheck handling, default headers, CORS preflight handling, and structural support for streaming/static-file response results.
+- `streamifyApiResponse`
+  Adapts an `api(...)` handler that returns a streaming result to the three-argument handler shape expected by `awslambda.streamifyResponse`.
+- `streamify`
+  Alias for `streamifyApiResponse` intended for direct Lambda response streaming handlers.
 
 - `schedule`
   EventBridge schedule chain with logging, timeout handling, context setup, smoke checks, and rethrown errors.

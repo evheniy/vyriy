@@ -1,7 +1,8 @@
 import { InvokeCommand } from '@aws-sdk/client-lambda';
 import { createLogger } from '@vyriy/logger';
-import { client } from './client.js';
+import { createClient } from './client.js';
 export const invoke = async (functionName, payload, options = {}) => {
+    const client = createClient();
     const logger = createLogger();
     logger.info('functionName:', functionName);
     logger.info('payload:', payload);

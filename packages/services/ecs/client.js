@@ -1,4 +1,6 @@
 import { ECSClient } from '@aws-sdk/client-ecs';
 import { getRegion, isLocal } from '@vyriy/env';
-const options = isLocal() ? { region: getRegion() } : {};
-export const client = new ECSClient(options);
+export const createClient = (options = {}) => {
+    const defaultOptions = isLocal() ? { region: getRegion() } : {};
+    return new ECSClient({ ...defaultOptions, ...options });
+};

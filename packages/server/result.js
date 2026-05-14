@@ -1,19 +1,22 @@
 import { STATUS_CODES } from 'node:http';
+const notFound = (response) => {
+    response
+        .writeHead(404, {
+        'content-type': 'application/json',
+    })
+        .end(JSON.stringify({ message: STATUS_CODES[404] }));
+};
 export const result = (response, value) => {
     if (!value) {
-        response
-            .writeHead(404, {
-            'content-type': 'application/json',
-        })
-            .end(JSON.stringify({ message: STATUS_CODES[404] }));
+        notFound(response);
         return;
     }
-    const { body, headers, multiValueHeaders, statusCode } = value;
+    const { body, headers, isBase64Encoded, multiValueHeaders, statusCode } = value;
     response.writeHead(statusCode, {
         ...headers,
         ...multiValueHeaders,
     });
-    response.end(body);
+    response.end(isBase64Encoded ? Buffer.from(body, 'base64') : body);
 };
 export const error = (response) => {
     response

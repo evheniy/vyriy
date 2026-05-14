@@ -1,11 +1,13 @@
 import type { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
-import type { Handler } from '@vyriy/handler';
+import type { ResponseStream } from '@vyriy/handler';
 import type { IncomingHttpHeaders, OutgoingHttpHeaders, Server as HttpServer } from 'node:http';
 export type { Context } from 'aws-lambda';
 export type Headers = OutgoingHttpHeaders;
 export type LambdaEvent = APIGatewayProxyEvent;
 export type LambdaResult = APIGatewayProxyResult;
-export type LambdaHandler = Handler<LambdaEvent, LambdaResult>;
+export type LambdaHandler = (event: LambdaEvent, context: Context) => Promise<LambdaResult>;
+export type LambdaStreamHandler = (event: LambdaEvent, responseStream: ResponseStream, context: Context) => Promise<LambdaResult | void>;
+export type ServerHandler = LambdaHandler | LambdaStreamHandler;
 export type RequestMessage = {
     headers: IncomingHttpHeaders;
     method?: string;
@@ -18,8 +20,12 @@ export type RequestMessage = {
 export type ResponseMessage = {
     end: {
         (): ResponseMessage;
-        (chunk: string): ResponseMessage;
+        (chunk: string | Buffer | Uint8Array): ResponseMessage;
     };
+    writableEnded?: boolean;
+    setContentType?: (contentType: string) => ResponseMessage;
+    setHeader?(name: string, value: number | string | readonly string[]): ResponseMessage;
+    write(chunk: string | Buffer | Uint8Array): boolean;
     writeHead(statusCode: number, headers?: OutgoingHttpHeaders): ResponseMessage;
 };
 export type ErrorEventTarget = {
@@ -34,6 +40,6 @@ export type MapParams = (request: RequestMessage) => Promise<{
 export type Server = HttpServer<typeof import('node:http').IncomingMessage, typeof import('node:http').ServerResponse>;
 export type Listen = (server: Server) => Server;
 export type NormalizeHeaders = (headers: IncomingHttpHeaders) => Record<string, string | undefined>;
-export type WriteResult<Response extends ResponseMessage = ResponseMessage> = (response: Response, result: LambdaResult | void) => void;
+export type WriteResult<Response extends ResponseMessage = ResponseMessage> = (response: Response, result: LambdaResult | void) => Promise<void> | void;
 export type WriteError<Response extends ResponseMessage = ResponseMessage> = (response: Response) => void;
-export type CreateServer = (handler: LambdaHandler) => Server;
+export type CreateServer = (handler: ServerHandler) => Server;

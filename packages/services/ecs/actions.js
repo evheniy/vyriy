@@ -1,7 +1,7 @@
 import { RunTaskCommand } from '@aws-sdk/client-ecs';
 import { getEcsClusterName, getEcsTaskDefinition, getVpcSecurityGroup, getVpcSubnets } from '@vyriy/env';
 import { createLogger } from '@vyriy/logger';
-import { client } from './client.js';
+import { createClient } from './client.js';
 export const runTask = async (task, environment = [], taskDefinition = getEcsTaskDefinition()) => {
     const cluster = getEcsClusterName();
     const subnets = getVpcSubnets();
@@ -46,5 +46,6 @@ export const runTask = async (task, environment = [], taskDefinition = getEcsTas
         },
     };
     createLogger().info('Params:', params);
+    const client = createClient();
     await client.send(new RunTaskCommand(params));
 };

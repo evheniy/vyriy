@@ -9,6 +9,7 @@ This package provides a small API Gateway router for Lambda handlers.
 It is intentionally kept small:
 
 - matches by HTTP method and exact path
+- supports simple prefix dispatch for handler factories such as static file serving
 - passes API Gateway event data into handlers
 - returns a Lambda-friendly response shape
 
@@ -32,6 +33,7 @@ yarn add @vyriy/router
 
 ```ts
 import { createRouter } from '@vyriy/router';
+import { staticFiles } from '@vyriy/server/static';
 
 const router = createRouter();
 
@@ -46,6 +48,26 @@ router.get('/health', async ({ event, query, headers, pathParameters, body }) =>
     body,
   }),
 }));
+
+router.prefix('/static', staticFiles('./public'));
+
+router.fallback(async ({ event }) => ({
+  statusCode: 404,
+  body: JSON.stringify({
+    message: 'Not Found',
+    path: event.path,
+  }),
+}));
+```
+
+Prefix handlers receive the relative matched path in `pathParameters.proxy`, so they can behave like normal handlers:
+
+```ts
+router.prefix('/events', async ({ pathParameters, responseStream }) => {
+  responseStream?.setContentType?.('text/plain');
+  responseStream?.write(`Path: ${pathParameters?.proxy}`);
+  responseStream?.end();
+});
 ```
 
 ## Exports
@@ -65,11 +87,15 @@ import { Router } from '@vyriy/router/router';
 - `router.put(path, handler)` registers a `PUT` handler.
 - `router.delete(path, handler)` registers a `DELETE` handler.
 - `router.patch(path, handler)` registers a `PATCH` handler.
+- `router.prefix(pathPrefix, handler)` registers a handler for every request under a URL prefix.
+- `router.fallback(handler)` registers a handler for unmatched requests.
 - `router.route(event)` resolves the matching route and returns an API Gateway response.
 
 The low-level `Router` class is also available from `@vyriy/router/router` and exposes only:
 
 - `router.on(method, path, handler)`
+- `router.prefix(pathPrefix, handler)`
+- `router.fallback(handler)`
 - `router.route(event)`
 
 Route handlers receive:
@@ -80,6 +106,7 @@ type HandlerParams = {
   body?: string;
   headers?: APIGatewayProxyEvent['headers'];
   pathParameters?: APIGatewayProxyEvent['pathParameters'];
+  responseStream?: ResponseStream;
   event: APIGatewayProxyEvent;
 };
 ```

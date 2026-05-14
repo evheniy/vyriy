@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/path",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Shared path utilities for Vyriy projects",
   "type": "module",
   "main": "./index.js",

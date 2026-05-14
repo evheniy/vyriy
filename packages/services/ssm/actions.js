@@ -1,9 +1,10 @@
 import { GetParameterCommand, GetParametersCommand } from '@aws-sdk/client-ssm';
 import { createLogger } from '@vyriy/logger';
 import { toError } from '@vyriy/error';
-import { client } from './client.js';
+import { createClient } from './client.js';
 export const getParameter = async (parameterName, decrypted = true) => {
     try {
+        const client = createClient();
         const logger = createLogger();
         logger.log('GetParameterCommand:', parameterName, decrypted);
         const response = await client.send(new GetParameterCommand({ Name: parameterName, WithDecryption: decrypted }));
@@ -18,6 +19,7 @@ export const getParameter = async (parameterName, decrypted = true) => {
 };
 export const getParameters = async (parameterNames, decrypted = true) => {
     try {
+        const client = createClient();
         const logger = createLogger();
         logger.log('GetParametersCommand:', parameterNames, decrypted);
         const response = await client.send(new GetParametersCommand({ Names: parameterNames, WithDecryption: decrypted }));

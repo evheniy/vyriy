@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/request",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Shared request utility for Vyriy projects",
   "type": "module",
   "main": "./index.js",
@@ -77,6 +77,16 @@
       "types": "./retry.d.ts",
       "import": "./retry.js",
       "default": "./retry.js"
+    },
+    "./stream": {
+      "types": "./stream.d.ts",
+      "import": "./stream.js",
+      "default": "./stream.js"
+    },
+    "./stream.js": {
+      "types": "./stream.d.ts",
+      "import": "./stream.js",
+      "default": "./stream.js"
     },
     "./timeout": {
       "types": "./timeout.d.ts",

@@ -1,8 +1,9 @@
 import { createLogger } from '@vyriy/logger';
-import { factory } from '../factory.js';
+import { factory, getContext } from '../factory.js';
 export const withLogger = factory(async (handler, args, options = {}) => {
     const { logger = createLogger() } = options;
-    const [event, context] = args;
+    const [event] = args;
+    const context = getContext(args);
     logger.info('Event:', event);
     logger.info('Context:', context);
     try {

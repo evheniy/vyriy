@@ -1,1 +1,1 @@
-export declare const withTimeout: <Event, Result>(options?: undefined) => import("../types.js").Decorator<Event, Result>;
+export declare const withTimeout: <Event, Result, Args extends import("../types.js").HandlerArgs = [context: import("aws-lambda").Context]>(options?: undefined) => import("../types.js").Decorator<Event, Result, Args>;
