@@ -1,8 +1,8 @@
-import { EnvironmentCheckResult } from '../../checks/node/index.js';
+import { DoctorCheck } from '../../doctor/index.js';
 export type RunDoctorCommandOptions = {
     readonly output?: Pick<typeof console, 'log' | 'error'>;
 };
 export type RunDoctorCommand = (options?: RunDoctorCommandOptions) => Promise<{
     readonly code: number;
-    readonly checks: readonly EnvironmentCheckResult[];
+    readonly checks: readonly DoctorCheck[];
 }>;

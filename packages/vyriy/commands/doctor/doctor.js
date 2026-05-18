@@ -1,20 +1,9 @@
-import { checkNodeVersion } from '../../checks/node/index.js';
-import { checkYarnVersion } from '../../checks/yarn/index.js';
+import { createDoctorReport, printDoctorReport } from '../../doctor/index.js';
 export const runDoctorCommand = async ({ output = console } = {}) => {
-    const checks = [checkNodeVersion(), await checkYarnVersion()];
-    const failedCheck = checks.find((check) => !check.ok);
-    output.log('Vyriy Project Master\n');
-    for (const check of checks) {
-        output.log(`${check.ok ? 'OK' : 'ERROR'} ${check.message}`);
-    }
-    if (failedCheck) {
-        return {
-            code: 1,
-            checks,
-        };
-    }
+    const report = await createDoctorReport();
+    output.log(printDoctorReport(report));
     return {
-        code: 0,
-        checks,
+        code: report.hasErrors ? 1 : 0,
+        checks: report.checks,
     };
 };

@@ -6,7 +6,7 @@ Interactive project master for calm cloud-ready applications.
 
 `vyriy` is the user-facing CLI entry point for the Vyriy ecosystem.
 
-The first implementation focuses on project planning rather than file generation. It checks the local environment, runs a small project wizard, creates a normalized `VyriyProjectPlan`, prints the summary, and exits without writing generated project files.
+The CLI checks the local environment, runs a small project wizard, creates a normalized `VyriyProjectPlan`, builds generated project files in memory, prints a file plan, and writes only files that are safe to create or explicitly allowed to overwrite.
 
 ## Install
 
@@ -31,6 +31,10 @@ vyriy new my-app
 vyriy .
 vyriy init
 vyriy doctor
+vyriy --dry-run
+vyriy --yes
+vyriy --overwrite
+vyriy --skip-existing
 vyriy --help
 vyriy --version
 ```
@@ -41,7 +45,7 @@ Runs the same flow as `vyriy new`.
 
 ### `vyriy new [name]`
 
-Starts the project planning wizard.
+Starts the project planning wizard, prints the project summary and file plan, then writes generated files when no unresolved conflicts exist.
 
 If `name` is provided, it is used as the default project name and target directory.
 
@@ -62,7 +66,31 @@ Runs environment checks only.
 Current checks:
 
 - Node.js `>=24`
+- Corepack availability
 - Yarn `>=4`
+- Git availability
+
+Node.js is fatal when unsupported. Yarn and Git are warnings so generation can continue without silently installing tools or initializing Git.
+
+## Flags
+
+### `--dry-run`
+
+Prints the doctor report, project summary, and file plan without writing files or running fix commands.
+
+### `--yes`
+
+Uses default wizard answers and avoids prompts where possible. It does not overwrite existing files unless `--overwrite` is also passed.
+
+### `--overwrite`
+
+Marks existing generated paths as overwrite candidates and writes them.
+
+### `--skip-existing`
+
+Marks existing generated paths as skipped and leaves them untouched.
+
+`--overwrite` and `--skip-existing` cannot be used together.
 
 ## Wizard
 
@@ -78,9 +106,9 @@ The wizard collects:
 - optional extra features
 - confirmation
 
-After confirmation, the CLI prints the project plan and exits.
+After confirmation, the CLI prints the project plan, creates generated files in memory, builds a conflict-aware file plan, and writes the accepted file plan.
 
-File generation is not implemented yet.
+Presets do not write to disk directly.
 
 ## Project Presets
 
@@ -111,19 +139,23 @@ Examples:
 
 ## Public API
 
-The package exports the CLI runner, command helpers, environment checks, prompt helper, and project-plan utilities.
+The package exports the CLI runner, command helpers, doctor checks, file-plan utilities, generated preset files, prompt helper, and project-plan utilities.
 
 ```ts
 import {
   askProjectPlan,
   checkNodeVersion,
   checkYarnVersion,
+  createDoctorReport,
+  createFilePlan,
+  createProjectFiles,
   createApiPlan,
   createCiPlan,
   createProjectPlanFromPreset,
   getProjectKindFromPreset,
   parseArgs,
   printProjectPlan,
+  writeFilePlan,
   runDoctorCommand,
   runInitCommand,
   runNewCommand,
@@ -145,13 +177,12 @@ It includes:
 - future package plans
 - future workspace plans
 
-This model is intentionally useful before generation exists. It gives future generator steps a stable contract to build from.
+This model is intentionally useful before files are written. It gives generator steps a stable contract to build from.
 
 ## Current Non-Goals
 
 The CLI does not yet:
 
-- write project files
 - initialize Git
 - run `yarn install`
 - generate AWS CDK stacks

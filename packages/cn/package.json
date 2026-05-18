@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/cn",
-  "version": "0.3.2",
+  "version": "0.3.4",
   "description": "Class name utility for Vyriy projects",
   "type": "module",
   "main": "./index.js",

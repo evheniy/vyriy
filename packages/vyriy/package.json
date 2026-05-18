@@ -1,6 +1,6 @@
 {
   "name": "vyriy",
-  "version": "0.3.2",
+  "version": "0.3.4",
   "description": "Interactive project master for calm cloud-ready applications.",
   "type": "module",
   "main": "./index.js",
@@ -169,6 +169,116 @@
       "import": "./commands/new/new.js",
       "default": "./commands/new/new.js"
     },
+    "./doctor/checkCorepack": {
+      "types": "./doctor/checkCorepack.d.ts",
+      "import": "./doctor/checkCorepack.js",
+      "default": "./doctor/checkCorepack.js"
+    },
+    "./doctor/checkCorepack.js": {
+      "types": "./doctor/checkCorepack.d.ts",
+      "import": "./doctor/checkCorepack.js",
+      "default": "./doctor/checkCorepack.js"
+    },
+    "./doctor/checkGit": {
+      "types": "./doctor/checkGit.d.ts",
+      "import": "./doctor/checkGit.js",
+      "default": "./doctor/checkGit.js"
+    },
+    "./doctor/checkGit.js": {
+      "types": "./doctor/checkGit.d.ts",
+      "import": "./doctor/checkGit.js",
+      "default": "./doctor/checkGit.js"
+    },
+    "./doctor/checkNodeVersion": {
+      "types": "./doctor/checkNodeVersion.d.ts",
+      "import": "./doctor/checkNodeVersion.js",
+      "default": "./doctor/checkNodeVersion.js"
+    },
+    "./doctor/checkNodeVersion.js": {
+      "types": "./doctor/checkNodeVersion.d.ts",
+      "import": "./doctor/checkNodeVersion.js",
+      "default": "./doctor/checkNodeVersion.js"
+    },
+    "./doctor/checkYarn": {
+      "types": "./doctor/checkYarn.d.ts",
+      "import": "./doctor/checkYarn.js",
+      "default": "./doctor/checkYarn.js"
+    },
+    "./doctor/checkYarn.js": {
+      "types": "./doctor/checkYarn.d.ts",
+      "import": "./doctor/checkYarn.js",
+      "default": "./doctor/checkYarn.js"
+    },
+    "./doctor/createDoctorReport": {
+      "types": "./doctor/createDoctorReport.d.ts",
+      "import": "./doctor/createDoctorReport.js",
+      "default": "./doctor/createDoctorReport.js"
+    },
+    "./doctor/createDoctorReport.js": {
+      "types": "./doctor/createDoctorReport.d.ts",
+      "import": "./doctor/createDoctorReport.js",
+      "default": "./doctor/createDoctorReport.js"
+    },
+    "./doctor/index": {
+      "types": "./doctor/index.d.ts",
+      "import": "./doctor/index.js",
+      "default": "./doctor/index.js"
+    },
+    "./doctor/index.js": {
+      "types": "./doctor/index.d.ts",
+      "import": "./doctor/index.js",
+      "default": "./doctor/index.js"
+    },
+    "./doctor/printDoctorReport": {
+      "types": "./doctor/printDoctorReport.d.ts",
+      "import": "./doctor/printDoctorReport.js",
+      "default": "./doctor/printDoctorReport.js"
+    },
+    "./doctor/printDoctorReport.js": {
+      "types": "./doctor/printDoctorReport.d.ts",
+      "import": "./doctor/printDoctorReport.js",
+      "default": "./doctor/printDoctorReport.js"
+    },
+    "./file-plan/createFilePlan": {
+      "types": "./file-plan/createFilePlan.d.ts",
+      "import": "./file-plan/createFilePlan.js",
+      "default": "./file-plan/createFilePlan.js"
+    },
+    "./file-plan/createFilePlan.js": {
+      "types": "./file-plan/createFilePlan.d.ts",
+      "import": "./file-plan/createFilePlan.js",
+      "default": "./file-plan/createFilePlan.js"
+    },
+    "./file-plan/index": {
+      "types": "./file-plan/index.d.ts",
+      "import": "./file-plan/index.js",
+      "default": "./file-plan/index.js"
+    },
+    "./file-plan/index.js": {
+      "types": "./file-plan/index.d.ts",
+      "import": "./file-plan/index.js",
+      "default": "./file-plan/index.js"
+    },
+    "./file-plan/printFilePlan": {
+      "types": "./file-plan/printFilePlan.d.ts",
+      "import": "./file-plan/printFilePlan.js",
+      "default": "./file-plan/printFilePlan.js"
+    },
+    "./file-plan/printFilePlan.js": {
+      "types": "./file-plan/printFilePlan.d.ts",
+      "import": "./file-plan/printFilePlan.js",
+      "default": "./file-plan/printFilePlan.js"
+    },
+    "./file-plan/writeFilePlan": {
+      "types": "./file-plan/writeFilePlan.d.ts",
+      "import": "./file-plan/writeFilePlan.js",
+      "default": "./file-plan/writeFilePlan.js"
+    },
+    "./file-plan/writeFilePlan.js": {
+      "types": "./file-plan/writeFilePlan.d.ts",
+      "import": "./file-plan/writeFilePlan.js",
+      "default": "./file-plan/writeFilePlan.js"
+    },
     "./index": {
       "types": "./index.d.ts",
       "import": "./index.js",
@@ -178,6 +288,26 @@
       "types": "./index.d.ts",
       "import": "./index.js",
       "default": "./index.js"
+    },
+    "./presets/createProjectFiles": {
+      "types": "./presets/createProjectFiles.d.ts",
+      "import": "./presets/createProjectFiles.js",
+      "default": "./presets/createProjectFiles.js"
+    },
+    "./presets/createProjectFiles.js": {
+      "types": "./presets/createProjectFiles.d.ts",
+      "import": "./presets/createProjectFiles.js",
+      "default": "./presets/createProjectFiles.js"
+    },
+    "./presets/index": {
+      "types": "./presets/index.d.ts",
+      "import": "./presets/index.js",
+      "default": "./presets/index.js"
+    },
+    "./presets/index.js": {
+      "types": "./presets/index.d.ts",
+      "import": "./presets/index.js",
+      "default": "./presets/index.js"
     },
     "./project-plan/api/api": {
       "types": "./project-plan/api/api.d.ts",
@@ -308,6 +438,56 @@
       "types": "./prompts/project-plan/project-plan.d.ts",
       "import": "./prompts/project-plan/project-plan.js",
       "default": "./prompts/project-plan/project-plan.js"
+    },
+    "./shared/commandExists": {
+      "types": "./shared/commandExists.d.ts",
+      "import": "./shared/commandExists.js",
+      "default": "./shared/commandExists.js"
+    },
+    "./shared/commandExists.js": {
+      "types": "./shared/commandExists.d.ts",
+      "import": "./shared/commandExists.js",
+      "default": "./shared/commandExists.js"
+    },
+    "./shared/execCommand": {
+      "types": "./shared/execCommand.d.ts",
+      "import": "./shared/execCommand.js",
+      "default": "./shared/execCommand.js"
+    },
+    "./shared/execCommand.js": {
+      "types": "./shared/execCommand.d.ts",
+      "import": "./shared/execCommand.js",
+      "default": "./shared/execCommand.js"
+    },
+    "./shared/fileExists": {
+      "types": "./shared/fileExists.d.ts",
+      "import": "./shared/fileExists.js",
+      "default": "./shared/fileExists.js"
+    },
+    "./shared/fileExists.js": {
+      "types": "./shared/fileExists.d.ts",
+      "import": "./shared/fileExists.js",
+      "default": "./shared/fileExists.js"
+    },
+    "./shared/index": {
+      "types": "./shared/index.d.ts",
+      "import": "./shared/index.js",
+      "default": "./shared/index.js"
+    },
+    "./shared/index.js": {
+      "types": "./shared/index.d.ts",
+      "import": "./shared/index.js",
+      "default": "./shared/index.js"
+    },
+    "./shared/semver": {
+      "types": "./shared/semver.d.ts",
+      "import": "./shared/semver.js",
+      "default": "./shared/semver.js"
+    },
+    "./shared/semver.js": {
+      "types": "./shared/semver.d.ts",
+      "import": "./shared/semver.js",
+      "default": "./shared/semver.js"
     }
   }
 }

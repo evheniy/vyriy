@@ -10,6 +10,7 @@ Usage:
   vyriy init             Initialize the current directory
   vyriy .                Initialize the current directory
   vyriy doctor           Check local environment
+  vyriy --dry-run        Print checks and file plan without writing
   vyriy --help           Show help
   vyriy --version        Show version
 
@@ -22,10 +23,23 @@ export const runVyriyCli = async (args = [], { output = console } = {}) => {
     let code = 0;
     switch (command.type) {
         case 'new':
-            code = await runNewCommand({ output, projectName: command.projectName });
+            code = await runNewCommand({
+                dryRun: command.dryRun,
+                output,
+                overwrite: command.overwrite,
+                projectName: command.projectName,
+                skipExisting: command.skipExisting,
+                yes: command.yes,
+            });
             break;
         case 'init':
-            code = await runInitCommand({ output });
+            code = await runInitCommand({
+                dryRun: command.dryRun,
+                output,
+                overwrite: command.overwrite,
+                skipExisting: command.skipExisting,
+                yes: command.yes,
+            });
             break;
         case 'doctor': {
             const result = await runDoctorCommand({ output });
