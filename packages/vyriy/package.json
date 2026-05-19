@@ -1,6 +1,6 @@
 {
   "name": "vyriy",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "Interactive project master for calm cloud-ready applications.",
   "type": "module",
   "main": "./index.js",
@@ -288,6 +288,16 @@
       "types": "./index.d.ts",
       "import": "./index.js",
       "default": "./index.js"
+    },
+    "./presets/agentsTemplate": {
+      "types": "./presets/agentsTemplate.d.ts",
+      "import": "./presets/agentsTemplate.js",
+      "default": "./presets/agentsTemplate.js"
+    },
+    "./presets/agentsTemplate.js": {
+      "types": "./presets/agentsTemplate.d.ts",
+      "import": "./presets/agentsTemplate.js",
+      "default": "./presets/agentsTemplate.js"
     },
     "./presets/createProjectFiles": {
       "types": "./presets/createProjectFiles.d.ts",

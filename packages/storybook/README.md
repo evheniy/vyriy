@@ -56,13 +56,45 @@ export { default } from '@vyriy/storybook-config/preview';
 If you customize preview locally, the preview module also exposes `Preview`.
 
 ```ts
-import config, { type Preview } from '@vyriy/storybook-config/main';
+import config, { type Preview } from '@vyriy/storybook-config/preview';
 
 const preview: Preview = {
   ...config,
   tags: ['autodocs'],
 };
 ```
+
+When a project needs custom docs themes, use `createThemedDocsContainer` so shared Markdown behavior stays enabled.
+
+```ts
+import config, { createThemedDocsContainer, type Preview } from '@vyriy/storybook-config/preview';
+import themeDark from './theme-dark';
+import themeLight from './theme-light';
+
+const preview: Preview = {
+  ...config,
+  parameters: {
+    ...config.parameters,
+    docs: {
+      container: createThemedDocsContainer({
+        dark: themeDark,
+        light: themeLight,
+      }),
+    },
+  },
+};
+```
+
+The shared preview container configures Storybook `Markdown` blocks to render Mermaid fenced code blocks.
+
+```tsx
+import Structure from './STRUCTURE.md?raw';
+import { Markdown } from '@storybook/addon-docs/blocks';
+
+<Markdown>{Structure}</Markdown>;
+```
+
+The underlying renderer is also available as `@vyriy/storybook-config/mermaid-markdown` for custom docs surfaces outside the shared preview container.
 
 ## Current Vyriy Usage
 

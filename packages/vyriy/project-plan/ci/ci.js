@@ -1,10 +1,11 @@
 export const defaultValidationPipelines = [
     'install',
-    'typecheck',
     'lint',
-    'prettier',
     'test',
     'build',
+    'deploy',
+    'smoke',
+    'e2e',
 ];
 export const createCiPlan = ({ provider = 'none' } = {}) => provider === 'none'
     ? {

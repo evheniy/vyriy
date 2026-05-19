@@ -16,10 +16,33 @@ const presets = [
     'empty',
 ];
 const extraFeatures = [
-    'storybook',
+    'docker',
+    'aws-api',
+    'aws-fargate',
+    'aws-static',
+];
+const extraFeatureMap = {
+    docker: ['docker'],
+    'aws-api': [
+        'aws-cdk',
+        'lambda',
+        'apigateway',
+    ],
+    'aws-fargate': [
+        'aws-cdk',
+        'fargate',
+        'docker',
+    ],
+    'aws-static': [
+        'aws-cdk',
+        's3',
+        'cloudfront',
+    ],
+};
+const directFeatureInputs = [
     'docker',
     'aws-cdk',
-    'dynamodb',
+    'apigateway',
     'lambda',
     'fargate',
     's3',
@@ -64,10 +87,15 @@ const parsePreset = (value, defaultValue) => {
     }
     return presets.includes(normalizedValue) ? normalizedValue : defaultValue;
 };
-const parseFeatures = (value) => value
-    .split(',')
-    .map((feature) => feature.trim())
-    .filter((feature) => extraFeatures.includes(feature));
+const parseFeatures = (value) => [
+    ...new Set(value
+        .split(',')
+        .map((feature) => feature.trim())
+        .flatMap((feature) => extraFeatureMap[feature] ??
+        (directFeatureInputs.includes(feature)
+            ? [feature]
+            : []))),
+];
 const parseApiStyle = (value, defaultValue) => {
     const normalizedValue = value.trim().toLowerCase();
     const numericValue = Number.parseInt(normalizedValue, 10);
@@ -109,9 +137,9 @@ export const askProjectPlan = async ({ defaults = {}, input = stdin, output = st
         output.write('  3. github\n');
         const defaultCiProvider = defaults.ciProvider ?? 'none';
         const ciProvider = parseCiProvider(await promptWithDefault(question, 'CI/CD provider number or name', defaultCiProvider), defaultCiProvider);
-        output.write('\nAdditional features, comma-separated:\n');
+        output.write('\nAdditional infrastructure, comma-separated:\n');
         output.write(`  ${extraFeatures.join(', ')}\n`);
-        const featuresAnswer = await promptWithDefault(question, 'Features', defaults.features?.join(', ') ?? '');
+        const featuresAnswer = await promptWithDefault(question, 'Infrastructure', defaults.features?.join(', ') ?? '');
         const features = parseFeatures(featuresAnswer);
         const plan = createProjectPlanFromPreset({
             projectName,

@@ -6,9 +6,10 @@ const baseFeatures = [
     'eslint',
     'prettier',
     'jest',
+    'storybook',
 ];
 const presetFeatures = {
-    library: ['react', 'storybook'],
+    library: ['react'],
     api: [],
     'react-csr': ['react', 'webpack'],
     'react-ssr': ['react', 'webpack'],
@@ -23,7 +24,11 @@ const presetFeatures = {
         'bff',
     ],
     fullstack: ['react', 'webpack'],
-    'aws-serverless': ['aws-cdk', 'lambda', 'dynamodb'],
+    'aws-serverless': [
+        'aws-cdk',
+        'lambda',
+        'apigateway',
+    ],
     empty: [],
 };
 const packagePlans = {
@@ -71,7 +76,7 @@ const packagePlans = {
     ],
     'aws-serverless': [
         { name: 'api', kind: 'api', publishable: false },
-        { name: 'infrastructure', kind: 'core', publishable: false },
+        { name: 'stack', kind: 'stack', publishable: false },
     ],
     empty: [],
 };
@@ -105,7 +110,7 @@ const workspacePlans = {
         { name: 'web', kind: 'web' },
         { name: 'api', kind: 'api' },
     ],
-    'aws-serverless': [{ name: 'cdk', kind: 'cdk' }],
+    'aws-serverless': [{ name: 'stack', kind: 'stack' }],
     empty: [],
 };
 const uniqueFeatures = (features) => [...new Set(features)];

@@ -8,6 +8,9 @@ Interactive project master for calm cloud-ready applications.
 
 The CLI checks the local environment, runs a small project wizard, creates a normalized `VyriyProjectPlan`, builds generated project files in memory, prints a file plan, and writes only files that are safe to create or explicitly allowed to overwrite.
 
+For a detailed map of CLI choices, diagrams, current generated files, and next
+generator targets, see [PROJECT-MASTER.md](./PROJECT-MASTER.md).
+
 ## Install
 
 Install globally:
@@ -103,12 +106,14 @@ The wizard collects:
 - project preset
 - API style for API-capable presets
 - CI/CD provider
-- optional extra features
+- optional infrastructure choices
 - confirmation
 
 After confirmation, the CLI prints the project plan, creates generated files in memory, builds a conflict-aware file plan, and writes the accepted file plan.
 
 Presets do not write to disk directly.
+
+Generated projects always include `AGENTS.md` based on the shared Vyriy package agent guide.
 
 ## Project Presets
 
