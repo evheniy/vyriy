@@ -1,14 +1,14 @@
-export type VyriyProjectKind = 'library' | 'api' | 'csr' | 'ssr' | 'ssg' | 'mfe' | 'fullstack' | 'aws-serverless' | 'empty';
-export type VyriyPreset = 'library' | 'api' | 'react-csr' | 'react-ssr' | 'react-ssg' | 'mfe' | 'openmfe' | 'mfe-bff' | 'openmfe-bff' | 'fullstack' | 'aws-serverless' | 'empty';
-export type VyriyFeature = 'typescript' | 'eslint' | 'prettier' | 'jest' | 'rest-api' | 'graphql-api' | 'react' | 'storybook' | 'webpack' | 'docker' | 'aws-cdk' | 'apigateway' | 'lambda' | 'fargate' | 's3' | 'cloudfront' | 'openmfe' | 'bff';
+export type VyriyProjectKind = 'library' | 'api' | 'csr' | 'ssr' | 'ssg' | 'mfe' | 'fullstack' | 'empty';
+export type VyriyPreset = 'empty' | 'library' | 'api' | 'ssr' | 'ssg' | 'csr' | 'fullstack' | 'mfe';
+export type VyriyFeature = 'typescript' | 'eslint' | 'prettier' | 'jest' | 'rest-api' | 'graphql-api' | 'react' | 'storybook' | 'webpack' | 'docker' | 'aws-cdk' | 'apigateway' | 'lambda' | 'fargate' | 's3' | 'cloudfront' | 'openmfe';
 export type VyriyPackagePlan = {
     readonly name: string;
-    readonly kind: 'core' | 'ui' | 'api' | 'bff' | 'ssr' | 'ssg' | 'mfe' | 'contract' | 'stack';
+    readonly kind: 'core' | 'ui' | 'api' | 'services' | 'stack' | 'config' | 'utils' | 'components' | 'app';
     readonly publishable: boolean;
 };
 export type VyriyWorkspacePlan = {
     readonly name: string;
-    readonly kind: 'web' | 'api' | 'ssr' | 'ssg' | 'storybook' | 'bff' | 'mfe' | 'openmfe' | 'stack';
+    readonly kind: 'api' | 'ui' | 'stack' | 'lambda' | 'fargate';
 };
 export type VyriyCiProvider = 'gitlab' | 'github';
 export type VyriyCiPipeline = 'install' | 'lint' | 'test' | 'build' | 'deploy' | 'smoke' | 'e2e';
@@ -17,8 +17,8 @@ export type VyriyCiPlan = {
     readonly providers: VyriyCiProvider[];
     readonly pipelines: VyriyCiPipeline[];
 };
-export type VyriyApiStyle = 'rest' | 'graphql' | 'mixed';
-export type VyriyApiRuntime = 'node' | 'lambda';
+export type VyriyApiStyle = 'rest' | 'graphql';
+export type VyriyApiRuntime = 'docker' | 'lambda';
 export type VyriyApiPlan = {
     readonly enabled: boolean;
     readonly style: VyriyApiStyle;

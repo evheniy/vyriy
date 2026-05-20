@@ -1,6 +1,6 @@
-import { path } from '@vyriy/path';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import { path } from '@vyriy/path';
 import { mode } from './mode.js';
 import { optimization } from './optimization.js';
 import { performance } from './performance.js';

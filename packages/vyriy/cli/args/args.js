@@ -6,6 +6,8 @@ export const parseArgs = (args) => {
         return { type: 'version' };
     }
     const dryRun = args.includes('--dry-run');
+    const install = !args.includes('--no-install');
+    const verify = install && (args.includes('--verify') || (!args.includes('--no-verify') && !args.includes('--install-only')));
     const yes = args.includes('--yes') || args.includes('-y');
     const overwrite = args.includes('--overwrite');
     const skipExisting = args.includes('--skip-existing');
@@ -13,8 +15,10 @@ export const parseArgs = (args) => {
     const [command, projectName] = positionalArgs;
     const options = {
         dryRun,
+        install,
         yes,
         overwrite,
+        verify,
         skipExisting,
     };
     if (!command) {

@@ -1,6 +1,7 @@
 import { VyriyApiPlan, VyriyApiRuntime, VyriyApiStyle, VyriyFeature, VyriyPreset } from '../types.js';
 export type CreateApiPlanOptions = {
     readonly preset: VyriyPreset;
+    readonly runtime?: VyriyApiRuntime;
     readonly style?: VyriyApiStyle;
 };
 export type CreateApiPlan = (options: CreateApiPlanOptions) => VyriyApiPlan | undefined;

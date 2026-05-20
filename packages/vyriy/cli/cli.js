@@ -10,9 +10,16 @@ Usage:
   vyriy init             Initialize the current directory
   vyriy .                Initialize the current directory
   vyriy doctor           Check local environment
+  vyriy --yes, -y        Use defaults where possible (empty preset)
   vyriy --dry-run        Print checks and file plan without writing
-  vyriy --help           Show help
-  vyriy --version        Show version
+  vyriy --overwrite      Overwrite existing generated paths
+  vyriy --skip-existing  Leave existing generated paths untouched
+  vyriy --no-install     Create files without installing dependencies
+  vyriy --no-verify      Install dependencies without running checks
+  vyriy --install-only   Alias for --no-verify
+  vyriy --verify         Explicitly enable generated project checks
+  vyriy --help, -h       Show help
+  vyriy --version, -v    Show version
 
 Examples:
   vyriy new my-app
@@ -25,19 +32,23 @@ export const runVyriyCli = async (args = [], { output = console } = {}) => {
         case 'new':
             code = await runNewCommand({
                 dryRun: command.dryRun,
+                install: command.install,
                 output,
                 overwrite: command.overwrite,
                 projectName: command.projectName,
                 skipExisting: command.skipExisting,
+                verify: command.verify,
                 yes: command.yes,
             });
             break;
         case 'init':
             code = await runInitCommand({
                 dryRun: command.dryRun,
+                install: command.install,
                 output,
                 overwrite: command.overwrite,
                 skipExisting: command.skipExisting,
+                verify: command.verify,
                 yes: command.yes,
             });
             break;

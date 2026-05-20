@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/storybook-config",
-  "version": "0.3.5",
+  "version": "0.3.8",
   "description": "Shared Storybook config for Vyriy projects",
   "type": "module",
   "main": "./main.js",
@@ -17,13 +17,13 @@
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "sass": "^1.99.0",
-    "sass-loader": "^16.0.8",
+    "sass-loader": "^17.0.0",
     "storybook": "^10.4.0",
     "storybook-addon-pseudo-states": "^10.4.0",
     "storybook-addon-tag-badges": "^3.1.0",
     "style-loader": "^4.0.0",
     "typescript": "^6.0.3",
-    "webpack": "^5.106.2"
+    "webpack": "^5.107.0"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",

@@ -4,20 +4,24 @@ Shared Webpack config for Vyriy projects.
 
 ## Purpose
 
-This package provides two small typed Webpack config generators for Vyriy client and server builds.
+This package provides small typed Webpack helpers for Vyriy client and server builds:
+
+- browser and SSR config generators
+- an HTML plugin helper backed by `html-webpack-plugin` and `@vyriy/html`
+- a node_modules externalizer for server bundles
 
 ## Install
 
 With npm:
 
 ```bash
-npm install @vyriy/webpack-config webpack webpack-cli
+npm install @vyriy/webpack-config webpack-cli
 ```
 
 With Yarn:
 
 ```bash
-yarn add @vyriy/webpack-config webpack webpack-cli
+yarn add @vyriy/webpack-config webpack-cli
 ```
 
 The `webpack` package is listed in the install command because the shared config is consumed by Webpack at build time. Add `webpack-cli` only when the consumer project runs Webpack through CLI commands.
@@ -39,44 +43,36 @@ export default csr('./src/index.tsx', {
 For SSR bundles:
 
 ```js
-import { ssr } from '@vyriy/webpack-config';
+import { ssr, external } from '@vyriy/webpack-config';
 
-export default ssr(['@w/api'], {
-  path: '/absolute/path/to/dist/api',
-  filename: 'index.js',
-  library: { type: 'commonjs2' },
-  clean: true,
-});
-```
-
-The second parameter is a regular Webpack `output` config passed as-is.
-
-Both generators accept a third parameter with a local Webpack config transform. The transform receives the shared config and returns the final config, so the consumer can choose where to extend defaults and where to replace them:
-
-```js
-import { csr } from '@vyriy/webpack-config';
-
-export default csr(
-  './src/index.tsx',
+export default ssr(
+  ['@w/api'],
   {
-    path: '/absolute/path/to/dist/client',
+    path: '/absolute/path/to/dist/api',
     filename: 'index.js',
+    library: { type: 'commonjs2' },
     clean: true,
   },
   (config) => ({
     ...config,
-    optimization: {
-      ...config.optimization,
-      splitChunks: true,
-    },
+    externals: [
+      ...(Array.isArray(config.externals) ? config.externals : []),
+      external({
+        allowlist: [/^@p/, /^@w/, /^@vyriy/],
+      }),
+    ],
   }),
 );
 ```
 
-For example, append a local CSR plugin while keeping the shared CSR plugin:
+The second parameter is a regular Webpack `output` config passed as-is.
+
+Both generators accept a third parameter with a local Webpack config transform. The transform receives the shared config and returns the final config, so the consumer can choose where to extend defaults and where to replace them.
+
+For example, add an HTML document to a client build:
 
 ```js
-import { csr } from '@vyriy/webpack-config';
+import { csr, html } from '@vyriy/webpack-config';
 
 export default csr(
   './src/index.tsx',
@@ -89,9 +85,29 @@ export default csr(
     ...config,
     plugins: [
       ...(config.plugins ?? []),
-      new LocalPlugin(),
+      html({
+        title: '<title>App</title>',
+        body: '<div id="root"></div>',
+      }),
     ],
   }),
+);
+```
+
+The `html` helper accepts `HtmlProps` from `@vyriy/html` as the first parameter and optional `html-webpack-plugin` options as the second parameter:
+
+```js
+import { html } from '@vyriy/webpack-config';
+
+html(
+  {
+    title: '<title>App</title>',
+    meta: '<meta name="viewport" content="width=device-width, initial-scale=1" />',
+    body: '<div id="root"></div>',
+  },
+  {
+    filename: 'index.html',
+  },
 );
 ```
 
@@ -113,6 +129,8 @@ export default config;
 
 - `csr(entry, output, transform?)` creates a browser-oriented Webpack config.
 - `ssr(entry, output, transform?)` creates a node-oriented SSR Webpack config.
+- `html(props, options?)` creates an `HtmlWebpackPlugin` instance from `@vyriy/html` document sections.
+- `external(options?)` creates a Webpack `externals` function that leaves bare package imports as CommonJS runtime imports.
 - `WebpackConfig`, `WebpackConfigTransform`, `WebpackEntry`, and `WebpackOutput` expose the shared config helper types.
 
 Shared defaults:
@@ -122,5 +140,19 @@ Shared defaults:
 - `performance.hints: false`
 - production `optimization` with `TerserPlugin`
 - merged `resolve` defaults
+
+CSR defaults:
+
+- production builds extract CSS with `MiniCssExtractPlugin`
+- development builds enable React refresh with `ReactRefreshWebpackPlugin`
+
+HTML plugin defaults:
+
+- `templateContent` rendered from `@vyriy/html`
+- `publicPath: '/'`
+- `hash: true`
+- `inject: 'body'`
+- minification enabled for whitespace, comments, JS, and CSS
+- local plugin options override shared defaults
 
 See the article with a complete browser and SSR bundling walkthrough: <https://vyriy.dev/examples/vyriy-webpack-config/>.

@@ -5,6 +5,8 @@ import { createFilePlan, printFilePlan, writeFilePlan } from '../../file-plan/in
 import { createProjectFiles } from '../../presets/index.js';
 import { askProjectPlan as askProjectPlanDefault } from '../../prompts/project-plan/index.js';
 import { createProjectPlanFromPreset, printProjectPlan } from '../../project-plan/index.js';
+import { runCommand } from '../../shared/index.js';
+const defaultYesPreset = 'empty';
 const getConflicts = (filePlan) => filePlan.filter((item) => item.status === 'conflict');
 const logConflicts = (output, conflicts, method) => {
     output[method]('\nExisting files found:\n');
@@ -28,6 +30,70 @@ const createResolvedFilePlan = async (plan, projectFiles, resolution) => createF
     overwrite: resolution === 'overwrite',
     skipExisting: resolution === 'skip',
 });
+const formatCommand = (command, args) => [command, ...args].join(' ');
+const printFailedPostGenerationCommand = ({ args, command, intro, output, projectDirectory, }) => {
+    const commandText = formatCommand(command, args);
+    output.error(`\n${intro}\n`);
+    output.error(`Failed command:\n  ${commandText}\n`);
+    output.error(`Project directory:\n  ${projectDirectory}\n`);
+    output.error(`You can inspect it and run manually:\n  cd ${projectDirectory}\n  ${commandText}`);
+};
+const runPostGenerationCommands = async ({ install, output, projectDirectory, verify, }) => {
+    if (!install) {
+        output.log('Installing dependencies... SKIPPED');
+        output.log('Running checks... SKIPPED');
+        output.log('\nProject files were created.');
+        return 0;
+    }
+    try {
+        await runCommand({
+            args: ['install'],
+            command: 'yarn',
+            cwd: projectDirectory,
+        });
+    }
+    catch {
+        printFailedPostGenerationCommand({
+            args: ['install'],
+            command: 'yarn',
+            intro: 'Project files were created, but dependency installation failed.',
+            output,
+            projectDirectory,
+        });
+        return 1;
+    }
+    output.log('Installing dependencies... OK');
+    if (!verify) {
+        output.log('Running checks... SKIPPED');
+        output.log('\nProject files were created and dependencies were installed.');
+        return 0;
+    }
+    try {
+        await runCommand({
+            args: ['fix'],
+            command: 'yarn',
+            cwd: projectDirectory,
+        });
+        await runCommand({
+            args: ['check'],
+            command: 'yarn',
+            cwd: projectDirectory,
+        });
+    }
+    catch {
+        printFailedPostGenerationCommand({
+            args: ['check'],
+            command: 'yarn',
+            intro: 'Project files were created and dependencies were installed, but verification failed.',
+            output,
+            projectDirectory,
+        });
+        return 1;
+    }
+    output.log('Running checks... OK');
+    output.log('\nProject is ready.');
+    return 0;
+};
 const resolveInteractiveConflicts = async (plan, projectFiles, output, conflicts, askConflictResolution) => {
     logConflicts(output, conflicts, 'log');
     printConflictPrompt(output);
@@ -46,7 +112,7 @@ const resolveInteractiveConflicts = async (plan, projectFiles, output, conflicts
 export const askConflictResolutionDefault = async () => {
     const readline = createInterface({ input: stdin, output: stdout });
     try {
-        const answer = (await readline.question('What should Vyriy do? 1. overwrite existing files, 2. skip existing files, 3. abort (abort): '))
+        const answer = (await readline.question('What should Vyriy do?\n\n 1. overwrite existing files,\n\n 2. skip existing files,\n\n 3. abort (abort): '))
             .trim()
             .toLowerCase();
         if (answer === '1' || answer === 'overwrite') {
@@ -61,7 +127,7 @@ export const askConflictResolutionDefault = async () => {
         readline.close();
     }
 };
-export const runNewCommand = async ({ askConflictResolution = askConflictResolutionDefault, askProjectPlan = askProjectPlanDefault, dryRun = false, output = console, overwrite = false, projectName = 'my-app', skipExisting = false, yes = false, } = {}) => {
+export const runNewCommand = async ({ askConflictResolution = askConflictResolutionDefault, askProjectPlan = askProjectPlanDefault, dryRun = false, install = true, output = console, overwrite = false, projectName = 'my-app', skipExisting = false, verify = true, yes = false, } = {}) => {
     if (overwrite && skipExisting) {
         output.error('Cannot use --overwrite and --skip-existing together.');
         return 1;
@@ -72,13 +138,13 @@ export const runNewCommand = async ({ askConflictResolution = askConflictResolut
         output.error('\nPlease install Node.js 24+ and run the command again.');
         return 1;
     }
-    const plan = dryRun || yes
+    const plan = yes
         ? createProjectPlanFromPreset({
             apiStyle: 'rest',
             ciProvider: 'none',
             description: 'Calm cloud-ready application.',
             packageScope: `@${projectName}`,
-            preset: 'react-ssr',
+            preset: defaultYesPreset,
             projectName,
             targetDirectory: projectName,
         })
@@ -113,6 +179,11 @@ export const runNewCommand = async ({ askConflictResolution = askConflictResolut
         output.log(`\n${printFilePlan(resolved.filePlan)}`);
     }
     await writeFilePlan(plan.targetDirectory, filePlan);
-    output.log('\nProject files written.');
-    return 0;
+    output.log('\nCreating project files... OK');
+    return runPostGenerationCommands({
+        install,
+        output,
+        projectDirectory: plan.targetDirectory,
+        verify: install && verify,
+    });
 };

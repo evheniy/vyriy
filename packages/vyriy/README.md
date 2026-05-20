@@ -36,6 +36,10 @@ vyriy init
 vyriy doctor
 vyriy --dry-run
 vyriy --yes
+vyriy --no-install
+vyriy --no-verify
+vyriy --install-only
+vyriy --verify
 vyriy --overwrite
 vyriy --skip-existing
 vyriy --help
@@ -48,7 +52,7 @@ Runs the same flow as `vyriy new`.
 
 ### `vyriy new [name]`
 
-Starts the project planning wizard, prints the project summary and file plan, then writes generated files when no unresolved conflicts exist.
+Starts the project planning wizard, prints the project summary and file plan, writes generated files when no unresolved conflicts exist, installs dependencies, and runs generated project checks.
 
 If `name` is provided, it is used as the default project name and target directory.
 
@@ -79,11 +83,27 @@ Node.js is fatal when unsupported. Yarn and Git are warnings so generation can c
 
 ### `--dry-run`
 
-Prints the doctor report, project summary, and file plan without writing files or running fix commands.
+Prints the doctor report, project summary, and file plan without writing files, installing dependencies, or running checks.
+
+### `--no-install`
+
+Writes generated files but skips `yarn install` and `yarn check`.
+
+### `--no-verify`
+
+Writes generated files and runs `yarn install`, but skips `yarn check`.
+
+### `--install-only`
+
+Alias for `--no-verify`.
+
+### `--verify`
+
+Explicitly enables `yarn check`. This is already the default unless `--no-install`, `--no-verify`, or `--install-only` is passed.
 
 ### `--yes`
 
-Uses default wizard answers and avoids prompts where possible. It does not overwrite existing files unless `--overwrite` is also passed.
+Uses default wizard answers and avoids prompts where possible. In non-interactive mode, the default preset is `empty` with no CI/CD provider. It does not overwrite existing files unless `--overwrite` is also passed.
 
 ### `--overwrite`
 
@@ -106,10 +126,10 @@ The wizard collects:
 - project preset
 - API style for API-capable presets
 - CI/CD provider
-- optional infrastructure choices
+- infrastructure provider
 - confirmation
 
-After confirmation, the CLI prints the project plan, creates generated files in memory, builds a conflict-aware file plan, and writes the accepted file plan.
+After confirmation, the CLI prints the project plan, creates generated files in memory, builds a conflict-aware file plan, writes the accepted file plan, runs `yarn install`, and runs `yarn check`.
 
 Presets do not write to disk directly.
 
@@ -119,28 +139,28 @@ Generated projects always include `AGENTS.md` based on the shared Vyriy package 
 
 Supported presets:
 
+- `empty`
 - `library`
 - `api`
-- `react-csr`
-- `react-ssr`
-- `react-ssg`
-- `mfe`
-- `openmfe`
-- `mfe-bff`
-- `openmfe-bff`
+- `ssr`
+- `ssg`
+- `csr`
 - `fullstack`
-- `aws-serverless`
-- `empty`
+- `mfe`
 
-The preset is the concrete future generated setup. The project kind is the broader architecture category.
+The preset is the concrete future generated setup. The project kind is the broader architecture category. The infrastructure choice is selected separately: Docker is the default local/container shape, while AWS selects CDK plus Lambda/API Gateway for API-capable presets.
+
+The `mfe` preset uses OpenMFE as the default MFE contract shape. There is no separate `openmfe` preset unless a future use case proves that split is useful.
+
+Workspace kinds describe deployment intent: `ui` is universal UI output, `api` is Docker-oriented, `lambda` is the AWS API runtime, `fargate` is an AWS container runtime, and `stack` contains AWS infrastructure.
 
 Examples:
 
-- `react-csr` -> `csr`
-- `react-ssr` -> `ssr`
-- `react-ssg` -> `ssg`
-- `openmfe-bff` -> `mfe`
-- `aws-serverless` -> `aws-serverless`
+- `csr` -> `csr`
+- `ssr` -> `ssr`
+- `ssg` -> `ssg`
+- `mfe` -> `mfe`
+- `fullstack` -> `fullstack`
 
 ## Public API
 
@@ -178,7 +198,7 @@ It includes:
 - architecture: `preset`, `projectKind`
 - selected features
 - CI/CD planning: enabled state, providers, and validation pipelines
-- API planning for API-capable presets: REST, GraphQL, or mixed API style
+- API planning for API-capable presets: REST or GraphQL API style
 - future package plans
 - future workspace plans
 

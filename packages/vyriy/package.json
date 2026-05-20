@@ -1,6 +1,6 @@
 {
   "name": "vyriy",
-  "version": "0.3.5",
+  "version": "0.3.8",
   "description": "Interactive project master for calm cloud-ready applications.",
   "type": "module",
   "main": "./index.js",
@@ -488,6 +488,16 @@
       "types": "./shared/index.d.ts",
       "import": "./shared/index.js",
       "default": "./shared/index.js"
+    },
+    "./shared/runCommand": {
+      "types": "./shared/runCommand.d.ts",
+      "import": "./shared/runCommand.js",
+      "default": "./shared/runCommand.js"
+    },
+    "./shared/runCommand.js": {
+      "types": "./shared/runCommand.d.ts",
+      "import": "./shared/runCommand.js",
+      "default": "./shared/runCommand.js"
     },
     "./shared/semver": {
       "types": "./shared/semver.d.ts",

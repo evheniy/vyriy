@@ -2,25 +2,34 @@ import { stdin, stdout } from 'node:process';
 import { createInterface } from 'node:readline';
 import { createProjectPlanFromPreset, getDefaultApiStyleFromPreset, isApiPreset, } from '../../project-plan/index.js';
 const presets = [
+    'empty',
     'library',
     'api',
-    'react-csr',
-    'react-ssr',
-    'react-ssg',
-    'mfe',
-    'openmfe',
-    'mfe-bff',
-    'openmfe-bff',
+    'ssr',
+    'ssg',
+    'csr',
     'fullstack',
-    'aws-serverless',
-    'empty',
+    'mfe',
 ];
-const extraFeatures = [
-    'docker',
-    'aws-api',
-    'aws-fargate',
-    'aws-static',
-];
+const presetDescriptions = {
+    empty: 'shared tooling without application code',
+    library: 'publishable React package for reusable UI',
+    api: 'REST or GraphQL backend API',
+    ssr: 'server-rendered React application',
+    ssg: 'build-time generated static React site',
+    csr: 'browser-rendered React application',
+    fullstack: 'React frontend with backend API',
+    mfe: 'OpenMFE widget with UI, API, SSR, and manifest',
+};
+const infrastructureOptions = ['docker', 'aws'];
+const infrastructureFeatureMap = {
+    docker: ['docker'],
+    aws: [
+        'aws-cdk',
+        'lambda',
+        'apigateway',
+    ],
+};
 const extraFeatureMap = {
     docker: ['docker'],
     'aws-api': [
@@ -48,7 +57,7 @@ const directFeatureInputs = [
     's3',
     'cloudfront',
 ];
-const apiStyles = ['rest', 'graphql', 'mixed'];
+const apiStyles = ['rest', 'graphql'];
 const ciProviders = ['none', 'gitlab', 'github'];
 const createQuestion = (readline, output) => {
     const queuedLines = [];
@@ -96,6 +105,28 @@ const parseFeatures = (value) => [
             ? [feature]
             : []))),
 ];
+const parseInfrastructure = (value, defaultValue) => {
+    const normalizedValue = value.trim().toLowerCase();
+    const numericValue = Number.parseInt(normalizedValue, 10);
+    if (Number.isInteger(numericValue) && infrastructureOptions[numericValue - 1]) {
+        return [...infrastructureFeatureMap[infrastructureOptions[numericValue - 1]]];
+    }
+    if (infrastructureOptions.includes(normalizedValue)) {
+        return [...infrastructureFeatureMap[normalizedValue]];
+    }
+    const legacyFeatures = parseFeatures(value);
+    return legacyFeatures.length > 0 ? legacyFeatures : [...infrastructureFeatureMap[defaultValue]];
+};
+const getDefaultInfrastructureInput = (features) => features?.some((feature) => [
+    'aws-cdk',
+    'lambda',
+    'apigateway',
+    'fargate',
+    's3',
+    'cloudfront',
+].includes(feature))
+    ? 'aws'
+    : 'docker';
 const parseApiStyle = (value, defaultValue) => {
     const normalizedValue = value.trim().toLowerCase();
     const numericValue = Number.parseInt(normalizedValue, 10);
@@ -124,12 +155,13 @@ export const askProjectPlan = async ({ defaults = {}, input = stdin, output = st
         const packageScope = await promptWithDefault(question, 'Package scope', defaults.packageScope ?? `@${projectName}`);
         const description = await promptWithDefault(question, 'Description', defaults.description ?? 'Calm cloud-ready application.');
         output.write('\nProject preset:\n');
-        presets.forEach((preset, index) => output.write(`  ${index + 1}. ${preset}\n`));
-        const presetAnswer = await promptWithDefault(question, 'Preset number or name', defaults.preset ?? 'react-ssr');
-        const preset = parsePreset(presetAnswer, defaults.preset ?? 'react-ssr');
+        presets.forEach((preset, index) => output.write(`  ${index + 1}. ${preset} - ${presetDescriptions[preset]}\n`));
+        const defaultPreset = defaults.preset ?? 'empty';
+        const presetAnswer = await promptWithDefault(question, 'Preset number or name', defaultPreset);
+        const preset = parsePreset(presetAnswer, defaultPreset);
         const defaultApiStyle = defaults.apiStyle ?? getDefaultApiStyleFromPreset(preset);
         const apiStyle = isApiPreset(preset)
-            ? parseApiStyle(await promptWithDefault(question, 'API style: 1. rest (@vyriy/router), 2. graphql, 3. mixed', defaultApiStyle), defaultApiStyle)
+            ? parseApiStyle(await promptWithDefault(question, 'API style:\n  1. rest (@vyriy/router),\n  2. graphql', defaultApiStyle), defaultApiStyle)
             : undefined;
         output.write('\nCI/CD provider:\n');
         output.write('  1. none\n');
@@ -137,10 +169,12 @@ export const askProjectPlan = async ({ defaults = {}, input = stdin, output = st
         output.write('  3. github\n');
         const defaultCiProvider = defaults.ciProvider ?? 'none';
         const ciProvider = parseCiProvider(await promptWithDefault(question, 'CI/CD provider number or name', defaultCiProvider), defaultCiProvider);
-        output.write('\nAdditional infrastructure, comma-separated:\n');
-        output.write(`  ${extraFeatures.join(', ')}\n`);
-        const featuresAnswer = await promptWithDefault(question, 'Infrastructure', defaults.features?.join(', ') ?? '');
-        const features = parseFeatures(featuresAnswer);
+        output.write('\nInfrastructure:\n');
+        output.write('  1. Docker\n');
+        output.write('  2. AWS\n');
+        const defaultInfrastructure = getDefaultInfrastructureInput(defaults.features);
+        const featuresAnswer = await promptWithDefault(question, 'Infrastructure number or name', defaultInfrastructure);
+        const features = parseInfrastructure(featuresAnswer, defaultInfrastructure);
         const plan = createProjectPlanFromPreset({
             projectName,
             targetDirectory,

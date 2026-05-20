@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/webpack-config",
-  "version": "0.3.5",
+  "version": "0.3.8",
   "description": "Shared Webpack config for Vyriy projects",
   "type": "module",
   "main": "./index.js",
@@ -13,11 +13,13 @@
     "@babel/register": "^7.29.3",
     "@babel/runtime": "^7.29.2",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.2",
-    "@vyriy/env": "0.3.5",
-    "@vyriy/path": "0.3.5",
+    "@vyriy/env": "0.3.8",
+    "@vyriy/html": "0.3.8",
+    "@vyriy/path": "0.3.8",
     "babel-loader": "^10.1.1",
     "css-loader": "^7.1.4",
     "cssnano": "^8.0.1",
+    "html-webpack-plugin": "^5.6.7",
     "mini-css-extract-plugin": "^2.10.2",
     "null-loader": "^4.0.1",
     "postcss": "^8.5.15",
@@ -25,10 +27,10 @@
     "postcss-preset-env": "^11.3.0",
     "react-refresh": "^0.18.0",
     "sass": "^1.99.0",
-    "sass-loader": "^16.0.8",
+    "sass-loader": "^17.0.0",
     "style-loader": "^4.0.0",
     "terser-webpack-plugin": "^5.6.0",
-    "webpack": "^5.106.2"
+    "webpack": "^5.107.0"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",
@@ -63,6 +65,26 @@
       "types": "./csr.d.ts",
       "import": "./csr.js",
       "default": "./csr.js"
+    },
+    "./external": {
+      "types": "./external.d.ts",
+      "import": "./external.js",
+      "default": "./external.js"
+    },
+    "./external.js": {
+      "types": "./external.d.ts",
+      "import": "./external.js",
+      "default": "./external.js"
+    },
+    "./html": {
+      "types": "./html.d.ts",
+      "import": "./html.js",
+      "default": "./html.js"
+    },
+    "./html.js": {
+      "types": "./html.d.ts",
+      "import": "./html.js",
+      "default": "./html.js"
     },
     "./index": {
       "types": "./index.d.ts",
