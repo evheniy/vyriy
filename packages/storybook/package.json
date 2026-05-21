@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/storybook-config",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "description": "Shared Storybook config for Vyriy projects",
   "type": "module",
   "main": "./main.js",

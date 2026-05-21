@@ -16,7 +16,7 @@ export type VyriyCliCommand = {
     readonly verify: boolean;
     readonly skipExisting: boolean;
 } | {
-    readonly type: 'doctor' | 'help' | 'version';
+    readonly type: 'doctor' | 'help' | 'publish' | 'version';
 } | {
     readonly type: 'unknown';
     readonly command: string;

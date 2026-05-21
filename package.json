@@ -1,6 +1,6 @@
 {
   "name": "vyriy-monorepo",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "description": "Calm cloud-oriented React architecture and toolkit",
   "private": true,
   "type": "module",
@@ -9,5 +9,10 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy"
+  }
 }

@@ -93,7 +93,7 @@ const config = {
         ],
     },
     transformIgnorePatterns: [
-        '/node_modules/',
+        '/node_modules/(?!@vyriy/)',
     ],
 };
 export default config;

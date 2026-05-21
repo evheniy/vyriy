@@ -34,6 +34,7 @@ vyriy new my-app
 vyriy .
 vyriy init
 vyriy doctor
+vyriy publish
 vyriy --dry-run
 vyriy --yes
 vyriy --no-install
@@ -78,6 +79,12 @@ Current checks:
 - Git availability
 
 Node.js is fatal when unsupported. Yarn and Git are warnings so generation can continue without silently installing tools or initializing Git.
+
+### `vyriy publish`
+
+Prepares compiled `dist` package metadata for publishing without running `npm publish`.
+
+Use it after TypeScript emits package files into `dist`, for example from a `build:dist` script.
 
 ## Flags
 

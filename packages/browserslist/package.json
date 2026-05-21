@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/browserslist-config",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "description": "Shared Browserslist config for Vyriy projects",
   "type": "module",
   "main": "./index.js",

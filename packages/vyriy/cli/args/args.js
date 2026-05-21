@@ -32,6 +32,8 @@ export const parseArgs = (args) => {
             return { type: 'init', ...options };
         case 'doctor':
             return { type: 'doctor' };
+        case 'publish':
+            return { type: 'publish' };
         default:
             return { type: 'unknown', command };
     }

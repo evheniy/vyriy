@@ -169,12 +169,16 @@ export const askProjectPlan = async ({ defaults = {}, input = stdin, output = st
         output.write('  3. github\n');
         const defaultCiProvider = defaults.ciProvider ?? 'none';
         const ciProvider = parseCiProvider(await promptWithDefault(question, 'CI/CD provider number or name', defaultCiProvider), defaultCiProvider);
-        output.write('\nInfrastructure:\n');
-        output.write('  1. Docker\n');
-        output.write('  2. AWS\n');
-        const defaultInfrastructure = getDefaultInfrastructureInput(defaults.features);
-        const featuresAnswer = await promptWithDefault(question, 'Infrastructure number or name', defaultInfrastructure);
-        const features = parseInfrastructure(featuresAnswer, defaultInfrastructure);
+        const features = isApiPreset(preset)
+            ? await (async () => {
+                output.write('\nInfrastructure:\n');
+                output.write('  1. Docker\n');
+                output.write('  2. AWS\n');
+                const defaultInfrastructure = getDefaultInfrastructureInput(defaults.features);
+                const featuresAnswer = await promptWithDefault(question, 'Infrastructure number or name', defaultInfrastructure);
+                return parseInfrastructure(featuresAnswer, defaultInfrastructure);
+            })()
+            : [];
         const plan = createProjectPlanFromPreset({
             projectName,
             targetDirectory,

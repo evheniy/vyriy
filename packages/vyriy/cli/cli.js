@@ -1,6 +1,7 @@
 import { runDoctorCommand } from '../commands/doctor/index.js';
 import { runInitCommand } from '../commands/init/index.js';
 import { runNewCommand } from '../commands/new/index.js';
+import { runPublishCommand } from '../commands/publish/index.js';
 import packageJson from '../package.json' with { type: 'json' };
 import { parseArgs } from './args/index.js';
 const helpText = `Vyriy Project Master
@@ -10,6 +11,7 @@ Usage:
   vyriy init             Initialize the current directory
   vyriy .                Initialize the current directory
   vyriy doctor           Check local environment
+  vyriy publish          Prepare dist package metadata without publishing to npm
   vyriy --yes, -y        Use defaults where possible (empty preset)
   vyriy --dry-run        Print checks and file plan without writing
   vyriy --overwrite      Overwrite existing generated paths
@@ -57,6 +59,9 @@ export const runVyriyCli = async (args = [], { output = console } = {}) => {
             code = result.code;
             break;
         }
+        case 'publish':
+            code = await runPublishCommand();
+            break;
         case 'help':
             output.log(helpText);
             break;
