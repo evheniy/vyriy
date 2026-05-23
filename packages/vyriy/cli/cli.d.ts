@@ -1,2 +1,2 @@
-import { RunVyriyCli } from './types.js';
-export declare const runVyriyCli: RunVyriyCli;
+import type { Cli } from './types.js';
+export declare const cli: Cli;

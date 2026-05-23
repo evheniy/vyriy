@@ -1,11 +1,10 @@
 {
   "name": "@vyriy/recursive",
-  "version": "0.3.9",
+  "version": "0.4.0",
   "description": "Recursive iteration utility for Vyriy projects",
   "type": "module",
-  "main": "./index.js",
   "dependencies": {
-    "@vyriy/logger": "0.3.9"
+    "@vyriy/logger": "0.4.0"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",
@@ -14,6 +13,7 @@
     "url": "https://github.com/evheniy/vyriy",
     "directory": "packages/recursive"
   },
+  "main": "./index.js",
   "types": "./index.d.ts",
   "exports": {
     ".": {

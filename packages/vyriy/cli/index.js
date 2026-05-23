@@ -1,2 +1,2 @@
-export * from './args/index.js';
+export * from './args.js';
 export * from './cli.js';

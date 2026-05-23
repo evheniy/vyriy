@@ -1,3 +1,3 @@
 #!/usr/bin/env node
-import { runVyriyCli } from '../cli/index.js';
-await runVyriyCli(process.argv.slice(2));
+import { cli } from '../cli/index.js';
+await cli(process.argv.slice(2));

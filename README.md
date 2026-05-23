@@ -154,7 +154,7 @@ The long-term goal is a reusable foundation with low cognitive load, clear contr
 
 ## Requirements
 
-- Node.js `>=24.0.0`
-- Yarn `4.14.1`
+- Node.js latest LTS (`>=24.0.0`)
+- Yarn latest stable version (`>=4.15.0`)
 
-In most projects that plan to use this library, `typescript` is also expected to be installed in the consumer project.
+In projects that plan to use this library, `typescript` is also expected to be installed in the consumer project (latest stable version `>= 6.0.0`).

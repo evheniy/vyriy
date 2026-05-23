@@ -1,9 +1,8 @@
 {
   "name": "@vyriy/stylelint-config",
-  "version": "0.3.9",
+  "version": "0.4.0",
   "description": "Shared Stylelint config for Vyriy projects",
   "type": "module",
-  "main": "./index.js",
   "dependencies": {
     "postcss": "^8.5.15",
     "postcss-scss": "^4.0.9",
@@ -23,6 +22,7 @@
     "url": "https://github.com/evheniy/vyriy",
     "directory": "packages/stylelint"
   },
+  "main": "./index.js",
   "types": "./index.d.ts",
   "exports": {
     ".": {

@@ -1,9 +1,8 @@
 {
   "name": "@vyriy/router",
-  "version": "0.3.9",
+  "version": "0.4.0",
   "description": "Router utility for Vyriy projects",
   "type": "module",
-  "main": "./index.js",
   "dependencies": {
     "@types/aws-lambda": "^8.10.161"
   },
@@ -14,6 +13,7 @@
     "url": "https://github.com/evheniy/vyriy",
     "directory": "packages/router"
   },
+  "main": "./index.js",
   "types": "./index.d.ts",
   "exports": {
     ".": {
