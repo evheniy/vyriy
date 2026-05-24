@@ -16,6 +16,7 @@ const config = {
         'build/**',
         'dist/**',
         'node_modules/**',
+        'coverage/**',
     ],
     plugins,
     rules: {

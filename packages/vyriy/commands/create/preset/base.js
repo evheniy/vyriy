@@ -53,8 +53,8 @@ export const base = {
                 'npm-run-all2': packageJson.peerDependencies['npm-run-all2'],
                 'cross-env': packageJson.peerDependencies['cross-env'],
             },
-        }, null, 2),
-        'README.md': `# ${name}\n\n${description}`,
+        }, null, 2) + '\n',
+        'README.md': `# ${name}\n\n${description}\n`,
         'doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
 import ReadMe from './README.md?raw';
 
@@ -152,7 +152,7 @@ export default {
                 'workspaces/**/*.tsx',
                 '*.ts',
             ],
-        }, null, 2),
+        }, null, 2) + '\n',
         'prettier.config.ts': "export { default } from '@vyriy/prettier-config';\n",
         '.prettierignore': 'node_modules\ndist\ncoverage\nstorybook-static\n',
         'eslint.config.ts': "export { default } from '@vyriy/eslint-config';\n",

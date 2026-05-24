@@ -82,12 +82,12 @@ Registered presets:
 | --------- | --------------------------------------------- |
 | `base`    | Minimal monorepo with config only             |
 | `library` | Workspaces layout with a sample React package |
+| `api`     | Backend API workspace with server/build setup |
 
 Presets in progress:
 
 | Key    | Direction                      |
 | ------ | ------------------------------ |
-| `api`  | Backend API project            |
 | `rest` | REST API project               |
 | `gql`  | GraphQL API project            |
 | `ssr`  | Server-side rendering project  |
@@ -106,7 +106,8 @@ Provider selections add files to the generated project.
 | Preset    | CI/CD providers    | Deploy providers |
 | --------- | ------------------ | ---------------- |
 | `base`    | `gitlab`, `github` | none             |
-| `library` | `gitlab`, `github` | `docker`         |
+| `library` | `gitlab`, `github` | none             |
+| `api`     | `gitlab`, `github` | none             |
 
 ## API
 

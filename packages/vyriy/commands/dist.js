@@ -60,6 +60,9 @@ const getPackageMain = async (packageDirectory, packageJson, javaScriptFiles) =>
     if (javaScriptFiles.includes('index.js')) {
         return 'index.js';
     }
+    if (getPackageBinFiles(packageJson).length > 0) {
+        return undefined;
+    }
     return javaScriptFiles[0];
 };
 const createExportTarget = (javaScriptFile) => {
@@ -174,9 +177,18 @@ const getPackageBinFiles = (packageJson) => {
     }
     return [];
 };
+const toPackageLocalPath = (filePath) => filePath.replace(/^\.\//, '');
+const removePackageBinDeclarationFiles = async (packageDirectory, packageJson) => {
+    for (const binFile of getPackageBinFiles(packageJson)) {
+        const declarationFilePath = path.join(packageDirectory, toPackageLocalPath(binFile).replace(/\.js$/, '.d.ts'));
+        if (await hasFile(declarationFilePath)) {
+            await unlink(declarationFilePath);
+        }
+    }
+};
 const makePackageBinsExecutable = async (packageDirectory, packageJson) => {
     for (const binFile of getPackageBinFiles(packageJson)) {
-        const binFilePath = path.join(packageDirectory, binFile.replace(/^\.\//, ''));
+        const binFilePath = path.join(packageDirectory, toPackageLocalPath(binFile));
         if (await hasFile(binFilePath)) {
             await chmod(binFilePath, 0o755);
         }
@@ -214,6 +226,7 @@ const distPackage = async (packageJsonPath, rootPackageJson) => {
     await removeEmptyJavaScriptFiles(packageDirectory);
     await removeMissingJavaScriptExports(packageDirectory);
     await removeEmptyJavaScriptFiles(packageDirectory);
+    await removePackageBinDeclarationFiles(packageDirectory, packageJson);
     const javaScriptFiles = await getJavaScriptFiles(packageDirectory);
     await copyLicense(packageDirectory);
     await copyReadme(packageDirectory);

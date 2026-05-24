@@ -68,7 +68,7 @@ export const library = {
                     stylelint: packageJson.peerDependencies.stylelint,
                     rimraf: packageJson.peerDependencies.rimraf,
                 },
-            }, null, 2),
+            }, null, 2) + '\n',
             'tsconfig.build.json': JSON.stringify({
                 extends: './tsconfig.json',
                 include: [
@@ -89,7 +89,7 @@ export const library = {
                     declaration: true,
                     allowImportingTsExtensions: false,
                 },
-            }, null, 2),
+            }, null, 2) + '\n',
             'stylelint.config.ts': "export { default } from '@vyriy/stylelint-config';\n",
             [`packages/${options.name}/package.json`]: JSON.stringify({
                 name: packageName,
@@ -104,7 +104,7 @@ export const library = {
                 peerDependencies: {
                     react: packageJson.peerDependencies.react,
                 },
-            }, null, 2),
+            }, null, 2) + '\n',
             [`packages/${options.name}/README.md`]: `# ${packageName}\n\n${options.description}\n`,
             [`packages/${options.name}/doc.mdx`]: `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
 import ReadMe from './README.md?raw';
@@ -128,8 +128,8 @@ import type { ButtonType } from './types.js';
 
 import './button.scss';
 
-export const Button: ButtonType = ({ className, type = 'button', variant = 'primary', ...props }) => (
-  <button className={cn('button', \`button--\${variant}\`, className)} type={type} {...props} />
+export const Button: ButtonType = ({ className, variant = 'primary', ...props }) => (
+  <button type="button" className={cn('button', \`button--\${variant}\`, className)} {...props} />
 );
 `,
             [`packages/${options.name}/index.test.ts`]: `import { describe, expect, it } from '@jest/globals';
@@ -173,13 +173,38 @@ const meta = {
   args: {
     children: 'Button',
   },
+  argTypes: {
+    children: {
+      control: 'text',
+      description: 'Button label.',
+      table: {
+        type: { summary: 'ReactNode' },
+      },
+    },
+    variant: {
+      control: 'select',
+      options: ['primary', 'secondary'],
+      description: 'Visual style of the button.',
+      table: {
+        type: { summary: "'primary' | 'secondary'" },
+        defaultValue: { summary: 'primary' },
+      },
+    },
+    className: {
+      table: { disable: true },
+    },
+  },
 } satisfies Meta<typeof Button>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Primary: Story = {};
+export const Primary: Story = {
+  args: {
+    variant: 'primary',
+  },
+};
 
 export const Secondary: Story = {
   args: {

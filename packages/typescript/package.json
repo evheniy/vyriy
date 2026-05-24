@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/typescript-config",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Shared TypeScript configs for Vyriy projects",
   "type": "module",
   "main": "index.json",

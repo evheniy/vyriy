@@ -1,6 +1,6 @@
 {
   "name": "vyriy",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Interactive project master for calm cloud-ready applications.",
   "type": "module",
   "bin": "./bin/vyriy.js",
@@ -22,7 +22,10 @@
     "rimraf": "^6.1.3",
     "storybook": "^10.4.1",
     "stylelint": "^17.12.0",
-    "typescript": "^6.0.3"
+    "tsx": "^4.22.3",
+    "typescript": "^6.0.3",
+    "webpack": "^5.107.1",
+    "webpack-cli": "^7.0.2"
   },
   "peerDependenciesMeta": {
     "@storybook/react-webpack5": {
@@ -67,7 +70,16 @@
     "stylelint": {
       "optional": true
     },
+    "tsx": {
+      "optional": true
+    },
     "typescript": {
+      "optional": true
+    },
+    "webpack": {
+      "optional": true
+    },
+    "webpack-cli": {
       "optional": true
     }
   },
@@ -77,314 +89,5 @@
     "type": "git",
     "url": "https://github.com/evheniy/vyriy",
     "directory": "packages/vyriy"
-  },
-  "main": "./bin/vyriy.js",
-  "types": "./bin/vyriy.d.ts",
-  "exports": {
-    ".": {
-      "types": "./bin/vyriy.d.ts",
-      "import": "./bin/vyriy.js",
-      "default": "./bin/vyriy.js"
-    },
-    "./bin/vyriy": {
-      "types": "./bin/vyriy.d.ts",
-      "import": "./bin/vyriy.js",
-      "default": "./bin/vyriy.js"
-    },
-    "./bin/vyriy.js": {
-      "types": "./bin/vyriy.d.ts",
-      "import": "./bin/vyriy.js",
-      "default": "./bin/vyriy.js"
-    },
-    "./cli/args": {
-      "types": "./cli/args.d.ts",
-      "import": "./cli/args.js",
-      "default": "./cli/args.js"
-    },
-    "./cli/args.js": {
-      "types": "./cli/args.d.ts",
-      "import": "./cli/args.js",
-      "default": "./cli/args.js"
-    },
-    "./cli/cli": {
-      "types": "./cli/cli.d.ts",
-      "import": "./cli/cli.js",
-      "default": "./cli/cli.js"
-    },
-    "./cli/cli.js": {
-      "types": "./cli/cli.d.ts",
-      "import": "./cli/cli.js",
-      "default": "./cli/cli.js"
-    },
-    "./cli/index": {
-      "types": "./cli/index.d.ts",
-      "import": "./cli/index.js",
-      "default": "./cli/index.js"
-    },
-    "./cli/index.js": {
-      "types": "./cli/index.d.ts",
-      "import": "./cli/index.js",
-      "default": "./cli/index.js"
-    },
-    "./commands/check-env": {
-      "types": "./commands/check-env.d.ts",
-      "import": "./commands/check-env.js",
-      "default": "./commands/check-env.js"
-    },
-    "./commands/check-env.js": {
-      "types": "./commands/check-env.d.ts",
-      "import": "./commands/check-env.js",
-      "default": "./commands/check-env.js"
-    },
-    "./commands/create/index": {
-      "types": "./commands/create/index.d.ts",
-      "import": "./commands/create/index.js",
-      "default": "./commands/create/index.js"
-    },
-    "./commands/create/index.js": {
-      "types": "./commands/create/index.d.ts",
-      "import": "./commands/create/index.js",
-      "default": "./commands/create/index.js"
-    },
-    "./commands/create/plan/index": {
-      "types": "./commands/create/plan/index.d.ts",
-      "import": "./commands/create/plan/index.js",
-      "default": "./commands/create/plan/index.js"
-    },
-    "./commands/create/plan/index.js": {
-      "types": "./commands/create/plan/index.d.ts",
-      "import": "./commands/create/plan/index.js",
-      "default": "./commands/create/plan/index.js"
-    },
-    "./commands/create/plan/plan": {
-      "types": "./commands/create/plan/plan.d.ts",
-      "import": "./commands/create/plan/plan.js",
-      "default": "./commands/create/plan/plan.js"
-    },
-    "./commands/create/plan/plan.js": {
-      "types": "./commands/create/plan/plan.d.ts",
-      "import": "./commands/create/plan/plan.js",
-      "default": "./commands/create/plan/plan.js"
-    },
-    "./commands/create/plan/question": {
-      "types": "./commands/create/plan/question.d.ts",
-      "import": "./commands/create/plan/question.js",
-      "default": "./commands/create/plan/question.js"
-    },
-    "./commands/create/plan/question.js": {
-      "types": "./commands/create/plan/question.d.ts",
-      "import": "./commands/create/plan/question.js",
-      "default": "./commands/create/plan/question.js"
-    },
-    "./commands/create/preset/api": {
-      "types": "./commands/create/preset/api.d.ts",
-      "import": "./commands/create/preset/api.js",
-      "default": "./commands/create/preset/api.js"
-    },
-    "./commands/create/preset/api.js": {
-      "types": "./commands/create/preset/api.d.ts",
-      "import": "./commands/create/preset/api.js",
-      "default": "./commands/create/preset/api.js"
-    },
-    "./commands/create/preset/base": {
-      "types": "./commands/create/preset/base.d.ts",
-      "import": "./commands/create/preset/base.js",
-      "default": "./commands/create/preset/base.js"
-    },
-    "./commands/create/preset/base.js": {
-      "types": "./commands/create/preset/base.d.ts",
-      "import": "./commands/create/preset/base.js",
-      "default": "./commands/create/preset/base.js"
-    },
-    "./commands/create/preset/gql": {
-      "types": "./commands/create/preset/gql.d.ts",
-      "import": "./commands/create/preset/gql.js",
-      "default": "./commands/create/preset/gql.js"
-    },
-    "./commands/create/preset/gql.js": {
-      "types": "./commands/create/preset/gql.d.ts",
-      "import": "./commands/create/preset/gql.js",
-      "default": "./commands/create/preset/gql.js"
-    },
-    "./commands/create/preset/index": {
-      "types": "./commands/create/preset/index.d.ts",
-      "import": "./commands/create/preset/index.js",
-      "default": "./commands/create/preset/index.js"
-    },
-    "./commands/create/preset/index.js": {
-      "types": "./commands/create/preset/index.d.ts",
-      "import": "./commands/create/preset/index.js",
-      "default": "./commands/create/preset/index.js"
-    },
-    "./commands/create/preset/library": {
-      "types": "./commands/create/preset/library.d.ts",
-      "import": "./commands/create/preset/library.js",
-      "default": "./commands/create/preset/library.js"
-    },
-    "./commands/create/preset/library.js": {
-      "types": "./commands/create/preset/library.d.ts",
-      "import": "./commands/create/preset/library.js",
-      "default": "./commands/create/preset/library.js"
-    },
-    "./commands/create/preset/mfe": {
-      "types": "./commands/create/preset/mfe.d.ts",
-      "import": "./commands/create/preset/mfe.js",
-      "default": "./commands/create/preset/mfe.js"
-    },
-    "./commands/create/preset/mfe.js": {
-      "types": "./commands/create/preset/mfe.d.ts",
-      "import": "./commands/create/preset/mfe.js",
-      "default": "./commands/create/preset/mfe.js"
-    },
-    "./commands/create/preset/rest": {
-      "types": "./commands/create/preset/rest.d.ts",
-      "import": "./commands/create/preset/rest.js",
-      "default": "./commands/create/preset/rest.js"
-    },
-    "./commands/create/preset/rest.js": {
-      "types": "./commands/create/preset/rest.d.ts",
-      "import": "./commands/create/preset/rest.js",
-      "default": "./commands/create/preset/rest.js"
-    },
-    "./commands/create/preset/spa": {
-      "types": "./commands/create/preset/spa.d.ts",
-      "import": "./commands/create/preset/spa.js",
-      "default": "./commands/create/preset/spa.js"
-    },
-    "./commands/create/preset/spa.js": {
-      "types": "./commands/create/preset/spa.d.ts",
-      "import": "./commands/create/preset/spa.js",
-      "default": "./commands/create/preset/spa.js"
-    },
-    "./commands/create/preset/ssg": {
-      "types": "./commands/create/preset/ssg.d.ts",
-      "import": "./commands/create/preset/ssg.js",
-      "default": "./commands/create/preset/ssg.js"
-    },
-    "./commands/create/preset/ssg.js": {
-      "types": "./commands/create/preset/ssg.d.ts",
-      "import": "./commands/create/preset/ssg.js",
-      "default": "./commands/create/preset/ssg.js"
-    },
-    "./commands/create/preset/ssr": {
-      "types": "./commands/create/preset/ssr.d.ts",
-      "import": "./commands/create/preset/ssr.js",
-      "default": "./commands/create/preset/ssr.js"
-    },
-    "./commands/create/preset/ssr.js": {
-      "types": "./commands/create/preset/ssr.d.ts",
-      "import": "./commands/create/preset/ssr.js",
-      "default": "./commands/create/preset/ssr.js"
-    },
-    "./commands/create/prompt/conflict-strategy": {
-      "types": "./commands/create/prompt/conflict-strategy.d.ts",
-      "import": "./commands/create/prompt/conflict-strategy.js",
-      "default": "./commands/create/prompt/conflict-strategy.js"
-    },
-    "./commands/create/prompt/conflict-strategy.js": {
-      "types": "./commands/create/prompt/conflict-strategy.d.ts",
-      "import": "./commands/create/prompt/conflict-strategy.js",
-      "default": "./commands/create/prompt/conflict-strategy.js"
-    },
-    "./commands/create/prompt/index": {
-      "types": "./commands/create/prompt/index.d.ts",
-      "import": "./commands/create/prompt/index.js",
-      "default": "./commands/create/prompt/index.js"
-    },
-    "./commands/create/prompt/index.js": {
-      "types": "./commands/create/prompt/index.d.ts",
-      "import": "./commands/create/prompt/index.js",
-      "default": "./commands/create/prompt/index.js"
-    },
-    "./commands/create/prompt/preset": {
-      "types": "./commands/create/prompt/preset.d.ts",
-      "import": "./commands/create/prompt/preset.js",
-      "default": "./commands/create/prompt/preset.js"
-    },
-    "./commands/create/prompt/preset.js": {
-      "types": "./commands/create/prompt/preset.d.ts",
-      "import": "./commands/create/prompt/preset.js",
-      "default": "./commands/create/prompt/preset.js"
-    },
-    "./commands/create/prompt/prompt": {
-      "types": "./commands/create/prompt/prompt.d.ts",
-      "import": "./commands/create/prompt/prompt.js",
-      "default": "./commands/create/prompt/prompt.js"
-    },
-    "./commands/create/prompt/prompt.js": {
-      "types": "./commands/create/prompt/prompt.d.ts",
-      "import": "./commands/create/prompt/prompt.js",
-      "default": "./commands/create/prompt/prompt.js"
-    },
-    "./commands/create/prompt/provider": {
-      "types": "./commands/create/prompt/provider.d.ts",
-      "import": "./commands/create/prompt/provider.js",
-      "default": "./commands/create/prompt/provider.js"
-    },
-    "./commands/create/prompt/provider.js": {
-      "types": "./commands/create/prompt/provider.d.ts",
-      "import": "./commands/create/prompt/provider.js",
-      "default": "./commands/create/prompt/provider.js"
-    },
-    "./commands/create/prompt/resolve-option": {
-      "types": "./commands/create/prompt/resolve-option.d.ts",
-      "import": "./commands/create/prompt/resolve-option.js",
-      "default": "./commands/create/prompt/resolve-option.js"
-    },
-    "./commands/create/prompt/resolve-option.js": {
-      "types": "./commands/create/prompt/resolve-option.d.ts",
-      "import": "./commands/create/prompt/resolve-option.js",
-      "default": "./commands/create/prompt/resolve-option.js"
-    },
-    "./commands/create/prompt/scope": {
-      "types": "./commands/create/prompt/scope.d.ts",
-      "import": "./commands/create/prompt/scope.js",
-      "default": "./commands/create/prompt/scope.js"
-    },
-    "./commands/create/prompt/scope.js": {
-      "types": "./commands/create/prompt/scope.d.ts",
-      "import": "./commands/create/prompt/scope.js",
-      "default": "./commands/create/prompt/scope.js"
-    },
-    "./commands/dist": {
-      "types": "./commands/dist.d.ts",
-      "import": "./commands/dist.js",
-      "default": "./commands/dist.js"
-    },
-    "./commands/dist.js": {
-      "types": "./commands/dist.d.ts",
-      "import": "./commands/dist.js",
-      "default": "./commands/dist.js"
-    },
-    "./commands/help": {
-      "types": "./commands/help.d.ts",
-      "import": "./commands/help.js",
-      "default": "./commands/help.js"
-    },
-    "./commands/help.js": {
-      "types": "./commands/help.d.ts",
-      "import": "./commands/help.js",
-      "default": "./commands/help.js"
-    },
-    "./commands/index": {
-      "types": "./commands/index.d.ts",
-      "import": "./commands/index.js",
-      "default": "./commands/index.js"
-    },
-    "./commands/index.js": {
-      "types": "./commands/index.d.ts",
-      "import": "./commands/index.js",
-      "default": "./commands/index.js"
-    },
-    "./commands/version": {
-      "types": "./commands/version.d.ts",
-      "import": "./commands/version.js",
-      "default": "./commands/version.js"
-    },
-    "./commands/version.js": {
-      "types": "./commands/version.d.ts",
-      "import": "./commands/version.js",
-      "default": "./commands/version.js"
-    }
   }
 }
