@@ -78,22 +78,17 @@ Prepares every package inside the `dist/` directory for npm publishing:
 
 Registered presets:
 
-| Key       | Description                                    |
-| --------- | ---------------------------------------------- |
-| `base`    | Minimal monorepo with config only              |
-| `library` | Workspaces layout with a sample React package  |
-| `api`     | Backend API workspace with server/build setup  |
-| `ssr`     | Server-rendered React API with CMS placeholder |
-| `ssg`     | Static site generation workspace               |
-| `spa`     | Single-page application                        |
-
-Presets in progress:
-
-| Key    | Direction              |
-| ------ | ---------------------- |
-| `rest` | REST API project       |
-| `gql`  | GraphQL API project    |
-| `mfe`  | Micro-frontend project |
+| Key       | Description                                       |
+| --------- | ------------------------------------------------- |
+| `base`    | Preset to create minimal monorepo with configs    |
+| `library` | Preset to create js/react library                 |
+| `api`     | Preset to create simple API                       |
+| `ssr`     | Preset to create Server Side Rendering (SSR) API  |
+| `ssg`     | Preset to create Static site generation (SSG)     |
+| `spa`     | Preset to create Single-page application (SPA)    |
+| `rest`    | Preset to create simple REST API                  |
+| `gql`     | Preset to create GraphQL API                      |
+| `mfe`     | Preset to create Micro-frontend (MFE) application |
 
 Registered presets are selectable by the wizard. In-progress presets exist as
 source modules and are expected to become selectable as their generated project

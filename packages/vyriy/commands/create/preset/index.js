@@ -4,6 +4,7 @@ import { api } from './api.js';
 import { ssr } from './ssr.js';
 import { ssg } from './ssg.js';
 import { spa } from './spa.js';
+import { rest } from './rest.js';
 export const presets = {
     base: {
         name: 'Base',
@@ -34,5 +35,10 @@ export const presets = {
         name: 'SPA',
         description: 'Preset for Single Page Application (SPA)',
         preset: spa,
+    },
+    rest: {
+        name: 'REST',
+        description: 'Preset for simple REST API',
+        preset: rest,
     },
 };

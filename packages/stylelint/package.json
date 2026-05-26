@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/stylelint-config",
-  "version": "0.4.4",
+  "version": "0.4.6",
   "description": "Shared Stylelint config for Vyriy projects",
   "type": "module",
   "dependencies": {

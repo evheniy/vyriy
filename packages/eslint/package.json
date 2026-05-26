@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/eslint-config",
-  "version": "0.4.4",
+  "version": "0.4.6",
   "description": "Shared ESLint config for Vyriy projects",
   "type": "module",
   "dependencies": {

@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/path",
-  "version": "0.4.4",
+  "version": "0.4.6",
   "description": "Shared path utilities for Vyriy projects",
   "type": "module",
   "agents": "./AGENTS.md",

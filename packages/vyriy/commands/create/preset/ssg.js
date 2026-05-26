@@ -82,84 +82,84 @@ export const ssg = {
         'packages/components/index.ts': "export * from './page/index.js';\n",
         'packages/components/index.test.tsx': `import { describe, expect, it } from '@jest/globals';
 
-  import { Page } from './index.js';
-  import { Page as PageImplementation } from './page/index.js';
+import { Page } from './index.js';
+import { Page as PageImplementation } from './page/index.js';
 
-  describe('packages/components/page', () => {
-    it('re-exports the page component', () => {
-      expect(Page).toBe(PageImplementation);
-    });
+describe('packages/components/page', () => {
+  it('re-exports the page component', () => {
+    expect(Page).toBe(PageImplementation);
   });
-  `,
+});
+`,
         'packages/components/page/index.ts': `export * from './page.js';
-  export type * from './types.js';
-  `,
+export type * from './types.js';
+`,
         'packages/components/page/index.test.ts': `import { describe, expect, it } from '@jest/globals';
 
-  import { Page } from './index.js';
-  import { Page as PageImplementation } from './page.js';
+import { Page } from './index.js';
+import { Page as PageImplementation } from './page.js';
 
-  describe('packages/components/page', () => {
-    it('re-exports the page component', () => {
-      expect(Page).toBe(PageImplementation);
-    });
+describe('packages/components/page', () => {
+  it('re-exports the page component', () => {
+    expect(Page).toBe(PageImplementation);
   });
-  `,
+});
+`,
         'packages/components/page/types.ts': `import { FC } from 'react';
 
-  export type PageProps = {
-    content: string;
-  };
+export type PageProps = {
+  content: string;
+};
 
-  export type PageType = FC<PageProps>;
-  `,
+export type PageType = FC<PageProps>;
+`,
         'packages/components/page/page.tsx': `import type { PageType } from './types.js';
 
-  export const Page: PageType = ({ content }) => <div className="content">{content}</div>;
-  `,
+export const Page: PageType = ({ content }) => <div className="content">{content}</div>;
+`,
         'packages/components/page/styles.scss': `.content {
-    display: block;
-  }
-  `,
+  display: block;
+}
+`,
         'packages/components/page/page.test.tsx': `import { renderToStaticMarkup } from 'react-dom/server';
-  import { describe, expect, it } from '@jest/globals';
+import { describe, expect, it } from '@jest/globals';
 
-  import { Page } from './page.js';
+import { Page } from './page.js';
 
-  describe('packages/components/page/page', () => {
-    it('renders content inside the page content container', () => {
-      expect(renderToStaticMarkup(<Page content="Page body" />)).toBe('<div class="content">Page body</div>');
-    });
+describe('packages/components/page/page', () => {
+  it('renders content inside the page content container', () => {
+    expect(renderToStaticMarkup(<Page content="Page body" />)).toBe('<div class="content">Page body</div>');
   });
-  `,
+});
+`,
         'packages/services/package.json': JSON.stringify({
             name: '@p/services',
             private: true,
             type: 'module',
         }, null, 2) + '\n',
         'packages/services/cms/index.ts': `export const cms = {
-    getContent: async () => {
-      // Placeholder for fetching content from a CMS
-      return Promise.resolve({
-        title: 'Sample Content',
-        body: 'This is a sample content fetched from the CMS.',
-      });
-    },
-  };
-  `,
+  getContent: async () => {
+    // Placeholder for fetching content from a CMS
+    return Promise.resolve({
+      title: 'Sample Content',
+      body: 'This is a sample content fetched from the CMS.',
+    });
+  },
+};
+`,
         'packages/services/cms/index.test.ts': `import { describe, expect, it } from '@jest/globals';
 
-  import { cms } from './index.js';
+import { cms } from './index.js';
 
-  describe('packages/services/cms', () => {
-    it('returns content for rendering a page', async () => {
-      await expect(cms.getContent()).resolves.toEqual({
-        title: 'Sample Content',
-        body: 'This is a sample content fetched from the CMS.',
-      });
+describe('packages/services/cms', () => {
+  it('returns content for rendering a page', async () => {
+    await expect(cms.getContent()).resolves.toEqual({
+      title: 'Sample Content',
+      body: 'This is a sample content fetched from the CMS.',
     });
   });
-  `,
+});
+`,
         'workspaces/ssg/bin/build.sh': `#!/usr/bin/env sh
 
 set -e
@@ -187,29 +187,29 @@ yarn exec sass packages/components/page/styles.scss "$distdir/styles.css" --no-s
 PROJECT_CWD="$distdir" NODE_ENV=production LOG_LEVEL=info "$PWD/node_modules/.bin/tsx" $scriptdir/index.tsx
 `,
         'workspaces/ssg/doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
-  import ReadMe from './README.md?raw';
+import ReadMe from './README.md?raw';
 
-  <Meta title="Workspaces/SSG" />
+<Meta title="Workspaces/SSG" />
 
-  <Markdown>{ReadMe}</Markdown>
-  `,
+<Markdown>{ReadMe}</Markdown>
+`,
         'workspaces/ssg/README.md': `# ${options.name} SSG\n\n${options.description}\n`,
         'workspaces/ssg/webpack.config.ts': `import { path } from '@vyriy/path';
-  import { ssr, external } from '@vyriy/webpack-config';
+import { ssr, external } from '@vyriy/webpack-config';
 
-  export default ssr(
-    '@w/ssg',
-    {
-      path: path('dist', 'ssg'),
-      filename: 'index.js',
-      library: { type: 'commonjs2' },
-    },
-    (config) => ({
-      ...config,
-      externals: [external({ allowlist: [/^@p/, /^@w/, /^@vyriy/] })],
-    }),
-  );
-  `,
+export default ssr(
+  '@w/ssg',
+  {
+    path: path('dist', 'ssg'),
+    filename: 'index.js',
+    library: { type: 'commonjs2' },
+  },
+  (config) => ({
+    ...config,
+    externals: [external({ allowlist: [/^@p/, /^@w/, /^@vyriy/] })],
+  }),
+);
+`,
         'workspaces/ssg/package.json': JSON.stringify({
             name: '@w/ssg',
             type: 'module',

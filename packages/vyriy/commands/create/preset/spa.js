@@ -93,56 +93,56 @@ extends @vyriy/browserslist-config
         'packages/components/index.ts': "export * from './page/index.js';\n",
         'packages/components/index.test.tsx': `import { describe, expect, it } from '@jest/globals';
 
-    import { Page } from './index.js';
-    import { Page as PageImplementation } from './page/index.js';
+import { Page } from './index.js';
+import { Page as PageImplementation } from './page/index.js';
 
-    describe('packages/components/page', () => {
-      it('re-exports the page component', () => {
-        expect(Page).toBe(PageImplementation);
-      });
-    });
-    `,
+describe('packages/components/page', () => {
+  it('re-exports the page component', () => {
+    expect(Page).toBe(PageImplementation);
+  });
+});
+`,
         'packages/components/page/index.ts': `export * from './page.js';
-    export type * from './types.js';
-    `,
+export type * from './types.js';
+`,
         'packages/components/page/index.test.ts': `import { describe, expect, it } from '@jest/globals';
 
-    import { Page } from './index.js';
-    import { Page as PageImplementation } from './page.js';
+import { Page } from './index.js';
+import { Page as PageImplementation } from './page.js';
 
-    describe('packages/components/page', () => {
-      it('re-exports the page component', () => {
-        expect(Page).toBe(PageImplementation);
-      });
-    });
-    `,
+describe('packages/components/page', () => {
+  it('re-exports the page component', () => {
+    expect(Page).toBe(PageImplementation);
+  });
+});
+`,
         'packages/components/page/types.ts': `import { FC } from 'react';
 
-    export type PageProps = {
-      content: string;
-    };
+export type PageProps = {
+  content: string;
+};
 
-    export type PageType = FC<PageProps>;
-    `,
+export type PageType = FC<PageProps>;
+`,
         'packages/components/page/page.tsx': `import type { PageType } from './types.js';
 
-    export const Page: PageType = ({ content }) => <div className="content">{content}</div>;
-    `,
+export const Page: PageType = ({ content }) => <div className="content">{content}</div>;
+`,
         'packages/components/page/styles.scss': `.content {
-      display: block;
-    }
-    `,
+  display: block;
+}
+`,
         'packages/components/page/page.test.tsx': `import { renderToStaticMarkup } from 'react-dom/server';
-    import { describe, expect, it } from '@jest/globals';
+import { describe, expect, it } from '@jest/globals';
 
-    import { Page } from './page.js';
+import { Page } from './page.js';
 
-    describe('packages/components/page/page', () => {
-      it('renders content inside the page content container', () => {
-        expect(renderToStaticMarkup(<Page content="Page body" />)).toBe('<div class="content">Page body</div>');
-      });
-    });
-    `,
+describe('packages/components/page/page', () => {
+  it('renders content inside the page content container', () => {
+    expect(renderToStaticMarkup(<Page content="Page body" />)).toBe('<div class="content">Page body</div>');
+  });
+});
+`,
         'workspaces/spa/bin/build.sh': `#!/usr/bin/env sh
 
 set -e
@@ -160,12 +160,12 @@ scriptdir="$PWD/workspaces/spa";
 npx webpack serve --open --config $scriptdir/webpack.config.ts
 `,
         'workspaces/spa/doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
-    import ReadMe from './README.md?raw';
+import ReadMe from './README.md?raw';
 
-    <Meta title="Workspaces/SPA" />
+<Meta title="Workspaces/SPA" />
 
-    <Markdown>{ReadMe}</Markdown>
-    `,
+<Markdown>{ReadMe}</Markdown>
+`,
         'workspaces/spa/README.md': `# ${options.name} SPA\n\n${options.description}\n`,
         'workspaces/spa/webpack.config.ts': `import { csr, html } from '@vyriy/webpack-config';
 import { path } from '@vyriy/path';
