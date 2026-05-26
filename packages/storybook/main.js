@@ -1,3 +1,4 @@
+import { resolveDependency } from './resolve-dependency.js';
 const config = {
     addons: [
         '@storybook/addon-webpack5-compiler-swc',
@@ -32,9 +33,9 @@ const config = {
                     {
                         test: /\.scss$/,
                         use: [
-                            'style-loader',
-                            'css-loader',
-                            'sass-loader',
+                            resolveDependency('style-loader'),
+                            resolveDependency('css-loader'),
+                            resolveDependency('sass-loader'),
                         ],
                     },
                 ],

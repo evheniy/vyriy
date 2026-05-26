@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/html",
-  "version": "0.4.1",
+  "version": "0.4.3",
   "description": "HTML document utility for Vyriy projects",
   "type": "module",
   "agents": "./AGENTS.md",
@@ -37,6 +37,16 @@
       "types": "./index.d.ts",
       "import": "./index.js",
       "default": "./index.js"
+    },
+    "./minify": {
+      "types": "./minify.d.ts",
+      "import": "./minify.js",
+      "default": "./minify.js"
+    },
+    "./minify.js": {
+      "types": "./minify.d.ts",
+      "import": "./minify.js",
+      "default": "./minify.js"
     }
   }
 }

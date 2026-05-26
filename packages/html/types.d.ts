@@ -11,3 +11,4 @@ export type HtmlProps = {
     script?: string;
 };
 export type Html = (props?: HtmlProps) => string;
+export type Minify = (html: string) => string;

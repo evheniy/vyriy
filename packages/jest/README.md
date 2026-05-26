@@ -24,6 +24,7 @@ Coverage is enabled by default and collected from:
   '!<rootDir>/**/*.types.ts',
   '!<rootDir>/**/types.ts',
   '!<rootDir>/*.config.ts',
+  '!<rootDir>/consumer/**',
 ];
 ```
 
@@ -40,6 +41,19 @@ Coverage paths ignore generated output, package manager state, Storybook output,
   '<rootDir>/.storybook/',
   '<rootDir>/coverage/',
   '<rootDir>/.yarn/',
+  '<rootDir>/consumer/',
+];
+```
+
+Jest also ignores these generated and dependency directories while resolving modules and discovering tests:
+
+```ts
+[
+  '/node_modules/',
+  '<rootDir>/coverage/',
+  '<rootDir>/dist/',
+  '<rootDir>/storybook-static/',
+  '<rootDir>/consumer/',
 ];
 ```
 

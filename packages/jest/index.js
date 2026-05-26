@@ -9,6 +9,7 @@ const config = {
         '!<rootDir>/**/types.ts',
         '!<rootDir>/*.config.{ts,mjs}',
         '!<rootDir>/**/*.config.{ts,mjs}',
+        '!<rootDir>/consumer/**',
     ],
     coverageDirectory: 'coverage',
     coveragePathIgnorePatterns: [
@@ -23,6 +24,7 @@ const config = {
         '<rootDir>/coverage/',
         '<rootDir>/.yarn/',
         '<rootDir>/e2e/',
+        '<rootDir>/consumer/',
     ],
     coverageProvider: 'v8',
     coverageReporters: [
@@ -58,7 +60,11 @@ const config = {
         '\\.(css|less|scss|sass|svg)$': 'identity-obj-proxy',
     },
     modulePathIgnorePatterns: [
-        '<rootDir>/dist',
+        '/node_modules/',
+        '<rootDir>/coverage/',
+        '<rootDir>/dist/',
+        '<rootDir>/storybook-static/',
+        '<rootDir>/consumer/',
     ],
     reporters: [
         'default',
@@ -76,7 +82,10 @@ const config = {
     testMatch: ['**/?(*.)+(spec|test).?([mc])[jt]s?(x)'],
     testPathIgnorePatterns: [
         '/node_modules/',
+        '<rootDir>/coverage/',
         '<rootDir>/dist/',
+        '<rootDir>/storybook-static/',
+        '<rootDir>/consumer/',
     ],
     transform: {
         '^.+\\.[tj]sx?$': [

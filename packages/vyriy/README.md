@@ -78,11 +78,12 @@ Prepares every package inside the `dist/` directory for npm publishing:
 
 Registered presets:
 
-| Key       | Description                                   |
-| --------- | --------------------------------------------- |
-| `base`    | Minimal monorepo with config only             |
-| `library` | Workspaces layout with a sample React package |
-| `api`     | Backend API workspace with server/build setup |
+| Key       | Description                                    |
+| --------- | ---------------------------------------------- |
+| `base`    | Minimal monorepo with config only              |
+| `library` | Workspaces layout with a sample React package  |
+| `api`     | Backend API workspace with server/build setup  |
+| `ssr`     | Server-rendered React API with CMS placeholder |
 
 Presets in progress:
 
@@ -90,14 +91,13 @@ Presets in progress:
 | ------ | ------------------------------ |
 | `rest` | REST API project               |
 | `gql`  | GraphQL API project            |
-| `ssr`  | Server-side rendering project  |
 | `ssg`  | Static site generation project |
 | `spa`  | Single-page application        |
 | `mfe`  | Micro-frontend project         |
 
-Only registered presets are selectable by the wizard today. In-progress presets
-exist as source modules and are expected to become selectable as their generated
-project shape is finalized.
+Registered presets are selectable by the wizard. In-progress presets exist as
+source modules and are expected to become selectable as their generated project
+shape is finalized.
 
 ## Providers
 
@@ -108,6 +108,7 @@ Provider selections add files to the generated project.
 | `base`    | `gitlab`, `github` | none             |
 | `library` | `gitlab`, `github` | none             |
 | `api`     | `gitlab`, `github` | none             |
+| `ssr`     | `gitlab`, `github` | none             |
 
 ## API
 

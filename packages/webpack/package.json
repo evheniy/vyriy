@@ -1,20 +1,20 @@
 {
   "name": "@vyriy/webpack-config",
-  "version": "0.4.1",
+  "version": "0.4.3",
   "description": "Shared Webpack config for Vyriy projects",
   "type": "module",
   "dependencies": {
-    "@babel/core": "^7.29.0",
-    "@babel/plugin-transform-runtime": "^7.29.0",
-    "@babel/preset-env": "^7.29.5",
-    "@babel/preset-react": "^7.28.5",
-    "@babel/preset-typescript": "^7.28.5",
-    "@babel/register": "^7.29.3",
-    "@babel/runtime": "^7.29.2",
+    "@babel/core": "^7.29.7",
+    "@babel/plugin-transform-runtime": "^7.29.7",
+    "@babel/preset-env": "^7.29.7",
+    "@babel/preset-react": "^7.29.7",
+    "@babel/preset-typescript": "^7.29.7",
+    "@babel/register": "^7.29.7",
+    "@babel/runtime": "^7.29.7",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.2",
-    "@vyriy/env": "0.4.1",
-    "@vyriy/html": "0.4.1",
-    "@vyriy/path": "0.4.1",
+    "@vyriy/env": "0.4.3",
+    "@vyriy/html": "0.4.3",
+    "@vyriy/path": "0.4.3",
     "babel-loader": "^10.1.1",
     "css-loader": "^7.1.4",
     "cssnano": "^8.0.1",
@@ -25,11 +25,13 @@
     "postcss-loader": "^8.2.1",
     "postcss-preset-env": "^11.3.0",
     "react-refresh": "^0.18.0",
-    "sass": "^1.99.0",
+    "sass": "^1.100.0",
     "sass-loader": "^17.0.0",
     "style-loader": "^4.0.0",
     "terser-webpack-plugin": "^5.6.0",
-    "webpack": "^5.107.1"
+    "webpack": "^5.107.2",
+    "webpack-cli": "^7.0.2",
+    "webpack-dev-server": "^5.2.4"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",
@@ -135,6 +137,16 @@
       "types": "./postcss.d.ts",
       "import": "./postcss.js",
       "default": "./postcss.js"
+    },
+    "./resolve-dependency": {
+      "types": "./resolve-dependency.d.ts",
+      "import": "./resolve-dependency.js",
+      "default": "./resolve-dependency.js"
+    },
+    "./resolve-dependency.js": {
+      "types": "./resolve-dependency.d.ts",
+      "import": "./resolve-dependency.js",
+      "default": "./resolve-dependency.js"
     },
     "./resolve": {
       "types": "./resolve.d.ts",

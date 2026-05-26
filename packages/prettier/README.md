@@ -55,6 +55,14 @@ npx prettier index.ts --write
 
 If Prettier cannot parse a file, it stops and reports the syntax error location instead of rewriting the file.
 
+Use `.prettierignore` to skip generated and dependency directories. Vyriy projects ignore:
+
+- `node_modules`
+- `coverage`
+- `dist`
+- `storybook-static`
+- `consumer`
+
 ## Formatting Scope
 
 Prettier controls multiline arrays through `prettier-plugin-multiline-arrays`.

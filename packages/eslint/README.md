@@ -64,9 +64,11 @@ Consumer projects should have a root `tsconfig.json` that covers the files ESLin
 
 Generated output is ignored by default:
 
+- `node_modules/**`
 - `dist/**`
 - `coverage/**`
 - `storybook-static/**`
+- `consumer/**`
 
 ## Included Rules
 

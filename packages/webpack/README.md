@@ -26,6 +26,8 @@ yarn add @vyriy/webpack-config webpack-cli
 
 The `webpack` package is listed in the install command because the shared config is consumed by Webpack at build time. Add `webpack-cli` only when the consumer project runs Webpack through CLI commands.
 
+Build loaders, Babel presets, and Babel plugins used by the shared config are resolved from `@vyriy/webpack-config`. Consumer projects do not need to install `babel-loader`, style loaders, or the shared Babel presets just to use the defaults.
+
 ## Usage
 
 For client bundles:
@@ -143,6 +145,7 @@ Shared defaults:
 
 CSR defaults:
 
+- loaders and Babel extensions are resolved from this package for workspace and package-manager isolation
 - production builds extract CSS with `MiniCssExtractPlugin`
 - development builds enable React refresh with `ReactRefreshWebpackPlugin`
 

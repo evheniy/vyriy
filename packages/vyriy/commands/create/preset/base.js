@@ -154,7 +154,7 @@ export default {
             ],
         }, null, 2) + '\n',
         'prettier.config.ts': "export { default } from '@vyriy/prettier-config';\n",
-        '.prettierignore': 'node_modules\ndist\ncoverage\nstorybook-static\n',
+        '.prettierignore': 'node_modules\ndist\ncoverage\nstorybook-static\nconsumer\n',
         'eslint.config.ts': "export { default } from '@vyriy/eslint-config';\n",
         'jest.config.ts': "export { default } from '@vyriy/jest-config';\n",
     }),

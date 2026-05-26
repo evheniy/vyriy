@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/error",
-  "version": "0.4.1",
+  "version": "0.4.3",
   "description": "Shared error utilities for Vyriy projects",
   "type": "module",
   "agents": "./AGENTS.md",

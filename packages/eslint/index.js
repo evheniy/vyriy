@@ -24,9 +24,11 @@ const multilineElementThreshold = 4;
 const config = [
     {
         ignores: [
+            'node_modules/**',
             'dist/**',
             'coverage/**',
             'storybook-static/**',
+            'consumer/**',
         ],
     },
     js.configs.recommended,

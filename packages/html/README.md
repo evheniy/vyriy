@@ -27,6 +27,8 @@ The function returns a full `<!DOCTYPE html>` page and lets you inject common do
 
 Missing sections default to empty strings, so the function always returns the same document shape.
 
+`minify` can be used as an explicit wrapper when the rendered document should not contain line breaks. It removes line breaks from the whole document, including injected style and script sections, while preserving ordinary spaces.
+
 ## Signature
 
 ```ts
@@ -44,6 +46,8 @@ type HtmlProps = {
 };
 
 type Html = (props?: HtmlProps) => string;
+
+type Minify = (html: string) => string;
 ```
 
 ## Example
@@ -61,13 +65,29 @@ const page = html({
 });
 ```
 
+Minified output:
+
+```ts
+import { html, minify } from '@vyriy/html';
+
+const page = minify(
+  html({
+    body: '<div id="root"></div>',
+    script: `<script>
+      window.__APP_READY__ = true;
+    </script>`,
+  }),
+);
+```
+
 ## Exports
 
 The package exposes both the root entry and the direct utility module:
 
 ```ts
 import { html } from '@vyriy/html';
-import { html as htmlDocument } from '@vyriy/html/html';
+import { html as htmlDocument } from '@vyriy/html/html.js';
+import { minify } from '@vyriy/html/minify,js';
 ```
 
 ## When to use it

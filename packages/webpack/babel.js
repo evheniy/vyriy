@@ -1,3 +1,4 @@
+import { resolveDependency } from './resolve-dependency.js';
 export const babel = (isSsr = false, isProduction = true) => {
     const isClientDevelopment = !isProduction && !isSsr;
     const envOptions = {
@@ -8,26 +9,26 @@ export const babel = (isSsr = false, isProduction = true) => {
     return {
         presets: [
             [
-                '@babel/preset-env',
+                resolveDependency('@babel/preset-env'),
                 envOptions,
             ],
             [
-                '@babel/preset-react',
+                resolveDependency('@babel/preset-react'),
                 {
                     runtime: 'automatic',
                     development: !isProduction,
                 },
             ],
-            '@babel/preset-typescript',
+            resolveDependency('@babel/preset-typescript'),
         ],
         plugins: [
             [
-                '@babel/plugin-transform-runtime',
+                resolveDependency('@babel/plugin-transform-runtime'),
                 {
                     regenerator: true,
                 },
             ],
-            ...(isClientDevelopment ? ['react-refresh/babel'] : []),
+            ...(isClientDevelopment ? [resolveDependency('react-refresh/babel')] : []),
         ],
     };
 };

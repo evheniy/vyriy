@@ -17,6 +17,8 @@ const config = {
         'dist/**',
         'node_modules/**',
         'coverage/**',
+        'storybook-static/**',
+        'consumer/**',
     ],
     plugins,
     rules: {

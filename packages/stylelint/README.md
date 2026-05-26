@@ -65,8 +65,11 @@ The shared config ignores common generated and dependency directories:
 - `build/**`
 - `dist/**`
 - `node_modules/**`
+- `coverage/**`
+- `storybook-static/**`
+- `consumer/**`
 
-Project-specific generated output, such as `coverage/**` or framework-specific output directories, should be ignored in the consumer config when needed.
+Project-specific generated output, such as framework-specific output directories, should be ignored in the consumer config when needed.
 
 ## API
 
