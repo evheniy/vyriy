@@ -44,7 +44,7 @@ export const library = {
                     'test:jest': 'jest',
                     postinstall: 'husky',
                 },
-                devDependencies: {
+                dependencies: {
                     '@vyriy/typescript-config': `^${packageJson.version}`,
                     typescript: packageJson.peerDependencies.typescript,
                     '@vyriy/prettier-config': `^${packageJson.version}`,

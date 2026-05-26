@@ -84,16 +84,16 @@ Registered presets:
 | `library` | Workspaces layout with a sample React package  |
 | `api`     | Backend API workspace with server/build setup  |
 | `ssr`     | Server-rendered React API with CMS placeholder |
+| `ssg`     | Static site generation workspace               |
+| `spa`     | Single-page application                        |
 
 Presets in progress:
 
-| Key    | Direction                      |
-| ------ | ------------------------------ |
-| `rest` | REST API project               |
-| `gql`  | GraphQL API project            |
-| `ssg`  | Static site generation project |
-| `spa`  | Single-page application        |
-| `mfe`  | Micro-frontend project         |
+| Key    | Direction              |
+| ------ | ---------------------- |
+| `rest` | REST API project       |
+| `gql`  | GraphQL API project    |
+| `mfe`  | Micro-frontend project |
 
 Registered presets are selectable by the wizard. In-progress presets exist as
 source modules and are expected to become selectable as their generated project
@@ -109,6 +109,8 @@ Provider selections add files to the generated project.
 | `library` | `gitlab`, `github` | none             |
 | `api`     | `gitlab`, `github` | none             |
 | `ssr`     | `gitlab`, `github` | none             |
+| `ssg`     | `gitlab`, `github` | none             |
+| `spa`     | `gitlab`, `github` | none             |
 
 ## API
 

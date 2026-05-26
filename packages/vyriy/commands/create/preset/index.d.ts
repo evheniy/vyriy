@@ -19,4 +19,14 @@ export declare const presets: {
         description: string;
         preset: import("./types.js").Preset;
     };
+    ssg: {
+        name: string;
+        description: string;
+        preset: import("./types.js").Preset;
+    };
+    spa: {
+        name: string;
+        description: string;
+        preset: import("./types.js").Preset;
+    };
 };

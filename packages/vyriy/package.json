@@ -1,6 +1,6 @@
 {
   "name": "vyriy",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Interactive project master for calm cloud-ready applications.",
   "type": "module",
   "bin": "./bin/vyriy.js",
