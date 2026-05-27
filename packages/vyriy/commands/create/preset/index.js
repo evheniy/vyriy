@@ -5,6 +5,7 @@ import { ssr } from './ssr.js';
 import { ssg } from './ssg.js';
 import { spa } from './spa.js';
 import { rest } from './rest.js';
+import { gql } from './gql.js';
 export const presets = {
     base: {
         name: 'Base',
@@ -40,5 +41,10 @@ export const presets = {
         name: 'REST',
         description: 'Preset for simple REST API',
         preset: rest,
+    },
+    gql: {
+        name: 'GraphQL',
+        description: 'Preset for GraphQL API',
+        preset: gql,
     },
 };

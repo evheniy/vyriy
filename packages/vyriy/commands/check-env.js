@@ -2,6 +2,7 @@ import { exec as processExec } from 'node:child_process';
 import { promisify } from 'node:util';
 import packageJson from '../package.json' with { type: 'json' };
 const exec = promisify(processExec);
+const yarnStableHint = 'Try:\n  corepack enable\n  corepack prepare yarn@stable --activate';
 const node = () => {
     const majorVersion = Number.parseInt(process.versions.node.split('.')[0]);
     const minimumMajorVersion = Number.parseInt(packageJson.engines.node.match(/(\d+)/)?.[0]);
@@ -18,6 +19,39 @@ const node = () => {
         message: `Vyriy requires Node.js >= ${minimumMajorVersion}.\n\nCurrent version: ${process.versions.node}\n\nPlease upgrade Node.js and run the command again.`,
     };
 };
+const corepack = async () => {
+    let currentVersion;
+    try {
+        const { stdout } = await exec('corepack --version');
+        currentVersion = stdout.trim();
+    }
+    catch {
+        return {
+            ok: false,
+            message: `Corepack was not found.\n\nVyriy uses Corepack to install Yarn stable.\n\nInstall a Node.js distribution that includes Corepack and run the command again.`,
+        };
+    }
+    return {
+        ok: true,
+        message: `Corepack ${currentVersion}`,
+    };
+};
+const activateYarnStable = async () => {
+    try {
+        await exec('corepack enable');
+        await exec('corepack prepare yarn@stable --activate');
+    }
+    catch {
+        return {
+            ok: false,
+            message: `Corepack could not activate Yarn stable.\n\n${yarnStableHint}`,
+        };
+    }
+    return {
+        ok: true,
+        message: 'Yarn stable activated',
+    };
+};
 const yarn = async () => {
     const minimumMajorVersion = Number.parseInt(packageJson.packageManager.match(/(\d+)/)?.[0]);
     let currentVersion;
@@ -28,7 +62,7 @@ const yarn = async () => {
     catch {
         return {
             ok: false,
-            message: `Yarn was not found.\n\nVyriy requires Yarn >= ${minimumMajorVersion}.\n\nTry:\n  corepack enable\n  yarn set version stable`,
+            message: `Yarn was not found.\n\nVyriy requires Yarn >= ${minimumMajorVersion}.\n\n${yarnStableHint}`,
         };
     }
     const majorVersion = Number.parseInt(currentVersion.match(/(\d+)/)?.[0]);
@@ -40,7 +74,7 @@ const yarn = async () => {
     }
     return {
         ok: false,
-        message: `Vyriy requires Yarn >= ${minimumMajorVersion}.\n\nCurrent version: ${currentVersion}\n\nTry:\n  corepack enable\n  yarn set version stable`,
+        message: `Vyriy requires Yarn >= ${minimumMajorVersion}.\n\nCurrent version: ${currentVersion}\n\n${yarnStableHint}`,
     };
 };
 export const checkEnv = async () => {
@@ -53,7 +87,28 @@ export const checkEnv = async () => {
         console.error(nodeResults.message);
         return 1;
     }
-    const yarnResults = await yarn();
+    const corepackResults = await corepack();
+    if (corepackResults.ok) {
+        console.log(' ', corepackResults.message);
+    }
+    else {
+        console.error(corepackResults.message);
+        return 1;
+    }
+    let yarnResults = await yarn();
+    if (yarnResults.ok) {
+        console.log(' ', yarnResults.message);
+        return 0;
+    }
+    const yarnStableResults = await activateYarnStable();
+    if (yarnStableResults.ok) {
+        console.log(' ', yarnStableResults.message);
+    }
+    else {
+        console.error(yarnStableResults.message);
+        return 1;
+    }
+    yarnResults = await yarn();
     if (yarnResults.ok) {
         console.log(' ', yarnResults.message);
     }

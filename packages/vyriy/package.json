@@ -1,6 +1,6 @@
 {
   "name": "vyriy",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "description": "Interactive project master for calm cloud-ready applications.",
   "type": "module",
   "bin": "./bin/vyriy.js",
@@ -13,6 +13,7 @@
     "@types/react-dom": "^19.2.3",
     "cross-env": "^10.1.0",
     "eslint": "^10.4.0",
+    "graphql": "^16.14.0",
     "husky": "^9.1.7",
     "jest": "^30.4.2",
     "npm-run-all2": "^9.0.1",
@@ -25,7 +26,6 @@
     "stylelint": "^17.12.0",
     "tsx": "^4.22.3",
     "typescript": "^6.0.3",
-    "webpack": "^5.107.2",
     "webpack-cli": "^7.0.2"
   },
   "peerDependenciesMeta": {
@@ -39,6 +39,9 @@
       "optional": true
     },
     "eslint": {
+      "optional": true
+    },
+    "graphql": {
       "optional": true
     },
     "husky": {
@@ -75,9 +78,6 @@
       "optional": true
     },
     "typescript": {
-      "optional": true
-    },
-    "webpack": {
       "optional": true
     },
     "webpack-cli": {

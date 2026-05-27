@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/services",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "description": "Shared services package for Vyriy projects",
   "type": "module",
   "dependencies": {
@@ -13,10 +13,10 @@
     "@aws-sdk/client-ssm": "^3.1054.0",
     "@aws-sdk/lib-dynamodb": "^3.1054.0",
     "@aws-sdk/util-dynamodb": "^3.996.2",
-    "@vyriy/env": "0.4.6",
-    "@vyriy/error": "0.4.6",
-    "@vyriy/logger": "0.4.6",
-    "@vyriy/pause": "0.4.6"
+    "@vyriy/env": "0.4.7",
+    "@vyriy/error": "0.4.7",
+    "@vyriy/logger": "0.4.7",
+    "@vyriy/pause": "0.4.7"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",

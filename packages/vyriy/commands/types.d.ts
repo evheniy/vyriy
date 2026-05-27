@@ -1,12 +1,11 @@
 export type Command = () => Promise<number>;
-export type Node = () => {
+export type EnvironmentCheckResult = {
     ok: boolean;
     message: string;
 };
-export type Yarn = () => Promise<{
-    ok: boolean;
-    message: string;
-}>;
+export type Node = () => EnvironmentCheckResult;
+export type Corepack = () => Promise<EnvironmentCheckResult>;
+export type Yarn = () => Promise<EnvironmentCheckResult>;
 export type CreateOptions = {
     readonly directory: string;
     readonly dryRun: boolean;
