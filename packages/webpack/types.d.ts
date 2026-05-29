@@ -7,3 +7,7 @@ export type WebpackExternal = Extract<NonNullable<Configuration['externals']>, u
 export type NodeModulesExternalOptions = {
     allowlist?: (RegExp | string)[];
 };
+export type WebpackStyleMode = 'extract' | 'ignore' | 'inject';
+export type WebpackStyleRuleOptions = {
+    mode?: WebpackStyleMode;
+};

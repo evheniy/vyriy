@@ -1,4 +1,4 @@
-import { resolveDependency } from './resolve-dependency.js';
+import { style } from '@vyriy/webpack-config/rules.js';
 const config = {
     addons: [
         '@storybook/addon-webpack5-compiler-swc',
@@ -30,14 +30,7 @@ const config = {
                 ...webpackConfig.module,
                 rules: [
                     ...(webpackConfig.module?.rules ?? []),
-                    {
-                        test: /\.scss$/,
-                        use: [
-                            resolveDependency('style-loader'),
-                            resolveDependency('css-loader'),
-                            resolveDependency('sass-loader'),
-                        ],
-                    },
+                    style({ mode: 'inject' }),
                 ],
             },
             resolve: {

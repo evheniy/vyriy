@@ -8,6 +8,7 @@ This package provides small typed Webpack helpers for Vyriy client and server bu
 
 - browser and SSR config generators
 - an HTML plugin helper backed by `html-webpack-plugin` and `@vyriy/html`
+- reusable script and style module rules
 - a node_modules externalizer for server bundles
 
 ## Install
@@ -157,5 +158,34 @@ HTML plugin defaults:
 - `inject: 'body'`
 - minification enabled for whitespace, comments, JS, and CSS
 - local plugin options override shared defaults
+
+## Style Rules
+
+The `style(options?)` helper creates the shared CSS/SCSS/Sass rule:
+
+```ts
+import { style } from '@vyriy/webpack-config';
+
+style({ mode: 'inject' });
+style({ mode: 'extract' });
+style({ mode: 'ignore' });
+```
+
+Modes:
+
+- `inject` uses `style-loader`, so ordinary style imports are inserted into the document head.
+- `extract` uses `mini-css-extract-plugin`, so ordinary style imports become CSS files that can be linked by HTML or served by webpack-dev-server.
+- `ignore` uses `null-loader`, which is useful for SSR bundles.
+
+All non-ignored modes also support inline CSS string imports:
+
+```ts
+import css from './profile-card.scss?inline';
+
+const styles = document.createElement('style');
+styles.textContent = css;
+```
+
+This is useful for custom elements that place styles inside a Shadow DOM. When a custom element should use a linked stylesheet instead, use `style({ mode: 'extract' })` and add `MiniCssExtractPlugin` to the Webpack plugins in both production and development. Webpack dev server can serve the extracted CSS from memory, while production emits the same kind of CSS asset to disk.
 
 See the article with a complete browser and SSR bundling walkthrough: <https://vyriy.dev/examples/vyriy-webpack-config/>.

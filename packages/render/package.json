@@ -1,0 +1,98 @@
+{
+  "name": "@vyriy/render",
+  "version": "0.4.8",
+  "description": "React rendering adapters for Vyriy projects",
+  "type": "module",
+  "dependencies": {
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
+  },
+  "agents": "./AGENTS.md",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/render"
+  },
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./custom-element": {
+      "types": "./custom-element.d.ts",
+      "import": "./custom-element.js",
+      "default": "./custom-element.js"
+    },
+    "./custom-element.js": {
+      "types": "./custom-element.d.ts",
+      "import": "./custom-element.js",
+      "default": "./custom-element.js"
+    },
+    "./element": {
+      "types": "./element.d.ts",
+      "import": "./element.js",
+      "default": "./element.js"
+    },
+    "./element.js": {
+      "types": "./element.d.ts",
+      "import": "./element.js",
+      "default": "./element.js"
+    },
+    "./errors": {
+      "types": "./errors.d.ts",
+      "import": "./errors.js",
+      "default": "./errors.js"
+    },
+    "./errors.js": {
+      "types": "./errors.d.ts",
+      "import": "./errors.js",
+      "default": "./errors.js"
+    },
+    "./html": {
+      "types": "./html.d.ts",
+      "import": "./html.js",
+      "default": "./html.js"
+    },
+    "./html.js": {
+      "types": "./html.d.ts",
+      "import": "./html.js",
+      "default": "./html.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./prerender": {
+      "types": "./prerender.d.ts",
+      "import": "./prerender.js",
+      "default": "./prerender.js"
+    },
+    "./prerender.js": {
+      "types": "./prerender.d.ts",
+      "import": "./prerender.js",
+      "default": "./prerender.js"
+    },
+    "./stream": {
+      "types": "./stream.d.ts",
+      "import": "./stream.js",
+      "default": "./stream.js"
+    },
+    "./stream.js": {
+      "types": "./stream.d.ts",
+      "import": "./stream.js",
+      "default": "./stream.js"
+    }
+  }
+}

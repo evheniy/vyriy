@@ -57,6 +57,18 @@ const writeFiles = (target, files, overwrite) => {
         }
     });
 };
+const verifyProject = async (target) => {
+    console.log('Running checks...');
+    try {
+        await exec(`yarn --cwd ${target} check`);
+    }
+    catch {
+        console.log('Running fixes...');
+        await exec(`yarn --cwd ${target} fix`);
+        console.log('Running checks...');
+        await exec(`yarn --cwd ${target} check`);
+    }
+};
 export const create = async (options) => {
     const { directory, dryRun, overwrite, skipExisting, install, verify } = options;
     const checkEnvCode = await checkEnv();
@@ -107,8 +119,7 @@ export const create = async (options) => {
             return 0;
         }
         if (verify) {
-            console.log('Running checks...');
-            await exec(`yarn --cwd ${target} check`);
+            await verifyProject(target);
         }
         else {
             console.log('Running checks... SKIPPED');

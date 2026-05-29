@@ -28,7 +28,7 @@ yarn add -D @vyriy/storybook-config storybook
 
 Install `storybook` in the consumer project so CLI commands are available.
 
-The shared SCSS loaders are resolved from `@vyriy/storybook-config`, so consumers do not need local `style-loader`, `css-loader`, or `sass-loader` dependencies for the default setup.
+The shared style rule is reused from `@vyriy/webpack-config`, so consumers do not need local style loader dependencies for the default setup.
 
 ## Usage
 
