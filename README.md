@@ -6,10 +6,11 @@
 
 **Documentation:** [https://vyriy.dev/storybook/](https://vyriy.dev/storybook/)
 
-Vyriy is a Yarn workspaces monorepo with small publishable packages for:
+Vyriy is a Yarn workspaces monorepo with a project CLI and small publishable packages for:
 
+- fast project scaffolding from calm presets
 - project configuration
-- React and SSR-friendly tooling
+- React rendering and SSR-friendly tooling
 - environment and infrastructure contracts
 - small runtime utilities for shared application code
 
@@ -17,7 +18,8 @@ The project philosophy is simple:
 
 - prefer calm systems over clever systems
 - keep architecture modular, explicit, and easy to explain
-- optimize for reuse across websites, widgets, services, and future starters
+- start projects quickly, then keep them simple as they grow
+- optimize for reuse across websites, widgets, services, APIs, and starters
 - stay AWS-aware without coupling every package to infrastructure
 
 ## Lineage
@@ -30,6 +32,29 @@ cloud-oriented React and AWS toolkit.
 ## What Is In This Repo
 
 Current packages are grouped by purpose. Each package has its own README in `packages/<name>/README.md`.
+
+### Project CLI
+
+| Package | Purpose                                                                                       |
+| ------- | --------------------------------------------------------------------------------------------- |
+| `vyriy` | Interactive project master for creating and maintaining Vyriy projects from reusable presets. |
+
+The CLI can create a ready project in seconds and keep the generated shape aligned with the same calm architecture used by the shared packages:
+
+```bash
+vyriy app
+```
+
+Available presets cover the common project shapes:
+
+- `base` for a minimal configured workspace
+- `library` for JavaScript and React libraries
+- `spa` for single-page applications
+- `ssg` for static generation projects
+- `ssr` for server-rendered projects
+- `api`, `rest`, and `gql` for service and API workloads
+
+The wizard can also merge CI/CD provider files, deployment provider files when a preset supports them, install dependencies, run checks, or print the generated plan with `--dry-run`.
 
 ### Configuration And Tooling
 
@@ -46,22 +71,22 @@ Current packages are grouped by purpose. Each package has its own README in `pac
 
 Some config packages intentionally document executable tools in their install command because the consumer project should expose the CLI binary:
 
-| Package                      | Consumer install                                         |
-| ---------------------------- | -------------------------------------------------------- |
-| `@vyriy/browserslist-config` | `npm install -D @vyriy/browserslist-config browserslist` |
-| `@vyriy/eslint-config`       | `npm install -D @vyriy/eslint-config eslint jiti`        |
-| `@vyriy/jest-config`         | `npm install -D @vyriy/jest-config jest`                 |
-| `@vyriy/prettier-config`     | `npm install -D @vyriy/prettier-config prettier`         |
-| `@vyriy/stylelint-config`    | `npm install -D @vyriy/stylelint-config stylelint`       |
-| `@vyriy/storybook-config`    | `npm install -D @vyriy/storybook-config storybook`       |
-| `@vyriy/typescript-config`   | `npm install -D @vyriy/typescript-config typescript`     |
-| `@vyriy/webpack-config`      | `npm install -D @vyriy/webpack-config webpack`           |
+| Package                    | Consumer install                                     |
+| -------------------------- | ---------------------------------------------------- |
+| `@vyriy/eslint-config`     | `npm install -D @vyriy/eslint-config eslint`         |
+| `@vyriy/jest-config`       | `npm install -D @vyriy/jest-config jest`             |
+| `@vyriy/prettier-config`   | `npm install -D @vyriy/prettier-config prettier`     |
+| `@vyriy/stylelint-config`  | `npm install -D @vyriy/stylelint-config stylelint`   |
+| `@vyriy/storybook-config`  | `npm install -D @vyriy/storybook-config storybook`   |
+| `@vyriy/typescript-config` | `npm install -D @vyriy/typescript-config typescript` |
+| `@vyriy/webpack-config`    | `npm install -D @vyriy/webpack-config webpack-cli`   |
 
 ### Runtime And Shared Utilities
 
 | Package            | Purpose                                                             |
 | ------------------ | ------------------------------------------------------------------- |
 | `@vyriy/cdk`       | Shared AWS CDK helpers for Vyriy projects.                          |
+| `@vyriy/chaos`     | Small chaos-testing helpers for delay and failure simulation.       |
 | `@vyriy/cn`        | Class name utility for composing CSS class strings.                 |
 | `@vyriy/commit`    | Shared commit package for Vyriy projects.                           |
 | `@vyriy/config`    | Environment config parsing utility with named parsers and defaults. |
@@ -78,6 +103,7 @@ Some config packages intentionally document executable tools in their install co
 | `@vyriy/pause`     | Promise-based pause utility.                                        |
 | `@vyriy/recursive` | Recursive iteration utility.                                        |
 | `@vyriy/request`   | Shared request utility.                                             |
+| `@vyriy/render`    | React rendering adapters for DOM, custom elements, SSR, and SSG.    |
 | `@vyriy/retry`     | Retry utility.                                                      |
 | `@vyriy/router`    | Router utility.                                                     |
 | `@vyriy/script`    | Script utilities.                                                   |
@@ -141,16 +167,29 @@ server(async () => ({
 }));
 ```
 
+Example React render helper:
+
+```tsx
+import { element } from '@vyriy/render';
+
+import { App } from './app.js';
+
+element({
+  root: document.getElementById('root'),
+  component: <App />,
+});
+```
+
 ## Direction
 
-Vyriy is aimed at a broader ecosystem of future starters and shared tooling for:
+Vyriy is aimed at a broader ecosystem of starters and shared tooling for:
 
 - libraries
 - SSG and SSR projects
 - MFE and widget delivery
 - service and API workloads
 
-The long-term goal is a reusable foundation with low cognitive load, clear contracts, and practical extraction from real projects.
+The current CLI presets are the first practical layer of that direction: they make new projects fast to start, while the package contracts keep the architecture explicit, reusable, and easy to maintain after the first commit.
 
 ## Requirements
 

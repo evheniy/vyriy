@@ -147,7 +147,7 @@ Shared defaults:
 CSR defaults:
 
 - loaders and Babel extensions are resolved from this package for workspace and package-manager isolation
-- production builds extract CSS with `MiniCssExtractPlugin`
+- CSS is extracted with `MiniCssExtractPlugin` in production and development
 - development builds enable React refresh with `ReactRefreshWebpackPlugin`
 
 HTML plugin defaults:
@@ -186,6 +186,6 @@ const styles = document.createElement('style');
 styles.textContent = css;
 ```
 
-This is useful for custom elements that place styles inside a Shadow DOM. When a custom element should use a linked stylesheet instead, use `style({ mode: 'extract' })` and add `MiniCssExtractPlugin` to the Webpack plugins in both production and development. Webpack dev server can serve the extracted CSS from memory, while production emits the same kind of CSS asset to disk.
+This is useful for custom elements that place styles inside a Shadow DOM. CSR builds extract ordinary stylesheet imports by default, so custom elements can also use a linked stylesheet without local rule replacement. Webpack dev server can serve the extracted CSS from memory, while production emits the same kind of CSS asset to disk.
 
 See the article with a complete browser and SSR bundling walkthrough: <https://vyriy.dev/examples/vyriy-webpack-config/>.

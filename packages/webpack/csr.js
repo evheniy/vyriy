@@ -17,11 +17,14 @@ export const csr = (entry, output, transform) => {
         entry,
         output,
         module: {
-            rules: rules(false, isProduction),
+            rules: rules(false, isProduction, 'extract'),
         },
         optimization: optimization(isProduction),
         performance,
-        plugins: isProduction ? [new MiniCssExtractPlugin()] : [new ReactRefreshWebpackPlugin()],
+        plugins: [
+            new MiniCssExtractPlugin(),
+            ...(isProduction ? [] : [new ReactRefreshWebpackPlugin()]),
+        ],
         resolve: resolve(),
     };
     return transform ? transform(base) : base;

@@ -49,10 +49,13 @@ export const style = ({ mode = 'extract' } = {}) => {
         ],
     };
 };
-export const rules = (isSsr = false, isProduction = true) => {
+export const rules = (isSsr = false, isProduction = true, styleMode) => {
     let mode;
     if (isSsr) {
         mode = 'ignore';
+    }
+    else if (styleMode) {
+        mode = styleMode;
     }
     else if (isProduction) {
         mode = 'extract';
