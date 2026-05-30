@@ -147,6 +147,7 @@ Shared defaults:
 CSR defaults:
 
 - loaders and Babel extensions are resolved from this package for workspace and package-manager isolation
+- webpack-dev-server uses shared CORS headers for local cross-origin bundle consumption
 - CSS is extracted with `MiniCssExtractPlugin` in production and development
 - development builds enable React refresh with `ReactRefreshWebpackPlugin`
 

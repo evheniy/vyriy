@@ -1,6 +1,6 @@
 {
   "name": "vyriy",
-  "version": "0.4.9",
+  "version": "0.4.10",
   "description": "Interactive project master for calm cloud-ready applications.",
   "type": "module",
   "bin": "./bin/vyriy.js",
@@ -12,7 +12,7 @@
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
     "cross-env": "^10.1.0",
-    "eslint": "^10.4.0",
+    "eslint": "^10.4.1",
     "graphql": "^16.14.0",
     "husky": "^9.1.7",
     "jest": "^30.4.2",

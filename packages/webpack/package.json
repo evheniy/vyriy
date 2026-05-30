@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/webpack-config",
-  "version": "0.4.9",
+  "version": "0.4.10",
   "description": "Shared Webpack config for Vyriy projects",
   "type": "module",
   "exports": {
@@ -28,6 +28,16 @@
       "types": "./csr.d.ts",
       "import": "./csr.js",
       "default": "./csr.js"
+    },
+    "./dev-server": {
+      "types": "./dev-server.d.ts",
+      "import": "./dev-server.js",
+      "default": "./dev-server.js"
+    },
+    "./dev-server.js": {
+      "types": "./dev-server.d.ts",
+      "import": "./dev-server.js",
+      "default": "./dev-server.js"
     },
     "./external": {
       "types": "./external.d.ts",
@@ -149,9 +159,9 @@
     "@babel/register": "^7.29.7",
     "@babel/runtime": "^7.29.7",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.2",
-    "@vyriy/env": "0.4.9",
-    "@vyriy/html": "0.4.9",
-    "@vyriy/path": "0.4.9",
+    "@vyriy/env": "0.4.10",
+    "@vyriy/html": "0.4.10",
+    "@vyriy/path": "0.4.10",
     "babel-loader": "^10.1.1",
     "css-loader": "^7.1.4",
     "cssnano": "^8.0.1",

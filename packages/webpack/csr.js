@@ -1,6 +1,7 @@
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { path } from '@vyriy/path';
+import { devServer } from './dev-server.js';
 import { mode } from './mode.js';
 import { optimization } from './optimization.js';
 import { performance } from './performance.js';
@@ -12,6 +13,7 @@ export const csr = (entry, output, transform) => {
     const base = {
         context: path(),
         devtool: false,
+        devServer: devServer(),
         mode: webpackMode,
         target: isProduction ? 'browserslist' : 'web',
         entry,
