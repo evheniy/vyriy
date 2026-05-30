@@ -1,10 +1,10 @@
 {
   "name": "@vyriy/config",
-  "version": "0.4.10",
+  "version": "0.4.11",
   "description": "Environment config parsing utility for Vyriy projects",
   "type": "module",
   "dependencies": {
-    "@vyriy/env": "0.4.10"
+    "@vyriy/env": "0.4.11"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",

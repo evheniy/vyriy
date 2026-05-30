@@ -88,6 +88,41 @@ customElement({
 });
 ```
 
+## Custom element SSR hydration
+
+For SSR custom elements, render declarative shadow DOM with a stable mount node marked by `data-vyriy-root`.
+The `rendered` attribute tells `customElement` to hydrate the existing shadow DOM instead of creating a new client container.
+
+```html
+<vyriy-profile-card rendered name="Ada">
+  <template shadowrootmode="open">
+    <link rel="stylesheet" href="/main.css" />
+    <div data-vyriy-root>
+      <!-- React SSR markup -->
+    </div>
+  </template>
+</vyriy-profile-card>
+```
+
+On the client, use the same registration. When the browser has already created `shadowRoot` from the template, `customElement` reuses it and calls `hydrateRoot` with `[data-vyriy-root]`.
+
+```tsx
+customElement({
+  tag: 'vyriy-profile-card',
+  elements: () => {
+    const container = document.createElement('div');
+
+    return {
+      elements: [container],
+      root: container,
+    };
+  },
+  render: (customElement) => {
+    return <ProfileCard name={customElement.getAttribute('name') ?? ''} />;
+  },
+});
+```
+
 ## HTML string
 
 ```tsx
@@ -111,7 +146,7 @@ const htmlStream = await stream({
 });
 ```
 
-## Rrerender
+## Prerender
 
 ```tsx
 import { prerender } from '@vyriy/render';

@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/render",
-  "version": "0.4.10",
+  "version": "0.4.11",
   "description": "React rendering adapters for Vyriy projects",
   "type": "module",
   "dependencies": {

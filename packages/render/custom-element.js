@@ -1,5 +1,16 @@
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import { createMissingCustomElementRootError } from './errors.js';
+const rootSelector = '[data-vyriy-root]';
+const fallbackRootSelector = ':not(link, style, template)';
+const findCustomElementRoot = (shadow) => {
+    return shadow.querySelector(rootSelector) ?? shadow.querySelector(fallbackRootSelector);
+};
+const requireCustomElementRoot = (root) => {
+    if (!root) {
+        throw createMissingCustomElementRootError();
+    }
+    return root;
+};
 export const customElement = ({ tag, mode = 'open', renderedAttribute = 'rendered', elements, render, options = {}, }) => {
     if (customElements.get(tag)) {
         return;
@@ -9,12 +20,15 @@ export const customElement = ({ tag, mode = 'open', renderedAttribute = 'rendere
         #mount;
         constructor() {
             super();
-            const shadow = this.attachShadow({ mode });
-            const renderElements = elements(this);
-            if (!renderElements.root) {
-                throw createMissingCustomElementRootError();
+            const existingShadow = this.shadowRoot;
+            const shadow = existingShadow ?? this.attachShadow({ mode });
+            const isHydratableShadow = this.hasAttribute(renderedAttribute) && existingShadow;
+            if (isHydratableShadow) {
+                this.#mount = requireCustomElementRoot(findCustomElementRoot(existingShadow));
+                return;
             }
-            this.#mount = renderElements.root;
+            const renderElements = elements(this);
+            this.#mount = requireCustomElementRoot(renderElements.root);
             shadow.append(...renderElements.elements);
         }
         connectedCallback() {

@@ -1,10 +1,10 @@
 {
   "name": "@vyriy/package",
-  "version": "0.4.10",
+  "version": "0.4.11",
   "description": "Shared package.json helpers for Vyriy projects",
   "type": "module",
   "dependencies": {
-    "@vyriy/path": "0.4.10"
+    "@vyriy/path": "0.4.11"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",
