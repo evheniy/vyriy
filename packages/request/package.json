@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/request",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Shared request utility for Vyriy projects",
   "type": "module",
   "agents": "./AGENTS.md",

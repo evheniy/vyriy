@@ -1,4 +1,28 @@
 import { style } from '@vyriy/webpack-config/rules.js';
+const STYLE_FIXTURES = [
+    'style.css',
+    'style.scss',
+    'style.sass',
+];
+const isStyleCondition = (condition) => {
+    if (condition instanceof RegExp) {
+        return STYLE_FIXTURES.some((fixture) => condition.test(fixture));
+    }
+    if (typeof condition === 'string') {
+        return [
+            '.css',
+            '.scss',
+            '.sass',
+        ].some((extension) => condition.includes(extension));
+    }
+    return false;
+};
+const isStyleRule = (rule) => {
+    if (!rule || typeof rule !== 'object' || Array.isArray(rule)) {
+        return false;
+    }
+    return isStyleCondition(rule.test);
+};
 const config = {
     addons: [
         '@storybook/addon-webpack5-compiler-swc',
@@ -29,7 +53,7 @@ const config = {
             module: {
                 ...webpackConfig.module,
                 rules: [
-                    ...(webpackConfig.module?.rules ?? []),
+                    ...(webpackConfig.module?.rules ?? []).filter((rule) => !isStyleRule(rule)),
                     style({ mode: 'inject' }),
                 ],
             },
