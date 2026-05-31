@@ -1,6 +1,6 @@
 import { Distribution, Function as CloudFrontFunction, FunctionCode, FunctionEventType, OriginProtocolPolicy, ViewerProtocolPolicy, } from 'aws-cdk-lib/aws-cloudfront';
 import { HttpOrigin, S3BucketOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
-export { FunctionEventType, OriginProtocolPolicy, ViewerProtocolPolicy };
+export { FunctionEventType, OriginProtocolPolicy, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
 export const createDistribution = (scope, id, props) => new Distribution(scope, id, props);
 export const createCloudFrontFunction = (scope, id, props) => new CloudFrontFunction(scope, id, {
     ...props,

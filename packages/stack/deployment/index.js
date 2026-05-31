@@ -1,6 +1,6 @@
 import { Duration } from 'aws-cdk-lib';
-import { BucketDeployment, CacheControl, Source } from 'aws-cdk-lib/aws-s3-deployment';
-export { Source, CacheControl };
+import { BucketDeployment, CacheControl } from 'aws-cdk-lib/aws-s3-deployment';
+export { Source, CacheControl } from 'aws-cdk-lib/aws-s3-deployment';
 export const createBucketDeployment = (scope, id, props) => new BucketDeployment(scope, id, {
     memoryLimit: 512,
     ...props,

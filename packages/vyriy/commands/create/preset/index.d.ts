@@ -39,4 +39,9 @@ export declare const presets: {
         description: string;
         preset: import("./types.js").Preset;
     };
+    mfe: {
+        name: string;
+        description: string;
+        preset: import("./types.js").Preset;
+    };
 };

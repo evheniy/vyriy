@@ -45,7 +45,7 @@ const MermaidDiagram = ({ chart }) => {
             startOnLoad: false,
             theme: isDark ? 'dark' : 'default',
         });
-        void mermaid
+        mermaid
             .render(id, chart)
             .then(({ svg: renderedSvg }) => {
             if (!mounted) {

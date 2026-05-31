@@ -1,5 +1,6 @@
 import packageJson from '../../../package.json' with { type: 'json' };
 import { base } from './base.js';
+import { stylelintConfigFile } from './shared.js';
 export const library = {
     files: (options) => {
         const packageScope = options.scope ?? `@${options.name}`;
@@ -90,7 +91,7 @@ export const library = {
                     allowImportingTsExtensions: false,
                 },
             }, null, 2) + '\n',
-            'stylelint.config.ts': "export { default } from '@vyriy/stylelint-config';\n",
+            ...stylelintConfigFile(),
             [`packages/${options.name}/package.json`]: JSON.stringify({
                 name: packageName,
                 version: '0.0.0',

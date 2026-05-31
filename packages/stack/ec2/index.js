@@ -1,5 +1,5 @@
 import { InterfaceVpcEndpoint, SecurityGroup, SubnetType, Vpc, } from 'aws-cdk-lib/aws-ec2';
-export { SubnetType };
+export { SubnetType } from 'aws-cdk-lib/aws-ec2';
 export const findVpc = (scope, id, props) => Vpc.fromLookup(scope, id, props);
 export const createSecurityGroup = (scope, id, props) => new SecurityGroup(scope, id, props);
 export const createVpcEndpoint = (scope, id, props) => new InterfaceVpcEndpoint(scope, id, props);

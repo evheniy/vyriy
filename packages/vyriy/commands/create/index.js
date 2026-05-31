@@ -21,7 +21,7 @@ const mergeFiles = (planOption) => {
         ...getProviderFiles(preset.deploy, planOption.deploy),
     };
 };
-const getSortedFileNames = (files) => Object.keys(files).sort();
+const getSortedFileNames = (files) => Object.keys(files).sort((a, b) => a.localeCompare(b));
 const logFilePlan = (target, files) => {
     console.log(`\nFile plan (${target}):`);
     console.log(' ', getSortedFileNames(files).join('\n  '));
@@ -69,6 +69,28 @@ const verifyProject = async (target) => {
         await exec(`yarn --cwd ${target} check`);
     }
 };
+const installAndVerify = async (target, install, verify) => {
+    if (install) {
+        console.log('Installing dependencies...');
+        await exec(`yarn --cwd ${target} set version berry`);
+        await exec(`yarn --cwd ${target} install`);
+    }
+    else {
+        console.log('Installing dependencies... SKIPPED');
+        console.log('Running checks... SKIPPED');
+        console.log('\nProject files were created.');
+        return 0;
+    }
+    if (verify) {
+        await verifyProject(target);
+    }
+    else {
+        console.log('Running checks... SKIPPED');
+        console.log('\nProject files were created.');
+        return 0;
+    }
+    return 0;
+};
 export const create = async (options) => {
     const { directory, dryRun, overwrite, skipExisting, install, verify } = options;
     const checkEnvCode = await checkEnv();
@@ -107,26 +129,7 @@ export const create = async (options) => {
             return 1;
         }
         writeFiles(target, files, conflictStrategy.overwrite);
-        if (install) {
-            console.log('Installing dependencies...');
-            await exec(`yarn --cwd ${target} set version berry`);
-            await exec(`yarn --cwd ${target} install`);
-        }
-        else {
-            console.log('Installing dependencies... SKIPPED');
-            console.log('Running checks... SKIPPED');
-            console.log('\nProject files were created.');
-            return 0;
-        }
-        if (verify) {
-            await verifyProject(target);
-        }
-        else {
-            console.log('Running checks... SKIPPED');
-            console.log('\nProject files were created.');
-            return 0;
-        }
-        return 0;
+        return installAndVerify(target, install, verify);
     }
     return 1;
 };

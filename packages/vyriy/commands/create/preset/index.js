@@ -6,6 +6,7 @@ import { ssg } from './ssg.js';
 import { spa } from './spa.js';
 import { rest } from './rest.js';
 import { gql } from './gql.js';
+import { mfe } from './mfe.js';
 export const presets = {
     base: {
         name: 'Base',
@@ -46,5 +47,10 @@ export const presets = {
         name: 'GraphQL',
         description: 'Preset for GraphQL API',
         preset: gql,
+    },
+    mfe: {
+        name: 'MFE',
+        description: 'Preset for Micro Frontend',
+        preset: mfe,
     },
 };

@@ -1,8 +1,8 @@
 import { Construct } from 'constructs';
-import { AwsIntegration, AwsIntegrationProps, BasePathMapping, BasePathMappingProps, DomainName, DomainNameProps, EndpointType, LambdaIntegration, LambdaIntegrationOptions, Model, RestApi, RestApiProps } from 'aws-cdk-lib/aws-apigateway';
+import { AwsIntegration, AwsIntegrationProps, BasePathMapping, BasePathMappingProps, DomainName, DomainNameProps, LambdaIntegration, LambdaIntegrationOptions, RestApi, RestApiProps } from 'aws-cdk-lib/aws-apigateway';
 import { IFunction } from 'aws-cdk-lib/aws-lambda';
-export { RestApi, EndpointType, Model };
-export type { RestApiProps };
+export { RestApi, EndpointType, Model } from 'aws-cdk-lib/aws-apigateway';
+export type { RestApiProps } from 'aws-cdk-lib/aws-apigateway';
 export declare const createApiGateway: (scope: Construct, id: string, props: RestApiProps) => RestApi;
 export declare const createIntegration: (lambda: IFunction, options: LambdaIntegrationOptions) => LambdaIntegration;
 export declare const createDomainName: (scope: Construct, id: string, props: DomainNameProps) => DomainName;

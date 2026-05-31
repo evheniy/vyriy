@@ -1,6 +1,6 @@
 import { RemovalPolicy } from 'aws-cdk-lib';
-import { BlockPublicAccess, Bucket, HttpMethods, BucketEncryption, RedirectProtocol, } from 'aws-cdk-lib/aws-s3';
-export { RedirectProtocol };
+import { BlockPublicAccess, Bucket, HttpMethods, BucketEncryption } from 'aws-cdk-lib/aws-s3';
+export { RedirectProtocol } from 'aws-cdk-lib/aws-s3';
 export const createBucket = (scope, id, props = {}) => {
     const bucketProps = {
         removalPolicy: RemovalPolicy.DESTROY,

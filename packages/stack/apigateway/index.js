@@ -1,5 +1,5 @@
-import { AwsIntegration, BasePathMapping, DomainName, EndpointType, LambdaIntegration, Model, RestApi, } from 'aws-cdk-lib/aws-apigateway';
-export { RestApi, EndpointType, Model };
+import { AwsIntegration, BasePathMapping, DomainName, EndpointType, LambdaIntegration, RestApi, } from 'aws-cdk-lib/aws-apigateway';
+export { RestApi, EndpointType, Model } from 'aws-cdk-lib/aws-apigateway';
 export const createApiGateway = (scope, id, props) => {
     const { defaultIntegration, ...rest } = props;
     const apiProps = {

@@ -1,8 +1,8 @@
 import { Duration, RemovalPolicy } from 'aws-cdk-lib';
-import { Code, FunctionUrl, Function as LambdaFunction, LayerVersion, Runtime, } from 'aws-cdk-lib/aws-lambda';
+import { FunctionUrl, Function as LambdaFunction, Runtime, } from 'aws-cdk-lib/aws-lambda';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 export { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
-export { Code, Runtime, LayerVersion };
+export { Code, Runtime, LayerVersion } from 'aws-cdk-lib/aws-lambda';
 export const createLambda = (scope, id, props) => {
     const { functionName, code, handler, runtime = Runtime.NODEJS_24_X, timeout = Duration.seconds(29), memorySize = 128, environment = {}, ...rest } = props;
     const lambdaFunction = new LambdaFunction(scope, id, {

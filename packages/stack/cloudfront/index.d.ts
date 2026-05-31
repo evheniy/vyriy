@@ -1,8 +1,8 @@
 import { Construct } from 'constructs';
-import { AddBehaviorOptions, Distribution, DistributionProps, Function as CloudFrontFunction, FunctionAssociation, FunctionEventType, FunctionProps, OriginProtocolPolicy, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
+import { AddBehaviorOptions, Distribution, DistributionProps, Function as CloudFrontFunction, FunctionAssociation, FunctionProps, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
 import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { Bucket } from 'aws-cdk-lib/aws-s3';
-export { FunctionEventType, OriginProtocolPolicy, ViewerProtocolPolicy };
+export { FunctionEventType, OriginProtocolPolicy, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
 export interface CreateCloudFrontFunctionProps extends Omit<FunctionProps, 'code'> {
     readonly code: string;
 }

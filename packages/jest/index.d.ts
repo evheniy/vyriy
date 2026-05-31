@@ -1,4 +1,4 @@
 import type { Config } from 'jest';
-export type { Config };
+export type { Config } from 'jest';
 declare const config: Config;
 export default config;
