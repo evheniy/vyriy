@@ -1,17 +1,16 @@
 import { base } from './base.js';
 import { apiWorkspaceBaseFiles, baseToolingDeps, buildPackageJson, serverDeps, webpackDeps, workspaceScripts, } from './shared.js';
-export const api = {
-    files: (options) => ({
-        ...base.files(options),
-        ...apiWorkspaceBaseFiles(options.name, options.description),
-        'package.json': buildPackageJson(options, [
-            'workspaces/*',
-        ], workspaceScripts('api'), {
-            ...baseToolingDeps(),
-            ...webpackDeps(),
-            ...serverDeps(),
-        }),
-        'workspaces/api/index.ts': `import { server } from '@vyriy/server';
+export const api = (options) => ({
+    ...base(options),
+    ...apiWorkspaceBaseFiles(options.name, options.description),
+    'package.json': buildPackageJson(options, [
+        'workspaces/*',
+    ], workspaceScripts('api'), {
+        ...baseToolingDeps(),
+        ...webpackDeps(),
+        ...serverDeps(),
+    }),
+    'workspaces/api/index.ts': `import { server } from '@vyriy/server';
 import { api } from '@vyriy/handler';
 
 server(
@@ -25,7 +24,7 @@ server(
   ),
 );
 `,
-        'workspaces/api/index.test.ts': `import { describe, expect, it, jest } from '@jest/globals';
+    'workspaces/api/index.test.ts': `import { describe, expect, it, jest } from '@jest/globals';
 
 const apiMock = jest.fn((handler) => ({
   handler,
@@ -61,9 +60,4 @@ describe('workspaces/api/index.ts', () => {
   });
 });
 `,
-    }),
-    ci: {
-        ...base.ci,
-    },
-    deploy: {},
-};
+});

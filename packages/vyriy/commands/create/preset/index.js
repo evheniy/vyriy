@@ -7,6 +7,7 @@ import { spa } from './spa.js';
 import { rest } from './rest.js';
 import { gql } from './gql.js';
 import { mfe } from './mfe.js';
+import { fullstack } from './fullstack.js';
 export const presets = {
     base: {
         name: 'Base',
@@ -52,5 +53,10 @@ export const presets = {
         name: 'MFE',
         description: 'Preset for Micro Frontend',
         preset: mfe,
+    },
+    fullstack: {
+        name: 'Fullstack',
+        description: 'Preset for fullstack React application',
+        preset: fullstack,
     },
 };

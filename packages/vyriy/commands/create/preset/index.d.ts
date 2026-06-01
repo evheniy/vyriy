@@ -44,4 +44,9 @@ export declare const presets: {
         description: string;
         preset: import("./types.js").Preset;
     };
+    fullstack: {
+        name: string;
+        description: string;
+        preset: import("./types.js").Preset;
+    };
 };

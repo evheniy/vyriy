@@ -8,18 +8,13 @@ import { plan } from './plan/index.js';
 import { conflictStrategy as promptConflictStrategy } from './prompt/index.js';
 import { presets } from './preset/index.js';
 const exec = promisify(processExec);
-const getProviderFiles = (providers, provider) => provider === undefined ? {} : (providers[provider] ?? {});
 const isPresetName = (preset) => preset in presets;
 const mergeFiles = (planOption) => {
     if (!isPresetName(planOption.preset)) {
         return undefined;
     }
     const preset = presets[planOption.preset].preset;
-    return {
-        ...preset.files(planOption),
-        ...getProviderFiles(preset.ci, planOption.ci),
-        ...getProviderFiles(preset.deploy, planOption.deploy),
-    };
+    return preset(planOption);
 };
 const getSortedFileNames = (files) => Object.keys(files).sort((a, b) => a.localeCompare(b));
 const logFilePlan = (target, files) => {

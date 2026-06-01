@@ -1,27 +1,26 @@
 import packageJson from '../../../package.json' with { type: 'json' };
 import { base } from './base.js';
 import { assetsDeclarationFile, baseToolingDeps, buildPackageJson, reactComponentFiles, reactDeps, reactServiceFiles, reactWorkspaceScripts, serverDeps, stylelintConfigFile, stylelintDeps, webpackDeps, } from './shared.js';
-export const ssr = {
-    files: (options) => ({
-        ...base.files(options),
-        ...stylelintConfigFile(),
-        ...assetsDeclarationFile(),
-        ...reactComponentFiles(),
-        ...reactServiceFiles(),
-        'package.json': buildPackageJson(options, [
-            'packages/*',
-            'workspaces/*',
-        ], reactWorkspaceScripts('api'), {
-            ...baseToolingDeps(),
-            ...webpackDeps(),
-            ...serverDeps(),
-            ...reactDeps(),
-            ...stylelintDeps(),
-            '@vyriy/cn': `^${packageJson.version}`,
-            '@vyriy/html': `^${packageJson.version}`,
-            sass: packageJson.peerDependencies.sass,
-        }),
-        'workspaces/api/bin/build.sh': `#!/usr/bin/env sh
+export const ssr = (options) => ({
+    ...base(options),
+    ...stylelintConfigFile(),
+    ...assetsDeclarationFile(),
+    ...reactComponentFiles(),
+    ...reactServiceFiles(),
+    'package.json': buildPackageJson(options, [
+        'packages/*',
+        'workspaces/*',
+    ], reactWorkspaceScripts('api'), {
+        ...baseToolingDeps(),
+        ...webpackDeps(),
+        ...serverDeps(),
+        ...reactDeps(),
+        ...stylelintDeps(),
+        '@vyriy/cn': `^${packageJson.version}`,
+        '@vyriy/html': `^${packageJson.version}`,
+        sass: packageJson.peerDependencies.sass,
+    }),
+    'workspaces/api/bin/build.sh': `#!/usr/bin/env sh
 
 set -e
 
@@ -35,7 +34,7 @@ cp $scriptdir/package.json "$distdir/package.json"
 npm pkg delete "type" --prefix "$distdir"
 npm pkg delete "private" --prefix "$distdir"
 `,
-        'workspaces/api/bin/start.sh': `#!/usr/bin/env sh
+    'workspaces/api/bin/start.sh': `#!/usr/bin/env sh
 
 set -e
 
@@ -47,15 +46,15 @@ yarn exec sass packages/components/page/styles.scss "$distdir/styles.css" --no-s
 
 PROJECT_CWD="$distdir" NODE_ENV=production LOG_LEVEL=info "$PWD/node_modules/.bin/tsx" $scriptdir/index.tsx
 `,
-        'workspaces/api/doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
+    'workspaces/api/doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
 import ReadMe from './README.md?raw';
 
 <Meta title="Workspaces/API" />
 
 <Markdown>{ReadMe}</Markdown>
 `,
-        'workspaces/api/README.md': `# ${options.name} API\n\n${options.description}\n`,
-        'workspaces/api/webpack.config.ts': `import { path } from '@vyriy/path';
+    'workspaces/api/README.md': `# ${options.name} API\n\n${options.description}\n`,
+    'workspaces/api/webpack.config.ts': `import { path } from '@vyriy/path';
 import { ssr, external } from '@vyriy/webpack-config';
 
 export default ssr(
@@ -71,12 +70,12 @@ export default ssr(
   }),
 );
 `,
-        'workspaces/api/package.json': JSON.stringify({
-            name: '@w/api',
-            type: 'module',
-            private: true,
-        }, null, 2) + '\n',
-        'workspaces/api/index.tsx': `import { readFileSync } from 'node:fs';
+    'workspaces/api/package.json': JSON.stringify({
+        name: '@w/api',
+        type: 'module',
+        private: true,
+    }, null, 2) + '\n',
+    'workspaces/api/index.tsx': `import { readFileSync } from 'node:fs';
 import { renderToString } from 'react-dom/server';
 
 import { server } from '@vyriy/server';
@@ -111,7 +110,7 @@ server(
   }),
 );
 `,
-        'workspaces/api/index.test.tsx': `import { describe, expect, it, jest } from '@jest/globals';
+    'workspaces/api/index.test.tsx': `import { describe, expect, it, jest } from '@jest/globals';
 
 const apiMock = jest.fn((handler) => ({
   handler,
@@ -177,9 +176,4 @@ describe('workspaces/api/index.tsx', () => {
   });
 });
 `,
-    }),
-    ci: {
-        ...base.ci,
-    },
-    deploy: {},
-};
+});

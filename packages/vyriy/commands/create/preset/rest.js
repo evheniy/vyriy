@@ -1,20 +1,19 @@
 import packageJson from '../../../package.json' with { type: 'json' };
 import { base } from './base.js';
 import { apiWorkspaceBaseFiles, baseToolingDeps, buildPackageJson, serverDeps, webpackDeps, workspaceScripts, } from './shared.js';
-export const rest = {
-    files: (options) => ({
-        ...base.files(options),
-        ...apiWorkspaceBaseFiles(options.name, options.description),
-        'package.json': buildPackageJson(options, [
-            'workspaces/*',
-        ], workspaceScripts('api'), {
-            ...baseToolingDeps(),
-            ...webpackDeps(),
-            ...serverDeps(),
-            '@vyriy/router': `^${packageJson.version}`,
-            '@vyriy/html': `^${packageJson.version}`,
-        }),
-        'workspaces/api/index.ts': `import { server } from '@vyriy/server';
+export const rest = (options) => ({
+    ...base(options),
+    ...apiWorkspaceBaseFiles(options.name, options.description),
+    'package.json': buildPackageJson(options, [
+        'workspaces/*',
+    ], workspaceScripts('api'), {
+        ...baseToolingDeps(),
+        ...webpackDeps(),
+        ...serverDeps(),
+        '@vyriy/router': `^${packageJson.version}`,
+        '@vyriy/html': `^${packageJson.version}`,
+    }),
+    'workspaces/api/index.ts': `import { server } from '@vyriy/server';
 import { api } from '@vyriy/handler';
 import { createRouter } from '@vyriy/router';
 import { html, minify } from '@vyriy/html';
@@ -110,7 +109,7 @@ router.get('/', async () => {
 
 server(api(async (event) => router.route(event)));
 `,
-        'workspaces/api/index.test.ts': `import { describe, expect, it, jest } from '@jest/globals';
+    'workspaces/api/index.test.ts': `import { describe, expect, it, jest } from '@jest/globals';
 import type { APIGatewayProxyEvent } from '@vyriy/router';
 
 const apiMock = jest.fn((handler) => ({
@@ -240,9 +239,4 @@ describe('workspaces/api/index.ts', () => {
   });
 });
 `,
-    }),
-    ci: {
-        ...base.ci,
-    },
-    deploy: {},
-};
+});

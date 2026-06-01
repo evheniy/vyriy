@@ -8,7 +8,5 @@ export type PlanResult = {
     target: string;
     preset: string;
     scope?: string;
-    ci?: string;
-    deploy?: string;
 };
 export type Plan = (dirName: string, appPath: string) => Promise<PlanResult | undefined>;

@@ -8,62 +8,61 @@ const agentsPath = [
     resolve(presetDir, '../../../../AGENTS.md'),
 ].find(existsSync) ?? '';
 const agentsContent = agentsPath ? readFileSync(agentsPath, 'utf8') : '';
-export const base = {
-    files: ({ name, description }) => ({
-        'package.json': JSON.stringify({
-            name,
-            version: '0.0.0',
-            description,
-            private: true,
-            type: 'module',
-            agents: './AGENTS.md',
-            packageManager: packageJson.packageManager,
-            engines: {
-                node: packageJson.engines.node,
-            },
-            scripts: {
-                storybook: 'cross-env STORYBOOK_DISABLE_TELEMETRY=1 storybook dev -p 6006 --disable-telemetry',
-                check: 'run-s lint build test',
-                fix: "run-s 'fix:*'",
-                lint: "run-s 'lint:*'",
-                build: "run-s 'build:*'",
-                test: "run-s 'test:*'",
-                'fix:prettier': 'prettier . --write',
-                'fix:eslint': 'eslint . --fix',
-                'lint:ts': 'tsc',
-                'lint:prettier': 'prettier . --check',
-                'lint:eslint': 'eslint .',
-                'build:storybook': 'cross-env STORYBOOK_DISABLE_TELEMETRY=1 storybook build --quiet --disable-telemetry',
-                'test:jest': 'jest --passWithNoTests',
-                postinstall: 'husky',
-            },
-            dependencies: {
-                '@vyriy/typescript-config': `^${packageJson.version}`,
-                typescript: packageJson.peerDependencies.typescript,
-                '@vyriy/prettier-config': `^${packageJson.version}`,
-                prettier: packageJson.peerDependencies.prettier,
-                '@vyriy/eslint-config': `^${packageJson.version}`,
-                eslint: packageJson.peerDependencies.eslint,
-                '@vyriy/jest-config': `^${packageJson.version}`,
-                jest: packageJson.peerDependencies.jest,
-                '@vyriy/storybook-config': `^${packageJson.version}`,
-                storybook: packageJson.peerDependencies.storybook,
-                '@vyriy/path': `^${packageJson.version}`,
-                husky: packageJson.peerDependencies.husky,
-                'npm-run-all2': packageJson.peerDependencies['npm-run-all2'],
-                'cross-env': packageJson.peerDependencies['cross-env'],
-            },
-        }, null, 2) + '\n',
-        'README.md': `# ${name}\n\n${description}\n`,
-        'doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
+export const base = ({ name, description }) => ({
+    'package.json': JSON.stringify({
+        name,
+        version: '0.0.0',
+        description,
+        private: true,
+        type: 'module',
+        agents: './AGENTS.md',
+        packageManager: packageJson.packageManager,
+        engines: {
+            node: packageJson.engines.node,
+        },
+        scripts: {
+            storybook: 'cross-env STORYBOOK_DISABLE_TELEMETRY=1 storybook dev -p 6006 --disable-telemetry',
+            check: 'run-s lint build test',
+            fix: "run-s 'fix:*'",
+            lint: "run-s 'lint:*'",
+            build: "run-s 'build:*'",
+            test: "run-s 'test:*'",
+            'fix:prettier': 'prettier . --write',
+            'fix:eslint': 'eslint . --fix',
+            'lint:ts': 'tsc',
+            'lint:prettier': 'prettier . --check',
+            'lint:eslint': 'eslint .',
+            'build:storybook': 'cross-env STORYBOOK_DISABLE_TELEMETRY=1 storybook build --quiet --disable-telemetry',
+            'test:jest': 'jest --passWithNoTests',
+            postinstall: 'husky',
+        },
+        dependencies: {
+            '@vyriy/typescript-config': `^${packageJson.version}`,
+            typescript: packageJson.peerDependencies.typescript,
+            '@vyriy/prettier-config': `^${packageJson.version}`,
+            prettier: packageJson.peerDependencies.prettier,
+            '@vyriy/eslint-config': `^${packageJson.version}`,
+            eslint: packageJson.peerDependencies.eslint,
+            '@vyriy/jest-config': `^${packageJson.version}`,
+            jest: packageJson.peerDependencies.jest,
+            '@vyriy/storybook-config': `^${packageJson.version}`,
+            storybook: packageJson.peerDependencies.storybook,
+            '@vyriy/path': `^${packageJson.version}`,
+            husky: packageJson.peerDependencies.husky,
+            'npm-run-all2': packageJson.peerDependencies['npm-run-all2'],
+            'cross-env': packageJson.peerDependencies['cross-env'],
+        },
+    }, null, 2) + '\n',
+    'README.md': `# ${name}\n\n${description}\n`,
+    'doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
 import ReadMe from './README.md?raw';
 
 <Meta title="${name}" />
 
 <Markdown>{ReadMe}</Markdown>
 `,
-        'AGENTS.md': agentsContent,
-        '.editorconfig': `# https://editorconfig.org
+    'AGENTS.md': agentsContent,
+    '.editorconfig': `# https://editorconfig.org
 root = true
 
 [*]
@@ -98,7 +97,7 @@ indent_size = 2
 [*.sh]
 indent_size = 2
 `,
-        '.gitignore': `.yarn/*
+    '.gitignore': `.yarn/*
 !.yarn/cache
 !.yarn/patches
 !.yarn/plugins
@@ -120,15 +119,15 @@ cdk.context.json
 
 !/**/.gitkeep
 `,
-        '.npmrc': 'engine-strict=true\n',
-        '.nvmrc': 'lts/krypton\n',
-        '.yarnrc.yml': 'nodeLinker: node-modules\nnpmMinimalAgeGate: 0\n',
-        '.husky/commit-msg': '#!/bin/sh\n',
-        '.husky/post-checkout': '#!/bin/sh\n\nyarn\n',
-        '.husky/post-merge': '#!/bin/sh\n\nyarn\n',
-        '.husky/pre-commit': '#!/bin/sh\n\nyarn check\n',
-        '.husky/pre-push': '#!/bin/sh\n\nyarn check\n',
-        '.storybook/main.ts': `import config from '@vyriy/storybook-config';
+    '.npmrc': 'engine-strict=true\n',
+    '.nvmrc': 'lts/krypton\n',
+    '.yarnrc.yml': 'nodeLinker: node-modules\nnpmMinimalAgeGate: 0\n',
+    '.husky/commit-msg': '#!/bin/sh\n',
+    '.husky/post-checkout': '#!/bin/sh\n\nyarn\n',
+    '.husky/post-merge': '#!/bin/sh\n\nyarn\n',
+    '.husky/pre-commit': '#!/bin/sh\n\nyarn check\n',
+    '.husky/pre-push': '#!/bin/sh\n\nyarn check\n',
+    '.storybook/main.ts': `import config from '@vyriy/storybook-config';
 import { path } from '@vyriy/path';
 
 export default {
@@ -139,57 +138,22 @@ export default {
   ],
 };
 `,
-        '.storybook/preview.tsx': "export { default } from '@vyriy/storybook-config/preview';\n",
-        'yarn.lock': '',
-        'tsconfig.json': JSON.stringify({
-            extends: '@vyriy/typescript-config/index.json',
-            include: [
-                '.storybook/**/*.ts',
-                '.storybook/**/*.tsx',
-                'packages/**/*.ts',
-                'packages/**/*.tsx',
-                'workspaces/**/*.ts',
-                'workspaces/**/*.tsx',
-                '*.ts',
-            ],
-        }, null, 2) + '\n',
-        'prettier.config.ts': "export { default } from '@vyriy/prettier-config';\n",
-        '.prettierignore': 'node_modules\ndist\ncoverage\nstorybook-static\nconsumer\n',
-        'eslint.config.ts': "export { default } from '@vyriy/eslint-config';\n",
-        'jest.config.ts': "export { default } from '@vyriy/jest-config';\n",
-    }),
-    ci: {
-        gitlab: {
-            '.gitlab-ci.yml': `image: node:24
-
-code:
-  script:
-    - corepack enable
-    - yarn install
-    - yarn check
-`,
-        },
-        github: {
-            '.github/workflows/code.yml': `name: code
-
-on:
-  push:
-  pull_request:
-
-jobs:
-  code:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-      - run: |
-          corepack enable
-          yarn install
-          yarn check
-`,
-        },
-    },
-    deploy: {},
-};
+    '.storybook/preview.tsx': "export { default } from '@vyriy/storybook-config/preview';\n",
+    'yarn.lock': '',
+    'tsconfig.json': JSON.stringify({
+        extends: '@vyriy/typescript-config/index.json',
+        include: [
+            '.storybook/**/*.ts',
+            '.storybook/**/*.tsx',
+            'packages/**/*.ts',
+            'packages/**/*.tsx',
+            'workspaces/**/*.ts',
+            'workspaces/**/*.tsx',
+            '*.ts',
+        ],
+    }, null, 2) + '\n',
+    'prettier.config.ts': "export { default } from '@vyriy/prettier-config';\n",
+    '.prettierignore': 'node_modules\ndist\ncoverage\nstorybook-static\nconsumer\n',
+    'eslint.config.ts': "export { default } from '@vyriy/eslint-config';\n",
+    'jest.config.ts': "export { default } from '@vyriy/jest-config';\n",
+});

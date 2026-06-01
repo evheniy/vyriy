@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/html",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "HTML document utility for Vyriy projects",
   "type": "module",
   "agents": "./AGENTS.md",

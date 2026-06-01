@@ -1,76 +1,75 @@
 import packageJson from '../../../package.json' with { type: 'json' };
 import { base } from './base.js';
-export const gql = {
-    files: (options) => ({
-        ...base.files(options),
-        'package.json': JSON.stringify({
-            name: options.name,
-            version: '0.0.0',
-            description: options.description,
-            private: true,
-            type: 'module',
-            agents: './AGENTS.md',
-            packageManager: packageJson.packageManager,
-            engines: {
-                node: packageJson.engines.node,
-            },
-            workspaces: [
-                'packages/*',
-                'workspaces/*',
-            ],
-            scripts: {
-                storybook: 'cross-env STORYBOOK_DISABLE_TELEMETRY=1 storybook dev -p 6006 --disable-telemetry',
-                check: 'run-s lint build test',
-                fix: "run-s 'fix:*'",
-                start: "run-p 'start:*'",
-                lint: "run-s 'lint:*'",
-                build: "run-s 'build:*'",
-                test: "run-s 'test:*'",
-                'fix:prettier': 'prettier . --write',
-                'fix:eslint': 'eslint . --fix',
-                'start:graphql': 'sh workspaces/graphql/bin/start.sh',
-                'lint:ts': 'tsc',
-                'lint:prettier': 'prettier . --check',
-                'lint:eslint': 'eslint .',
-                'build:graphql': 'rimraf dist && sh workspaces/graphql/bin/build.sh',
-                'build:storybook': 'cross-env STORYBOOK_DISABLE_TELEMETRY=1 storybook build --quiet --disable-telemetry',
-                'test:jest': 'jest',
-                postinstall: 'husky',
-            },
-            dependencies: {
-                '@vyriy/typescript-config': `^${packageJson.version}`,
-                typescript: packageJson.peerDependencies.typescript,
-                '@vyriy/prettier-config': `^${packageJson.version}`,
-                prettier: packageJson.peerDependencies.prettier,
-                '@vyriy/eslint-config': `^${packageJson.version}`,
-                eslint: packageJson.peerDependencies.eslint,
-                '@vyriy/jest-config': `^${packageJson.version}`,
-                jest: packageJson.peerDependencies.jest,
-                '@vyriy/storybook-config': `^${packageJson.version}`,
-                storybook: packageJson.peerDependencies.storybook,
-                '@vyriy/path': `^${packageJson.version}`,
-                husky: packageJson.peerDependencies.husky,
-                'npm-run-all2': packageJson.peerDependencies['npm-run-all2'],
-                'cross-env': packageJson.peerDependencies['cross-env'],
-                rimraf: packageJson.peerDependencies.rimraf,
-                '@vyriy/webpack-config': `^${packageJson.version}`,
-                '@vyriy/handler': `^${packageJson.version}`,
-                '@vyriy/server': `^${packageJson.version}`,
-                '@vyriy/router': `^${packageJson.version}`,
-                tsx: packageJson.peerDependencies.tsx,
-                'webpack-cli': packageJson.peerDependencies['webpack-cli'],
-                graphql: packageJson.peerDependencies.graphql,
-                '@vyriy/html': `^${packageJson.version}`,
-            },
-        }, null, 2) + '\n',
-        'packages/graphql/doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
+export const gql = (options) => ({
+    ...base(options),
+    'package.json': JSON.stringify({
+        name: options.name,
+        version: '0.0.0',
+        description: options.description,
+        private: true,
+        type: 'module',
+        agents: './AGENTS.md',
+        packageManager: packageJson.packageManager,
+        engines: {
+            node: packageJson.engines.node,
+        },
+        workspaces: [
+            'packages/*',
+            'workspaces/*',
+        ],
+        scripts: {
+            storybook: 'cross-env STORYBOOK_DISABLE_TELEMETRY=1 storybook dev -p 6006 --disable-telemetry',
+            check: 'run-s lint build test',
+            fix: "run-s 'fix:*'",
+            start: "run-p 'start:*'",
+            lint: "run-s 'lint:*'",
+            build: "run-s 'build:*'",
+            test: "run-s 'test:*'",
+            'fix:prettier': 'prettier . --write',
+            'fix:eslint': 'eslint . --fix',
+            'start:graphql': 'sh workspaces/graphql/bin/start.sh',
+            'lint:ts': 'tsc',
+            'lint:prettier': 'prettier . --check',
+            'lint:eslint': 'eslint .',
+            'build:graphql': 'rimraf dist && sh workspaces/graphql/bin/build.sh',
+            'build:storybook': 'cross-env STORYBOOK_DISABLE_TELEMETRY=1 storybook build --quiet --disable-telemetry',
+            'test:jest': 'jest',
+            postinstall: 'husky',
+        },
+        dependencies: {
+            '@vyriy/typescript-config': `^${packageJson.version}`,
+            typescript: packageJson.peerDependencies.typescript,
+            '@vyriy/prettier-config': `^${packageJson.version}`,
+            prettier: packageJson.peerDependencies.prettier,
+            '@vyriy/eslint-config': `^${packageJson.version}`,
+            eslint: packageJson.peerDependencies.eslint,
+            '@vyriy/jest-config': `^${packageJson.version}`,
+            jest: packageJson.peerDependencies.jest,
+            '@vyriy/storybook-config': `^${packageJson.version}`,
+            storybook: packageJson.peerDependencies.storybook,
+            '@vyriy/path': `^${packageJson.version}`,
+            husky: packageJson.peerDependencies.husky,
+            'npm-run-all2': packageJson.peerDependencies['npm-run-all2'],
+            'cross-env': packageJson.peerDependencies['cross-env'],
+            rimraf: packageJson.peerDependencies.rimraf,
+            '@vyriy/webpack-config': `^${packageJson.version}`,
+            '@vyriy/handler': `^${packageJson.version}`,
+            '@vyriy/server': `^${packageJson.version}`,
+            '@vyriy/router': `^${packageJson.version}`,
+            tsx: packageJson.peerDependencies.tsx,
+            'webpack-cli': packageJson.peerDependencies['webpack-cli'],
+            graphql: packageJson.peerDependencies.graphql,
+            '@vyriy/html': `^${packageJson.version}`,
+        },
+    }, null, 2) + '\n',
+    'packages/graphql/doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
 import ReadMe from './README.md?raw';
 
 <Meta title="Packages/GraphQL" />
 
 <Markdown>{ReadMe}</Markdown>
 `,
-        'packages/graphql/graphiql.test.ts': `import { describe, expect, it } from '@jest/globals';
+    'packages/graphql/graphiql.test.ts': `import { describe, expect, it } from '@jest/globals';
 
 import { graphiql } from './graphiql.js';
 
@@ -92,7 +91,7 @@ describe('packages/graphql/graphiql.ts', () => {
   });
 });
 `,
-        'packages/graphql/graphiql.ts': `import { html, minify } from '@vyriy/html';
+    'packages/graphql/graphiql.ts': `import { html, minify } from '@vyriy/html';
 
 export const graphiql = () =>
   minify(
@@ -189,7 +188,7 @@ export const graphiql = () =>
     }),
   );
 `,
-        'packages/graphql/index.test.ts': `import { describe, expect, it } from '@jest/globals';
+    'packages/graphql/index.test.ts': `import { describe, expect, it } from '@jest/globals';
 
 import { router } from './router.js';
 
@@ -201,14 +200,14 @@ describe('packages/graphql/index.ts', () => {
   });
 });
 `,
-        'packages/graphql/index.ts': "export * from './router.js';\n",
-        'packages/graphql/package.json': `{
+    'packages/graphql/index.ts': "export * from './router.js';\n",
+    'packages/graphql/package.json': `{
   "name": "@p/graphql",
   "type": "module",
   "private": true
 }
 `,
-        'packages/graphql/README.md': `# @p/graphql
+    'packages/graphql/README.md': `# @p/graphql
 
 Reusable GraphQL API package for the application.
 
@@ -252,7 +251,7 @@ mutation Ping($message: String) {
 }
 \`\`\`
 `,
-        'packages/graphql/router.test.ts': `import { describe, expect, it } from '@jest/globals';
+    'packages/graphql/router.test.ts': `import { describe, expect, it } from '@jest/globals';
 import type { APIGatewayProxyEvent, APIGatewayProxyResult } from '@vyriy/router';
 
 import { router } from './router.js';
@@ -390,7 +389,7 @@ describe('packages/graphql/router.ts', () => {
   });
 });
 `,
-        'packages/graphql/router.ts': `import { createRouter } from '@vyriy/router';
+    'packages/graphql/router.ts': `import { createRouter } from '@vyriy/router';
 
 import { graphql } from 'graphql';
 
@@ -458,7 +457,7 @@ router.post('/', async (params) => {
   };
 });
 `,
-        'packages/graphql/schema.test.ts': `import { describe, expect, it } from '@jest/globals';
+    'packages/graphql/schema.test.ts': `import { describe, expect, it } from '@jest/globals';
 import { graphql } from 'graphql';
 
 import { schema } from './schema.js';
@@ -498,7 +497,7 @@ describe('packages/graphql/schema.ts', () => {
   });
 });
 `,
-        'packages/graphql/schema.ts': `import { GraphQLSchema, GraphQLObjectType, GraphQLString, GraphQLBoolean } from 'graphql';
+    'packages/graphql/schema.ts': `import { GraphQLSchema, GraphQLObjectType, GraphQLString, GraphQLBoolean } from 'graphql';
 
 const TestType = new GraphQLObjectType({
   name: 'Test',
@@ -552,7 +551,7 @@ export const schema = new GraphQLSchema({
   mutation: MutationType,
 });
 `,
-        'workspaces/graphql/bin/build.sh': `#!/usr/bin/env sh
+    'workspaces/graphql/bin/build.sh': `#!/usr/bin/env sh
 
 set -e
 
@@ -565,7 +564,7 @@ cp $scriptdir/package.json $distdir/package.json
 npm pkg delete "type" --prefix $distdir
 npm pkg delete "private" --prefix $distdir
 `,
-        'workspaces/graphql/bin/start.sh': `#!/usr/bin/env sh
+    'workspaces/graphql/bin/start.sh': `#!/usr/bin/env sh
 
 set -e
 
@@ -573,14 +572,14 @@ scriptdir="$PWD/workspaces/graphql";
 
 NODE_ENV=production LOG_LEVEL=info tsx $scriptdir/index.ts
 `,
-        'workspaces/graphql/doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
+    'workspaces/graphql/doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
 import ReadMe from './README.md?raw';
 
 <Meta title="Workspaces/Graphql" />
 
 <Markdown>{ReadMe}</Markdown>
 `,
-        'workspaces/graphql/index.test.ts': `import { describe, expect, it, jest } from '@jest/globals';
+    'workspaces/graphql/index.test.ts': `import { describe, expect, it, jest } from '@jest/globals';
 import type { APIGatewayProxyEvent } from '@vyriy/router';
 
 const apiMock = jest.fn((handler) => ({
@@ -670,20 +669,20 @@ describe('workspaces/graphql/index.ts', () => {
   });
 });
 `,
-        'workspaces/graphql/index.ts': `import { server } from '@vyriy/server';
+    'workspaces/graphql/index.ts': `import { server } from '@vyriy/server';
 import { api } from '@vyriy/handler';
 
 import { router } from '@p/graphql';
 
 server(api(async (event) => router.route(event)));
 `,
-        'workspaces/graphql/package.json': `{
+    'workspaces/graphql/package.json': `{
   "name": "@w/graphql",
   "type": "module",
   "private": true
 }
 `,
-        'workspaces/graphql/README.md': `# @w/graphql
+    'workspaces/graphql/README.md': `# @w/graphql
 
 GraphQL runtime workspace for the application.
 
@@ -726,7 +725,7 @@ The workspace entrypoint is \`index.ts\`. It wraps the shared router with \`api(
 server(api(async (event) => router.route(event)));
 \`\`\`
 `,
-        'workspaces/graphql/webpack.config.ts': `import { path } from '@vyriy/path';
+    'workspaces/graphql/webpack.config.ts': `import { path } from '@vyriy/path';
 import { ssr, external } from '@vyriy/webpack-config';
 
 export default ssr(
@@ -742,9 +741,4 @@ export default ssr(
   }),
 );
 `,
-    }),
-    ci: {
-        ...base.ci,
-    },
-    deploy: {},
-};
+});
