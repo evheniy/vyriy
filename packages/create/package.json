@@ -1,0 +1,346 @@
+{
+  "name": "@vyriy/create",
+  "version": "0.5.3",
+  "description": "Vyriy project creation CLI.",
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "packageManager": "yarn@4.15.0",
+  "bin": "./bin/vyriy-create.js",
+  "dependencies": {
+    "@vyriy/check": "0.5.3"
+  },
+  "peerDependencies": {
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/jest": "^30.0.0",
+    "@types/react": "^19.2.16",
+    "@types/react-dom": "^19.2.3",
+    "cross-env": "^10.1.0",
+    "eslint": "^10.4.1",
+    "graphql": "^16.14.1",
+    "husky": "^9.1.7",
+    "jest": "^30.4.2",
+    "npm-run-all2": "^9.0.1",
+    "prettier": "^3.8.3",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "rimraf": "^6.1.3",
+    "sass": "^1.100.0",
+    "serve": "^14.2.6",
+    "storybook": "^10.4.2",
+    "stylelint": "^17.12.0",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3",
+    "webpack": "^5.107.2",
+    "webpack-cli": "^7.0.3"
+  },
+  "peerDependenciesMeta": {
+    "@testing-library/dom": {
+      "optional": true
+    },
+    "@testing-library/react": {
+      "optional": true
+    },
+    "@types/jest": {
+      "optional": true
+    },
+    "@types/react": {
+      "optional": true
+    },
+    "@types/react-dom": {
+      "optional": true
+    },
+    "cross-env": {
+      "optional": true
+    },
+    "eslint": {
+      "optional": true
+    },
+    "graphql": {
+      "optional": true
+    },
+    "husky": {
+      "optional": true
+    },
+    "jest": {
+      "optional": true
+    },
+    "npm-run-all2": {
+      "optional": true
+    },
+    "prettier": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    },
+    "rimraf": {
+      "optional": true
+    },
+    "sass": {
+      "optional": true
+    },
+    "serve": {
+      "optional": true
+    },
+    "storybook": {
+      "optional": true
+    },
+    "stylelint": {
+      "optional": true
+    },
+    "tsx": {
+      "optional": true
+    },
+    "typescript": {
+      "optional": true
+    },
+    "webpack": {
+      "optional": true
+    },
+    "webpack-cli": {
+      "optional": true
+    }
+  },
+  "agents": "./AGENTS.md",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/create"
+  },
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./create": {
+      "types": "./create.d.ts",
+      "import": "./create.js",
+      "default": "./create.js"
+    },
+    "./create.js": {
+      "types": "./create.d.ts",
+      "import": "./create.js",
+      "default": "./create.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./plan/index": {
+      "types": "./plan/index.d.ts",
+      "import": "./plan/index.js",
+      "default": "./plan/index.js"
+    },
+    "./plan/index.js": {
+      "types": "./plan/index.d.ts",
+      "import": "./plan/index.js",
+      "default": "./plan/index.js"
+    },
+    "./plan/plan": {
+      "types": "./plan/plan.d.ts",
+      "import": "./plan/plan.js",
+      "default": "./plan/plan.js"
+    },
+    "./plan/plan.js": {
+      "types": "./plan/plan.d.ts",
+      "import": "./plan/plan.js",
+      "default": "./plan/plan.js"
+    },
+    "./plan/question": {
+      "types": "./plan/question.d.ts",
+      "import": "./plan/question.js",
+      "default": "./plan/question.js"
+    },
+    "./plan/question.js": {
+      "types": "./plan/question.d.ts",
+      "import": "./plan/question.js",
+      "default": "./plan/question.js"
+    },
+    "./preset/api": {
+      "types": "./preset/api.d.ts",
+      "import": "./preset/api.js",
+      "default": "./preset/api.js"
+    },
+    "./preset/api.js": {
+      "types": "./preset/api.d.ts",
+      "import": "./preset/api.js",
+      "default": "./preset/api.js"
+    },
+    "./preset/base": {
+      "types": "./preset/base.d.ts",
+      "import": "./preset/base.js",
+      "default": "./preset/base.js"
+    },
+    "./preset/base.js": {
+      "types": "./preset/base.d.ts",
+      "import": "./preset/base.js",
+      "default": "./preset/base.js"
+    },
+    "./preset/fullstack": {
+      "types": "./preset/fullstack.d.ts",
+      "import": "./preset/fullstack.js",
+      "default": "./preset/fullstack.js"
+    },
+    "./preset/fullstack.js": {
+      "types": "./preset/fullstack.d.ts",
+      "import": "./preset/fullstack.js",
+      "default": "./preset/fullstack.js"
+    },
+    "./preset/gql": {
+      "types": "./preset/gql.d.ts",
+      "import": "./preset/gql.js",
+      "default": "./preset/gql.js"
+    },
+    "./preset/gql.js": {
+      "types": "./preset/gql.d.ts",
+      "import": "./preset/gql.js",
+      "default": "./preset/gql.js"
+    },
+    "./preset/index": {
+      "types": "./preset/index.d.ts",
+      "import": "./preset/index.js",
+      "default": "./preset/index.js"
+    },
+    "./preset/index.js": {
+      "types": "./preset/index.d.ts",
+      "import": "./preset/index.js",
+      "default": "./preset/index.js"
+    },
+    "./preset/library": {
+      "types": "./preset/library.d.ts",
+      "import": "./preset/library.js",
+      "default": "./preset/library.js"
+    },
+    "./preset/library.js": {
+      "types": "./preset/library.d.ts",
+      "import": "./preset/library.js",
+      "default": "./preset/library.js"
+    },
+    "./preset/mfe": {
+      "types": "./preset/mfe.d.ts",
+      "import": "./preset/mfe.js",
+      "default": "./preset/mfe.js"
+    },
+    "./preset/mfe.js": {
+      "types": "./preset/mfe.d.ts",
+      "import": "./preset/mfe.js",
+      "default": "./preset/mfe.js"
+    },
+    "./preset/rest": {
+      "types": "./preset/rest.d.ts",
+      "import": "./preset/rest.js",
+      "default": "./preset/rest.js"
+    },
+    "./preset/rest.js": {
+      "types": "./preset/rest.d.ts",
+      "import": "./preset/rest.js",
+      "default": "./preset/rest.js"
+    },
+    "./preset/spa": {
+      "types": "./preset/spa.d.ts",
+      "import": "./preset/spa.js",
+      "default": "./preset/spa.js"
+    },
+    "./preset/spa.js": {
+      "types": "./preset/spa.d.ts",
+      "import": "./preset/spa.js",
+      "default": "./preset/spa.js"
+    },
+    "./preset/ssg": {
+      "types": "./preset/ssg.d.ts",
+      "import": "./preset/ssg.js",
+      "default": "./preset/ssg.js"
+    },
+    "./preset/ssg.js": {
+      "types": "./preset/ssg.d.ts",
+      "import": "./preset/ssg.js",
+      "default": "./preset/ssg.js"
+    },
+    "./preset/ssr": {
+      "types": "./preset/ssr.d.ts",
+      "import": "./preset/ssr.js",
+      "default": "./preset/ssr.js"
+    },
+    "./preset/ssr.js": {
+      "types": "./preset/ssr.d.ts",
+      "import": "./preset/ssr.js",
+      "default": "./preset/ssr.js"
+    },
+    "./prompt/conflict-strategy": {
+      "types": "./prompt/conflict-strategy.d.ts",
+      "import": "./prompt/conflict-strategy.js",
+      "default": "./prompt/conflict-strategy.js"
+    },
+    "./prompt/conflict-strategy.js": {
+      "types": "./prompt/conflict-strategy.d.ts",
+      "import": "./prompt/conflict-strategy.js",
+      "default": "./prompt/conflict-strategy.js"
+    },
+    "./prompt/index": {
+      "types": "./prompt/index.d.ts",
+      "import": "./prompt/index.js",
+      "default": "./prompt/index.js"
+    },
+    "./prompt/index.js": {
+      "types": "./prompt/index.d.ts",
+      "import": "./prompt/index.js",
+      "default": "./prompt/index.js"
+    },
+    "./prompt/preset": {
+      "types": "./prompt/preset.d.ts",
+      "import": "./prompt/preset.js",
+      "default": "./prompt/preset.js"
+    },
+    "./prompt/preset.js": {
+      "types": "./prompt/preset.d.ts",
+      "import": "./prompt/preset.js",
+      "default": "./prompt/preset.js"
+    },
+    "./prompt/prompt": {
+      "types": "./prompt/prompt.d.ts",
+      "import": "./prompt/prompt.js",
+      "default": "./prompt/prompt.js"
+    },
+    "./prompt/prompt.js": {
+      "types": "./prompt/prompt.d.ts",
+      "import": "./prompt/prompt.js",
+      "default": "./prompt/prompt.js"
+    },
+    "./prompt/resolve-option": {
+      "types": "./prompt/resolve-option.d.ts",
+      "import": "./prompt/resolve-option.js",
+      "default": "./prompt/resolve-option.js"
+    },
+    "./prompt/resolve-option.js": {
+      "types": "./prompt/resolve-option.d.ts",
+      "import": "./prompt/resolve-option.js",
+      "default": "./prompt/resolve-option.js"
+    },
+    "./prompt/scope": {
+      "types": "./prompt/scope.d.ts",
+      "import": "./prompt/scope.js",
+      "default": "./prompt/scope.js"
+    },
+    "./prompt/scope.js": {
+      "types": "./prompt/scope.d.ts",
+      "import": "./prompt/scope.js",
+      "default": "./prompt/scope.js"
+    }
+  }
+}

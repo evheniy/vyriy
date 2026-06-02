@@ -25,22 +25,18 @@ yarn global add vyriy
 ## Usage
 
 ```bash
-vyriy [name]           Create a new Vyriy project
-vyriy .                Initialise a new Vyriy project in the current directory
+vyriy create [name]    Create a new Vyriy project
+vyriy create .         Initialise a new Vyriy project in the current directory
+vyriy dist             Prepare dist package metadata without publishing to npm
+vyriy static [dir]     Serve a static directory (defaults to dist)
+vyriy check            Check local environment (Node.js and Yarn versions)
 vyriy --help, -h       Show help
 vyriy --version, -v    Show version
-vyriy --check-env, -c  Check local environment (Node.js and Yarn versions)
-vyriy --dist, -d       Prepare dist package metadata without publishing to npm
-vyriy --dry-run        Print the merged file plan without writing project files
-vyriy --overwrite      Overwrite existing generated paths
-vyriy --skip-existing  Leave existing generated paths untouched
-vyriy --no-install     Create files without installing dependencies
-vyriy --no-verify      Install dependencies without running checks
 ```
 
 ## Commands
 
-### `create` (default)
+### `create`
 
 The interactive wizard collects project details and writes the scaffold:
 
@@ -60,12 +56,22 @@ When generated paths already exist, use `--overwrite` or `--skip-existing` to
 avoid the interactive conflict prompt. Without either flag, `vyriy` asks whether
 to overwrite existing files, skip them, or abort.
 
-### `--check-env`
+Create options:
+
+```bash
+vyriy create --dry-run        Print the merged file plan without writing project files
+vyriy create --overwrite      Overwrite existing generated paths
+vyriy create --skip-existing  Leave existing generated paths untouched
+vyriy create --no-install     Create files without installing dependencies
+vyriy create --no-verify      Install dependencies without running checks
+```
+
+### `check`
 
 Validates Node.js and Yarn versions against the engine requirements declared in
 `package.json`.
 
-### `--dist`
+### `dist`
 
 Prepares every package inside the `dist/` directory for npm publishing:
 
@@ -73,6 +79,11 @@ Prepares every package inside the `dist/` directory for npm publishing:
 - Builds the `exports` map from compiled JS files
 - Copies README, LICENSE, and AGENTS.md
 - Makes bin files executable
+
+### `static`
+
+Starts the static server command. The implementation is currently a placeholder
+while `@vyriy/static` grows the reusable server helpers.
 
 ## Presets
 

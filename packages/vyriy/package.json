@@ -1,6 +1,6 @@
 {
   "name": "vyriy",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Interactive project master for calm cloud-ready applications.",
   "type": "module",
   "bin": "./bin/vyriy.js",
@@ -8,25 +8,31 @@
     "node": ">=24.0.0"
   },
   "packageManager": "yarn@4.15.0",
+  "dependencies": {
+    "@vyriy/check": "0.5.3",
+    "@vyriy/create": "0.5.3",
+    "@vyriy/dist": "0.5.3",
+    "@vyriy/static": "0.5.3"
+  },
   "peerDependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.2",
     "@types/jest": "^30.0.0",
-    "@types/react": "^19.2.15",
+    "@types/react": "^19.2.16",
     "@types/react-dom": "^19.2.3",
     "cross-env": "^10.1.0",
     "eslint": "^10.4.1",
-    "graphql": "^16.14.0",
+    "graphql": "^16.14.1",
     "husky": "^9.1.7",
     "jest": "^30.4.2",
     "npm-run-all2": "^9.0.1",
     "prettier": "^3.8.3",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
     "rimraf": "^6.1.3",
     "sass": "^1.100.0",
     "serve": "^14.2.6",
-    "storybook": "^10.4.1",
+    "storybook": "^10.4.2",
     "stylelint": "^17.12.0",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3",
@@ -110,5 +116,44 @@
     "type": "git",
     "url": "https://github.com/evheniy/vyriy",
     "directory": "packages/vyriy"
+  },
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./args": {
+      "types": "./args.d.ts",
+      "import": "./args.js",
+      "default": "./args.js"
+    },
+    "./args.js": {
+      "types": "./args.d.ts",
+      "import": "./args.js",
+      "default": "./args.js"
+    },
+    "./cli": {
+      "types": "./cli.d.ts",
+      "import": "./cli.js",
+      "default": "./cli.js"
+    },
+    "./cli.js": {
+      "types": "./cli.d.ts",
+      "import": "./cli.js",
+      "default": "./cli.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    }
   }
 }

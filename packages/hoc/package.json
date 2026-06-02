@@ -1,11 +1,11 @@
 {
   "name": "@vyriy/hoc",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "React higher-order component utilities for Vyriy projects",
   "type": "module",
   "dependencies": {
-    "@types/react": "^19.2.15",
-    "react": "^19.2.6"
+    "@types/react": "^19.2.16",
+    "react": "^19.2.7"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",

@@ -7,6 +7,6 @@ export type DocsThemes = {
     readonly dark: ThemeVars;
     readonly light: ThemeVars;
 };
-export declare const createThemedDocsContainer: (docsThemes: DocsThemes) => ({ children, context }: PropsWithChildren<DocsContainerProps>) => import("react/jsx-runtime").JSX.Element;
+export declare const createThemedDocsContainer: (docsThemes: DocsThemes) => ({ children, context }: PropsWithChildren<DocsContainerProps>) => import("react").JSX.Element;
 declare const preview: ReactWebpackPreview;
 export default preview;

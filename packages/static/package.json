@@ -1,0 +1,88 @@
+{
+  "name": "@vyriy/static",
+  "version": "0.5.3",
+  "description": "Static file and SPA serving helpers for Vyriy servers.",
+  "type": "module",
+  "bin": "./bin/vyriy-static.js",
+  "dependencies": {
+    "@vyriy/handler": "0.5.3",
+    "@vyriy/router": "0.5.3",
+    "@vyriy/server": "0.5.3"
+  },
+  "agents": "./AGENTS.md",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/static"
+  },
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./server": {
+      "types": "./server.d.ts",
+      "import": "./server.js",
+      "default": "./server.js"
+    },
+    "./server.js": {
+      "types": "./server.d.ts",
+      "import": "./server.js",
+      "default": "./server.js"
+    },
+    "./use-spa": {
+      "types": "./use-spa.d.ts",
+      "import": "./use-spa.js",
+      "default": "./use-spa.js"
+    },
+    "./use-spa.js": {
+      "types": "./use-spa.d.ts",
+      "import": "./use-spa.js",
+      "default": "./use-spa.js"
+    },
+    "./use-static": {
+      "types": "./use-static.d.ts",
+      "import": "./use-static.js",
+      "default": "./use-static.js"
+    },
+    "./use-static.js": {
+      "types": "./use-static.d.ts",
+      "import": "./use-static.js",
+      "default": "./use-static.js"
+    },
+    "./with-spa": {
+      "types": "./with-spa.d.ts",
+      "import": "./with-spa.js",
+      "default": "./with-spa.js"
+    },
+    "./with-spa.js": {
+      "types": "./with-spa.d.ts",
+      "import": "./with-spa.js",
+      "default": "./with-spa.js"
+    },
+    "./with-static": {
+      "types": "./with-static.d.ts",
+      "import": "./with-static.js",
+      "default": "./with-static.js"
+    },
+    "./with-static.js": {
+      "types": "./with-static.d.ts",
+      "import": "./with-static.js",
+      "default": "./with-static.js"
+    }
+  }
+}
