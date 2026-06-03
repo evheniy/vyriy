@@ -18,6 +18,8 @@ vyriy-create app --dry-run
 vyriy-create . --overwrite
 vyriy-create app --no-install
 vyriy-create app --no-verify
+vyriy-create --help
+vyriy-create --version
 ```
 
 ## API
@@ -28,10 +30,10 @@ Install as a project dependency:
 npm install @vyriy/create
 ```
 
-Use the creator from code:
+Use the creator and CLI helpers from code:
 
 ```ts
-import { create } from '@vyriy/create';
+import { create, runCreateCli } from '@vyriy/create';
 
 const code = await create({
   directory: 'app',
@@ -41,6 +43,8 @@ const code = await create({
   install: true,
   verify: true,
 });
+
+await runCreateCli(['app', '--dry-run']);
 ```
 
 `create(options)` creates a Vyriy project from the configured starter options and returns a process-style exit code.

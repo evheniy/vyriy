@@ -14,6 +14,8 @@ Check the local project environment:
 
 ```bash
 vyriy-check
+vyriy-check --help
+vyriy-check --version
 ```
 
 ## API
@@ -24,12 +26,14 @@ Install as a project dependency:
 npm install @vyriy/check
 ```
 
-Run the environment check from code:
+Run the environment check and CLI helper from code:
 
 ```ts
-import { checkEnv } from '@vyriy/check';
+import { checkEnv, runCheckCli } from '@vyriy/check';
 
 const code = await checkEnv();
+
+await runCheckCli(['--help']);
 ```
 
 `checkEnv()` checks the local Node.js, Corepack, and Yarn environment and returns a process-style exit code.

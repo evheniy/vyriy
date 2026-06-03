@@ -6,7 +6,7 @@ Usage:
   vyriy create [name]    Create a new Vyriy project
   vyriy create .         Initialize a new Vyriy project in the current directory
   vyriy dist             Prepare dist package metadata without publishing to npm
-  vyriy static [dir]     Serve a static directory (defaults to dist)
+  vyriy static [dir]     Serve a static directory (defaults to .)
   vyriy check            Check local environment
   vyriy --help, -h       Show help
   vyriy --version, -v    Show version
@@ -25,6 +25,7 @@ Examples:
   vyriy create . --no-verify
   vyriy dist
   vyriy static
+  vyriy static --port 3000 dist
   vyriy static dist
   vyriy check`;
 export const cli = async (args = []) => {
@@ -39,23 +40,23 @@ export const cli = async (args = []) => {
             process.exitCode = 0;
             break;
         case 'dist': {
-            const { dist } = await import('@vyriy/dist');
-            process.exitCode = await dist();
+            const { runDistCli } = await import('@vyriy/dist');
+            await runDistCli(command.args, 'vyriy dist', false);
             break;
         }
         case 'check': {
-            const { checkEnv } = await import('@vyriy/check');
-            process.exitCode = await checkEnv();
+            const { runCheckCli } = await import('@vyriy/check');
+            await runCheckCli(command.args, 'vyriy check', false);
             break;
         }
         case 'static': {
-            const { staticServer } = await import('@vyriy/static');
-            process.exitCode = await staticServer(command);
+            const { runStaticCli } = await import('@vyriy/static');
+            await runStaticCli(command.args, 'vyriy static', false);
             break;
         }
         case 'create': {
-            const { create } = await import('@vyriy/create');
-            process.exitCode = await create(command);
+            const { runCreateCli } = await import('@vyriy/create');
+            await runCreateCli(command.args, 'vyriy create', false);
             break;
         }
         default:

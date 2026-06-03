@@ -28,7 +28,7 @@ yarn global add vyriy
 vyriy create [name]    Create a new Vyriy project
 vyriy create .         Initialise a new Vyriy project in the current directory
 vyriy dist             Prepare dist package metadata without publishing to npm
-vyriy static [dir]     Serve a static directory (defaults to dist)
+vyriy static [dir]     Serve a static directory (defaults to .)
 vyriy check            Check local environment (Node.js and Yarn versions)
 vyriy --help, -h       Show help
 vyriy --version, -v    Show version
@@ -71,6 +71,12 @@ vyriy create --no-verify      Install dependencies without running checks
 Validates Node.js and Yarn versions against the engine requirements declared in
 `package.json`.
 
+```bash
+vyriy check
+vyriy check --help
+vyriy check --version
+```
+
 ### `dist`
 
 Prepares every package inside the `dist/` directory for npm publishing:
@@ -80,43 +86,44 @@ Prepares every package inside the `dist/` directory for npm publishing:
 - Copies README, LICENSE, and AGENTS.md
 - Makes bin files executable
 
+```bash
+vyriy dist
+vyriy dist --help
+vyriy dist --version
+```
+
 ### `static`
 
-Starts the static server command. The implementation is currently a placeholder
-while `@vyriy/static` grows the reusable server helpers.
+Starts the reusable `@vyriy/static` server command:
+
+```bash
+vyriy static
+vyriy static public
+vyriy static --port 3000 dist
+vyriy static --help
+vyriy static --version
+```
 
 ## Presets
 
 Registered presets:
 
-| Key       | Description                                       |
-| --------- | ------------------------------------------------- |
-| `base`    | Preset to create minimal monorepo with configs    |
-| `library` | Preset to create js/react library                 |
-| `api`     | Preset to create simple API                       |
-| `ssr`     | Preset to create Server Side Rendering (SSR) API  |
-| `ssg`     | Preset to create Static site generation (SSG)     |
-| `spa`     | Preset to create Single-page application (SPA)    |
-| `rest`    | Preset to create simple REST API                  |
-| `gql`     | Preset to create GraphQL API                      |
-| `mfe`     | Preset to create Micro-frontend (MFE) application |
+| Key         | Description                                       |
+| ----------- | ------------------------------------------------- |
+| `base`      | Preset to create minimal monorepo with configs    |
+| `library`   | Preset to create js/react library                 |
+| `api`       | Preset to create simple API                       |
+| `ssr`       | Preset to create Server Side Rendering (SSR) API  |
+| `ssg`       | Preset to create Static site generation (SSG)     |
+| `spa`       | Preset to create Single-page application (SPA)    |
+| `rest`      | Preset to create simple REST API                  |
+| `gql`       | Preset to create GraphQL API                      |
+| `mfe`       | Preset to create Micro-frontend (MFE) application |
+| `fullstack` | Preset to create Fullstack React app with SSR     |
 
 Registered presets are selectable by the wizard. In-progress presets exist as
 source modules and are expected to become selectable as their generated project
 shape is finalized.
-
-## Providers
-
-Provider selections add files to the generated project.
-
-| Preset    | CI/CD providers    | Deploy providers |
-| --------- | ------------------ | ---------------- |
-| `base`    | `gitlab`, `github` | none             |
-| `library` | `gitlab`, `github` | none             |
-| `api`     | `gitlab`, `github` | none             |
-| `ssr`     | `gitlab`, `github` | none             |
-| `ssg`     | `gitlab`, `github` | none             |
-| `spa`     | `gitlab`, `github` | none             |
 
 ## API
 

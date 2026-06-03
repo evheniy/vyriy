@@ -1,4 +1,10 @@
 export type Command = () => Promise<number>;
+export type CheckBinCommand = {
+    readonly type: 'check' | 'help' | 'version';
+};
+export type ParseCheckBinArgs = (args: readonly string[]) => CheckBinCommand;
+export type CheckHelpText = (command?: string, alias?: false | string) => string;
+export type RunCheckCli = (args?: readonly string[], command?: string, alias?: false | string) => Promise<void>;
 export type EnvironmentCheckResult = {
     readonly ok: boolean;
     readonly message: string;

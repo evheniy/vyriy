@@ -14,6 +14,8 @@ Prepare compiled workspace packages for distribution:
 
 ```bash
 vyriy-dist
+vyriy-dist --help
+vyriy-dist --version
 ```
 
 ## API
@@ -24,12 +26,14 @@ Install as a project dependency:
 npm install @vyriy/dist
 ```
 
-Run distribution preparation from code:
+Run distribution preparation and CLI helper from code:
 
 ```ts
-import { dist } from '@vyriy/dist';
+import { dist, runDistCli } from '@vyriy/dist';
 
 const code = await dist();
+
+await runDistCli(['--help']);
 ```
 
 `dist()` copies root package metadata, prepares each `dist/<package>/package.json`, creates export maps, removes empty generated JavaScript files, and returns a process-style exit code.

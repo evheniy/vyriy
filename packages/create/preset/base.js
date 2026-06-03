@@ -53,11 +53,118 @@ export const base = ({ name, description }) => ({
             'cross-env': packageJson.peerDependencies['cross-env'],
         },
     }, null, 2) + '\n',
-    'README.md': `# ${name}\n\n${description}\n`,
+    'README.md': `# Base
+
+Base is a minimal project preset for starting new applications, packages, or workspaces with a calm shared foundation already in place.
+
+The repository intentionally contains configuration and workflow glue instead of product code. Its main entry point is Storybook: it works as both living documentation and a playground for future components, UI states, examples, and integration notes.
+
+## Why Storybook
+
+Storybook is configured from the start so the project has a visible documentation surface before any application-specific structure exists.
+
+Use it to:
+
+- document project decisions and package APIs with MDX;
+- develop and review future components in isolation;
+- capture component states, variants, and edge cases as stories;
+- build a static documentation site that can be shared or deployed;
+- keep README-driven documentation visible inside the same developer UI.
+
+The root \`doc.mdx\` renders this README in Storybook, so the project overview is available both in the repository and in the local documentation playground.
+
+## Included Foundation
+
+- TypeScript configuration from \`@vyriy/typescript-config\`.
+- ESLint configuration from \`@vyriy/eslint-config\`.
+- Prettier configuration from \`@vyriy/prettier-config\`.
+- Jest configuration from \`@vyriy/jest-config\`.
+- Storybook configuration from \`@vyriy/storybook-config\`.
+- Husky hooks for dependency refresh after branch changes or merges and quality checks before commit or push.
+
+## Requirements
+
+- Node.js \`>=24.0.0\`.
+- Yarn \`4.16.0\`.
+
+## Install
+
+\`\`\`bash
+yarn
+\`\`\`
+
+## Commands
+
+\`\`\`bash
+yarn storybook
+\`\`\`
+
+Starts the local Storybook playground on port \`6006\`.
+
+\`\`\`bash
+yarn build
+\`\`\`
+
+Builds the static Storybook output.
+
+\`\`\`bash
+yarn check
+\`\`\`
+
+Runs the full project validation pipeline: \`lint\`, \`build\`, and \`test\`.
+
+\`\`\`bash
+yarn fix
+\`\`\`
+
+Formats the project and applies available ESLint fixes.
+
+\`\`\`bash
+yarn lint
+\`\`\`
+
+Checks TypeScript, formatting, and ESLint rules.
+
+\`\`\`bash
+yarn test
+\`\`\`
+
+Runs Jest. The command is allowed to pass in an empty preset before tests are added.
+
+## Structure
+
+\`\`\`text
+.
+├── .storybook/
+│   ├── main.ts
+│   └── preview.tsx
+├── .husky/
+├── doc.mdx
+├── eslint.config.ts
+├── jest.config.ts
+├── prettier.config.ts
+├── tsconfig.json
+└── package.json
+\`\`\`
+
+## Adding Project Code
+
+Add source code where it fits the final project shape, for example under \`packages/*\` or \`workspaces/*\`. These paths are already included in \`tsconfig.json\`.
+
+When adding public components or package APIs, add matching stories or MDX documentation so Storybook remains the first place to inspect behavior, examples, and supported states.
+
+## Project Guidance
+
+These articles describe the development approach behind this preset and provide practical guidance for evolving a project on top of it:
+
+- [Calm Development Environment: Node.js, Corepack, Yarn and Static Preview](https://vyriy.dev/blog/calm-development-setup/) - how to keep the local development environment predictable and easy to reproduce.
+- [Calm Component Structure](https://vyriy.dev/blog/calm-component-structure/) - how to organize component code, tests, stories, and public exports.
+- [Storybook as Project Documentation](https://vyriy.dev/blog/storybook-as-project-documentation/) - how to use Storybook as living project documentation and a component playground.
+`,
     'doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
 import ReadMe from './README.md?raw';
 
-<Meta title="${name}" />
+<Meta title="Base" />
 
 <Markdown>{ReadMe}</Markdown>
 `,

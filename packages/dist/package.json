@@ -1,12 +1,15 @@
 {
   "name": "@vyriy/dist",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Vyriy distribution build CLI.",
   "type": "module",
   "engines": {
     "node": ">=24.0.0"
   },
-  "bin": "./bin/vyriy-dist.js",
+  "bin": {
+    "vd": "./bin/index.js",
+    "vyriy-dist": "./bin/index.js"
+  },
   "agents": "./AGENTS.md",
   "license": "MIT",
   "repository": {
@@ -51,6 +54,16 @@
       "types": "./cleanup.d.ts",
       "import": "./cleanup.js",
       "default": "./cleanup.js"
+    },
+    "./cli": {
+      "types": "./cli.d.ts",
+      "import": "./cli.js",
+      "default": "./cli.js"
+    },
+    "./cli.js": {
+      "types": "./cli.d.ts",
+      "import": "./cli.js",
+      "default": "./cli.js"
     },
     "./constants": {
       "types": "./constants.d.ts",

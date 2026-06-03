@@ -1,16 +1,8 @@
 export type Command = {
-    readonly type: 'help' | 'version' | 'dist' | 'check';
+    readonly type: 'help' | 'version';
 } | {
-    readonly type: 'static';
-    readonly directory: string;
-} | {
-    readonly type: 'create';
-    readonly directory: string;
-    readonly dryRun: boolean;
-    readonly overwrite: boolean;
-    readonly skipExisting: boolean;
-    readonly install: boolean;
-    readonly verify: boolean;
+    readonly type: 'check' | 'create' | 'dist' | 'static';
+    readonly args: readonly string[];
 } | {
     readonly type: 'unknown';
     readonly command: string;

@@ -25,6 +25,8 @@ Run the installed command:
 create-vyriy app
 create-vyriy app --dry-run
 create-vyriy . --skip-existing
+create-vyriy --help
+create-vyriy --version
 ```
 
 ## API
