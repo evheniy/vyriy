@@ -29,7 +29,7 @@ export const createStaticHelpText = (command = 'vyriy-static', alias = 'vs') => 
     return `Vyriy Static Server
 
 Usage:
-  ${command} [directory]        Serve a static directory (defaults to .)
+  ${command} [directory]        Serve a static directory (defaults to dist when it exists)
   ${command} --port 3000 dist   Serve a directory on a specific port
 ${aliasText}\
   ${command} --help, -h         Show help
@@ -52,7 +52,7 @@ export const parseStaticBinArgs = (args) => {
     }
     return {
         type: 'serve',
-        directory: args.find((arg, index) => !arg.startsWith('-') && !isOptionValue(args, index)) ?? '.',
+        directory: args.find((arg, index) => !arg.startsWith('-') && !isOptionValue(args, index)),
         port: getOptionValue(args, '--port', '-p'),
     };
 };

@@ -5,10 +5,11 @@ export type StaticOptions = {
     readonly index?: string;
     readonly error?: string;
 };
+export type StaticMountOptions = StaticOptions | string;
 export type StaticHandler = Handler<ApiEvent, ApiResult>;
 export type StaticServer = (options?: StaticOptions) => Promise<number>;
 export type StaticRouterApi = Omit<RouterApi, 'delete' | 'fallback' | 'get' | 'patch' | 'post' | 'put'> & {
-    static(path: string): StaticRouterApi;
+    static(path: string, options?: StaticMountOptions): StaticRouterApi;
 } & {
     [Method in Extract<keyof RouterApi, 'delete' | 'fallback' | 'get' | 'patch' | 'post' | 'put'>]: (...args: Parameters<RouterApi[Method]>) => StaticRouterApi;
 };

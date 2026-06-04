@@ -7,6 +7,5 @@ export type PlanResult = {
     description: string;
     target: string;
     preset: string;
-    scope?: string;
 };
 export type Plan = (dirName: string, appPath: string) => Promise<PlanResult | undefined>;

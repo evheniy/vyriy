@@ -33,14 +33,14 @@ export const api = (options) => ({
             test: "run-s 'test:*'",
             'fix:prettier': 'prettier . --write',
             'fix:eslint': 'eslint . --fix',
+            'start:api': 'sh workspaces/api/bin/start.sh',
             'lint:ts': 'tsc',
             'lint:prettier': 'prettier . --check',
             'lint:eslint': 'eslint .',
+            'build:api': 'rimraf dist && sh workspaces/api/bin/build.sh',
             'build:storybook': 'cross-env STORYBOOK_DISABLE_TELEMETRY=1 storybook build --quiet --disable-telemetry',
             'test:jest': 'jest',
             postinstall: 'husky',
-            'start:api': 'sh workspaces/api/bin/start.sh',
-            'build:api': 'rimraf dist && sh workspaces/api/bin/build.sh',
         },
         dependencies: {
             '@vyriy/typescript-config': `^${packageJson.version}`,
@@ -65,11 +65,81 @@ export const api = (options) => ({
             '@vyriy/server': `^${packageJson.version}`,
         },
     }, null, 2) + '\n',
-    'README.md': `# ${options.name}\n\n${options.description}\n`,
+    'README.md': `# Api
+
+Calm cloud-ready application built as a Yarn workspace.
+
+The repository currently contains one runtime workspace:
+
+- \`workspaces/api\` - HTTP API entry point based on \`@vyriy/server\` and \`@vyriy/handler\`.
+
+## Requirements
+
+- Node.js \`>=24.0.0\`
+- Yarn \`4.16.0\`
+
+## Usage
+
+Install dependencies:
+
+\`\`\`bash
+yarn install
+\`\`\`
+
+Start the API:
+
+\`\`\`bash
+yarn start
+\`\`\`
+
+Build the API bundle:
+
+\`\`\`bash
+yarn build
+\`\`\`
+
+Run all project checks:
+
+\`\`\`bash
+yarn check
+\`\`\`
+
+## Scripts
+
+- \`yarn start\` - start all workspace services.
+- \`yarn start:api\` - run the API from \`workspaces/api/index.ts\`.
+- \`yarn build\` - build all project outputs.
+- \`yarn build:api\` - create the production API bundle in \`dist/api\`.
+- \`yarn test\` - run Jest tests.
+- \`yarn lint\` - run TypeScript, Prettier, and ESLint validation.
+- \`yarn storybook\` - start Storybook documentation.
+
+## Project Structure
+
+- \`workspaces/api\` - API source, tests, build script, and workspace README.
+- \`.storybook\` - Storybook configuration for MDX documentation and stories.
+- \`doc.mdx\` - root Storybook documentation page backed by this README.
+- \`dist\` - generated production output.
+
+## Development
+
+Keep public behavior documented in the relevant workspace README and covered by
+matching tests. For API changes, start with \`workspaces/api/index.ts\` and keep
+\`workspaces/api/index.test.ts\` aligned with the request/response contract.
+
+## Project Guidance
+
+These articles describe the development approach behind this preset and provide practical guidance for evolving a project on top of it:
+
+- [Calm Development Environment: Node.js, Corepack, Yarn and Static Preview](https://vyriy.dev/blog/calm-development-setup/) - how to keep the local development environment predictable and easy to reproduce.
+- [Calm App Structure for the Vyriy Ecosystem](https://vyriy.dev/blog/vyriy-calm-app-structure/) - a practical project structure for Vyriy applications: shared configs, small packages, thin workspaces, Storybook docs, tests, and deployable entry points.
+- [One Handler, Many Runtimes](https://vyriy.dev/examples/one-handler-many-runtimes/) - how @vyriy/handler, @vyriy/router, and @vyriy/server compose a calm Lambda-compatible API that can run locally, in Docker, Fargate-style HTTP runtimes, and AWS Lambda.
+- [Storybook as Project Documentation](https://vyriy.dev/blog/storybook-as-project-documentation/) - how to use Storybook as living project documentation and a component playground.
+`,
     'doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
 import ReadMe from './README.md?raw';
 
-<Meta title="${options.name}" />
+<Meta title="Api" />
 
 <Markdown>{ReadMe}</Markdown>
 `,
@@ -195,7 +265,50 @@ import ReadMe from './README.md?raw';
 
 <Markdown>{ReadMe}</Markdown>
 `,
-    'workspaces/api/README.md': `# ${options.name} API\n\n${options.description}\n`,
+    'workspaces/api/README.md': `# @w/api
+
+HTTP API workspace for the application.
+
+The current handler starts a \`@vyriy/server\` instance with an \`@vyriy/handler\`
+API adapter. For every request it returns a JSON response with the requested
+path:
+
+\`\`\`json
+{
+  "path": "/healthcheck"
+}
+\`\`\`
+
+## Usage
+
+Start the API from the repository root:
+
+\`\`\`bash
+yarn start:api
+\`\`\`
+
+Build the production bundle:
+
+\`\`\`bash
+yarn build:api
+\`\`\`
+
+The build writes a CommonJS bundle to \`dist/api/index.js\` and copies the
+workspace \`package.json\` into \`dist/api\`.
+
+## Development
+
+The API entry point is \`index.ts\`.
+
+Update the handler there when adding routes or changing response behavior, and
+keep \`index.test.ts\` aligned with the public behavior.
+
+Run the focused test suite with:
+
+\`\`\`bash
+yarn jest workspaces/api --runInBand --coverage=false
+\`\`\`
+`,
     'workspaces/api/webpack.config.ts': `import { path } from '@vyriy/path';
 import { ssr, external } from '@vyriy/webpack-config';
 

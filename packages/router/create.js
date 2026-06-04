@@ -22,6 +22,9 @@ export const createRouter = () => {
             router.fallback(handler);
             return api;
         },
+        handle() {
+            return (event) => api.route(event);
+        },
         patch(path, handler) {
             router.on('PATCH', path, handler);
             return api;
@@ -54,6 +57,9 @@ export const createStreamRouter = () => {
         fallback(handler) {
             router.fallback(handler);
             return api;
+        },
+        handle() {
+            return (event, responseStream) => api.route(event, responseStream);
         },
         patch(path, handler) {
             router.on('PATCH', path, handler);

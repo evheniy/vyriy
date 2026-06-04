@@ -1,10 +1,10 @@
 {
   "name": "@vyriy/timeout",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "Timeout utility for Vyriy projects",
   "type": "module",
   "dependencies": {
-    "@vyriy/pause": "0.5.4"
+    "@vyriy/pause": "0.5.5"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",

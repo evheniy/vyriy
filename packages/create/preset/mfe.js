@@ -21,7 +21,52 @@ const projectFiles = {
     'packages/api/package.json': '{\n  "name": "@p/api",\n  "type": "module",\n  "private": true\n}\n',
     'packages/api/prerender.test.tsx': "import { afterEach, describe, expect, it } from '@jest/globals';\n\nimport { prerender } from './prerender.js';\n\ndescribe('prerender', () => {\n  afterEach(() => {\n    delete process.env.MODE;\n    delete process.env.TAG;\n    delete process.env.UI;\n  });\n\n  it('renders profile card props as custom element attributes', () => {\n    process.env.MODE = 'open';\n    process.env.TAG = 'vyriy-profile-card';\n    process.env.UI = 'http://localhost:3002';\n\n    expect(\n      prerender({\n        avatarUrl: 'https://example.com/avatar.png',\n        description: 'A \"quoted\" <description>',\n        name: 'Name',\n        tags: ['one', 'two'],\n        title: 'Title',\n      }),\n    ).toContain(\n      '<vyriy-profile-card name=\"Name\" title=\"Title\" description=\"A &quot;quoted&quot; &lt;description&gt;\" avatarUrl=\"https://example.com/avatar.png\" tags=\"[&quot;one&quot;,&quot;two&quot;]\" rendered>',\n    );\n    expect(\n      prerender({\n        name: 'Name',\n      }),\n    ).toContain('<div data-vyriy-root>');\n  });\n\n  it('removes React generated resource hints from the hydration root', () => {\n    process.env.MODE = 'open';\n    process.env.TAG = 'vyriy-profile-card';\n    process.env.UI = 'http://localhost:3002';\n\n    expect(\n      prerender({\n        avatarUrl: 'https://example.com/avatar.png',\n        name: 'Name',\n      }),\n    ).not.toContain('rel=\"preload\"');\n  });\n});\n",
     'packages/api/prerender.tsx': "import { html } from '@vyriy/render';\n\nimport { ProfileCard } from '@p/components/profile-card';\n\nimport { getTag, getMode, getUi } from '@p/env';\n\nimport type { Prerender } from './types.js';\n\ntype AttributeValue = string | string[] | undefined;\n\nconst escapeAttribute = (value: string): string => {\n  return value.replaceAll('&', '&amp;').replaceAll('\"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');\n};\n\nconst getAttributeValue = (value: AttributeValue): string | undefined => {\n  if (value === undefined) {\n    return undefined;\n  }\n\n  return Array.isArray(value) ? JSON.stringify(value) : value;\n};\n\nconst getAttribute = (name: string, value: AttributeValue): string => {\n  const attributeValue = getAttributeValue(value);\n\n  if (attributeValue === undefined) {\n    return '';\n  }\n\n  return ` ${name}=\"${escapeAttribute(attributeValue)}\"`;\n};\n\nconst getProfileCardAttributes = (props: Parameters<Prerender>[0]): string => {\n  return [\n    getAttribute('name', props.name),\n    getAttribute('title', props.title),\n    getAttribute('description', props.description),\n    getAttribute('avatarUrl', props.avatarUrl),\n    getAttribute('tags', props.tags),\n  ].join('');\n};\n\nconst removeReactResourceHints = (value: string): string => {\n  return value.replaceAll(/<link\\b(?=[^>]*\\brel=\"preload\")[^>]*>/g, '');\n};\n\n/** Renders a profile card custom element with declarative shadow DOM for hydration. */\nexport const prerender: Prerender = (props) => {\n  const tag = getTag();\n  const mode = getMode();\n  const body = removeReactResourceHints(html(<ProfileCard {...props} />));\n\n  return [\n    `<${tag}${getProfileCardAttributes(props)} rendered>`,\n    `<template shadowrootmode=\"${mode}\">`,\n    `<link rel=\"stylesheet\" href=\"${getUi()}/main.css\" />`,\n    `<div data-vyriy-root>${body}</div>`,\n    `</template>`,\n    `</${tag}>`,\n  ].join('');\n};\n",
-    'packages/api/README.md': "# @p/api\n\nServer-side document builders for the profile-card microfrontend.\n\n## Exports\n\n- `demo()` returns a standalone HTML demo document.\n- `prerender(props)` returns SSR custom element markup with declarative shadow DOM.\n- `semantic(props)` returns Schema.org Person JSON-LD.\n- `manifest()` returns the OpenMFE manifest YAML.\n\n## Example\n\n```ts\nimport { prerender } from '@p/api';\n\nconst html = prerender({\n  name: 'Ada Lovelace',\n  title: 'Mathematician',\n});\n```\n",
+    'packages/api/README.md': `# API
+
+Server-side document builders for the profile-card microfrontend.
+
+## Exports
+
+- \`demo()\` returns a standalone HTML demo document.
+- \`prerender(props)\` returns SSR custom element markup with declarative shadow DOM.
+- \`semantic(props)\` returns Schema.org Person JSON-LD.
+- \`manifest()\` returns the OpenMFE manifest YAML.
+- \`Demo\`, \`Prerender\`, \`Semantic\`, and \`Manifest\` describe the public builder signatures.
+
+## Props
+
+The renderers accept the shared profile-card data model from \`@p/components\`:
+
+- \`name\` is required.
+- \`title\`, \`description\`, \`avatarUrl\`, and \`tags\` are optional.
+
+\`prerender(props)\` serializes those values onto the configured custom element tag and includes the UI stylesheet inside the declarative shadow root.
+
+## Environment
+
+The builders read required runtime configuration through \`@p/env\`:
+
+- \`TAG\` custom element tag name.
+- \`MODE\` shadow root mode.
+- \`API\` API origin used in the manifest.
+- \`CDN\` static asset origin used in the manifest.
+- \`UI\` UI asset origin used by demo and prerender output.
+
+## Example
+
+\`\`\`ts
+import { prerender, semantic } from '@p/api';
+
+const props = {
+  name: 'Ada Lovelace',
+  title: 'Mathematician',
+  tags: ['math', 'computing'],
+};
+
+const html = prerender(props);
+const jsonLd = semantic(props);
+\`\`\`
+`,
     'packages/api/semantic.test.ts': "import { describe, expect, it } from '@jest/globals';\n\nimport { semantic } from './semantic.js';\n\ndescribe('semantic', () => {\n  it('serializes profile-card props as Schema.org JSON-LD', () => {\n    expect(\n      JSON.parse(\n        semantic({\n          avatarUrl: 'https://example.com/avatar.png',\n          name: 'Ada Lovelace',\n          title: 'Mathematician',\n        }),\n      ),\n    ).toEqual({\n      '@context': 'https://schema.org',\n      '@type': 'Person',\n      image: 'https://example.com/avatar.png',\n      jobTitle: 'Mathematician',\n      name: 'Ada Lovelace',\n    });\n  });\n});\n",
     'packages/api/semantic.ts': "import type { Semantic } from './types.js';\n\n/** Serializes profile-card props as Schema.org Person JSON-LD. */\nexport const semantic: Semantic = (params) =>\n  JSON.stringify({\n    '@context': 'https://schema.org',\n    '@type': 'Person',\n    name: params.name,\n    jobTitle: params.title,\n    image: params.avatarUrl,\n  });\n",
     'packages/api/types.ts': "import type { ProfileCard } from '@p/components/profile-card/types.js';\n\n/** Builds the standalone HTML demo document. */\nexport type Demo = () => string;\n\n/** Builds server-rendered custom element markup from profile-card props. */\nexport type Prerender = (props: ProfileCard) => string;\n\n/** Builds semantic JSON-LD from profile-card props. */\nexport type Semantic = (props: ProfileCard) => string;\n\n/** Builds the OpenMFE manifest YAML document. */\nexport type Manifest = () => string;\n",
@@ -31,7 +76,39 @@ const projectFiles = {
     'packages/env/index.test.ts': "import { afterEach, describe, expect, it } from '@jest/globals';\n\nimport * as publicApi from './index.js';\n\nconst ENV_NAMES = [\n  'TAG',\n  'MODE',\n  'API',\n  'CDN',\n  'UI',\n] as const;\n\nconst clearEnv = () => {\n  for (const name of ENV_NAMES) {\n    delete process.env[name];\n  }\n};\n\ndescribe('env public API', () => {\n  afterEach(() => {\n    clearEnv();\n  });\n\n  it('exports env getters', () => {\n    expect(publicApi.getTag).toBeDefined();\n    expect(publicApi.getMode).toBeDefined();\n    expect(publicApi.getApi).toBeDefined();\n    expect(publicApi.getCdn).toBeDefined();\n    expect(publicApi.getUi).toBeDefined();\n  });\n\n  it('reads environment variables by public getter name', () => {\n    process.env.TAG = 'vyriy-profile-card';\n    process.env.MODE = 'open';\n    process.env.API = 'http://localhost:3000';\n    process.env.CDN = 'http://localhost:3001';\n    process.env.UI = 'http://localhost:3002';\n\n    expect(publicApi.getTag()).toBe('vyriy-profile-card');\n    expect(publicApi.getMode()).toBe('open');\n    expect(publicApi.getApi()).toBe('http://localhost:3000');\n    expect(publicApi.getCdn()).toBe('http://localhost:3001');\n    expect(publicApi.getUi()).toBe('http://localhost:3002');\n  });\n\n  it('throws when a required environment variable is missing', () => {\n    clearEnv();\n\n    expect(() => publicApi.getApi()).toThrow('Environment variable API is not defined!');\n  });\n});\n",
     'packages/env/index.ts': "export * from './env.js';\n",
     'packages/env/package.json': '{\n  "name": "@p/env",\n  "type": "module",\n  "private": true\n}\n',
-    'packages/env/README.md': '# @p/env\n\nRequired environment readers shared by API and UI workspaces.\n\n## Exports\n\n- `getTag()` reads `TAG`.\n- `getMode()` reads `MODE`.\n- `getApi()` reads `API`.\n- `getCdn()` reads `CDN`.\n- `getUi()` reads `UI`.\n\nEach getter throws when its environment variable is missing.\n',
+    'packages/env/README.md': `# Env
+
+Required environment readers shared by API and UI workspaces.
+
+## Exports
+
+- \`getTag()\` reads \`TAG\`.
+- \`getMode()\` reads \`MODE\`.
+- \`getApi()\` reads \`API\`.
+- \`getCdn()\` reads \`CDN\`.
+- \`getUi()\` reads \`UI\`.
+
+Each getter delegates to \`@vyriy/env\` and throws when its environment variable is missing.
+
+## Local Defaults
+
+\`workspaces/env.sh\` provides the local development defaults:
+
+- \`API=http://localhost:3000\`
+- \`CDN=http://localhost:3001\`
+- \`UI=http://localhost:3002\`
+- \`TAG=vyriy-profile-card\`
+- \`MODE=open\`
+
+## Example
+
+\`\`\`ts
+import { getCdn, getUi } from '@p/env';
+
+const stylesheet = \`\${getUi()}/main.css\`;
+const avatar = \`\${getCdn()}/avatar.svg\`;
+\`\`\`
+`,
     'packages/event/constants.test.ts': "import { describe, expect, it } from '@jest/globals';\n\nimport { PROFILE_CARD_ANALYTICS_EVENT_NAME, PROFILE_CARD_SELECT_EVENT_NAME } from './constants.js';\n\ndescribe('event constants', () => {\n  it('matches the manifest event names', () => {\n    expect(PROFILE_CARD_ANALYTICS_EVENT_NAME).toBe('openmfe.analytics');\n    expect(PROFILE_CARD_SELECT_EVENT_NAME).toBe('vyriy-profile-card.select');\n  });\n});\n",
     'packages/event/constants.ts': "/** Custom event emitted when the profile card is selected. */\nexport const PROFILE_CARD_SELECT_EVENT_NAME = 'vyriy-profile-card.select';\n\n/** Standard OpenMFE analytics event emitted for profile-card interactions. */\nexport const PROFILE_CARD_ANALYTICS_EVENT_NAME = 'openmfe.analytics';\n",
     'packages/event/doc.mdx': "import { Meta, Markdown } from '@storybook/addon-docs/blocks';\nimport ReadMe from './README.md?raw';\n\n<Meta title=\"Packages/Event\" />\n\n<Markdown>{ReadMe}</Markdown>\n",
@@ -41,7 +118,45 @@ const projectFiles = {
     'packages/event/profile-card-analytics.ts': "import { dispatchAnalyticsEvent } from '@vyriy/event';\n\nimport type { ProfileCardAnalyticsData } from './types.js';\n\n/** Dispatches the standard OpenMFE analytics event for a profile-card selection. */\nexport const dispatchProfileCardAnalyticsEvent = (target: HTMLElement, data: ProfileCardAnalyticsData): CustomEvent => {\n  return dispatchAnalyticsEvent(\n    target,\n    {\n      action: 'select',\n      category: 'profile-card',\n      data,\n      name: 'profile_card_select',\n    },\n    {\n      bubbles: true,\n      composed: true,\n    },\n  );\n};\n",
     'packages/event/profile-card-select.test.ts': "import { describe, expect, it, jest } from '@jest/globals';\n\nimport { PROFILE_CARD_SELECT_EVENT_NAME } from './constants.js';\nimport { dispatchProfileCardSelectEvent } from './profile-card-select.js';\n\ndescribe('dispatchProfileCardSelectEvent', () => {\n  it('dispatches the profile card select event from the custom element', () => {\n    const target = document.createElement('vyriy-profile-card');\n    const listener = jest.fn();\n\n    target.addEventListener(PROFILE_CARD_SELECT_EVENT_NAME, listener);\n\n    const event = dispatchProfileCardSelectEvent(target, {\n      avatarUrl: 'https://example.com/avatar.png',\n      name: 'Ada Lovelace',\n      role: 'Mathematician',\n    });\n\n    expect(event.type).toBe(PROFILE_CARD_SELECT_EVENT_NAME);\n    expect(event.bubbles).toBe(true);\n    expect(event.composed).toBe(true);\n    expect(event.detail).toEqual({\n      avatarUrl: 'https://example.com/avatar.png',\n      name: 'Ada Lovelace',\n      role: 'Mathematician',\n    });\n    expect(listener).toHaveBeenCalledWith(event);\n  });\n});\n",
     'packages/event/profile-card-select.ts': "import { dispatchCustomEvent } from '@vyriy/event';\n\nimport { PROFILE_CARD_SELECT_EVENT_NAME } from './constants.js';\nimport type { ProfileCardSelectDetail } from './types.js';\n\n/** Dispatches the profile-card select custom event from the web component host. */\nexport const dispatchProfileCardSelectEvent = (\n  target: HTMLElement,\n  detail: ProfileCardSelectDetail,\n): CustomEvent<ProfileCardSelectDetail> => {\n  return dispatchCustomEvent(target, PROFILE_CARD_SELECT_EVENT_NAME, detail, {\n    bubbles: true,\n    composed: true,\n  });\n};\n",
-    'packages/event/README.md': "# @p/event\n\nTyped profile-card event helpers.\n\n## Usage\n\n```ts\nimport { dispatchProfileCardAnalyticsEvent, dispatchProfileCardSelectEvent } from '@p/event';\n\nconst target = document.querySelector('vyriy-profile-card');\n\nif (target instanceof HTMLElement) {\n  const detail = {\n    name: 'Ada Lovelace',\n    role: 'Mathematician',\n    avatarUrl: '/avatar.svg',\n  };\n\n  dispatchProfileCardSelectEvent(target, detail);\n  dispatchProfileCardAnalyticsEvent(target, detail);\n}\n```\n\n## Events\n\n- `vyriy-profile-card.select` is emitted when the profile card is selected.\n- `openmfe.analytics` is emitted with the standard OpenMFE analytics payload for the same selection.\n",
+    'packages/event/README.md': `# Event
+
+Typed profile-card event helpers.
+
+## Exports
+
+- \`PROFILE_CARD_SELECT_EVENT_NAME\` is \`vyriy-profile-card.select\`.
+- \`PROFILE_CARD_ANALYTICS_EVENT_NAME\` is \`openmfe.analytics\`.
+- \`dispatchProfileCardSelectEvent(target, detail)\` dispatches the profile-card selection event.
+- \`dispatchProfileCardAnalyticsEvent(target, data)\` dispatches the standard OpenMFE analytics event for the same selection.
+- \`ProfileCardSelectDetail\` and \`ProfileCardAnalyticsData\` describe the event payloads.
+
+Both dispatch helpers emit bubbling, composed custom events so consumers outside the custom element shadow root can observe them.
+
+## Usage
+
+\`\`\`ts
+import { dispatchProfileCardAnalyticsEvent, dispatchProfileCardSelectEvent } from '@p/event';
+
+const target = document.querySelector('vyriy-profile-card');
+
+if (target instanceof HTMLElement) {
+  const detail = {
+    name: 'Ada Lovelace',
+    role: 'Mathematician',
+    avatarUrl: '/avatar.svg',
+  };
+
+  dispatchProfileCardSelectEvent(target, detail);
+  dispatchProfileCardAnalyticsEvent(target, detail);
+}
+\`\`\`
+
+## Payload
+
+\`ProfileCardSelectDetail\` requires \`name\` and accepts optional \`role\` and \`avatarUrl\`.
+
+The analytics helper wraps the same data in the standard OpenMFE analytics event with \`action: 'select'\` and \`category: 'profile-card'\`.
+`,
     'packages/event/types.ts': '/** Detail payload for the profile-card select custom event. */\nexport type ProfileCardSelectDetail = {\n  name: string;\n  role?: string;\n  avatarUrl?: string | null;\n};\n\n/** Analytics data payload emitted for profile-card selections. */\nexport type ProfileCardAnalyticsData = ProfileCardSelectDetail;\n',
     'packages/query/doc.mdx': "import { Meta, Markdown } from '@storybook/addon-docs/blocks';\nimport ReadMe from './README.md?raw';\n\n<Meta title=\"Packages/Query\" />\n\n<Markdown>{ReadMe}</Markdown>\n",
     'packages/query/index.test.ts': "import { describe, expect, it } from '@jest/globals';\n\nimport * as publicApi from './index.js';\n\ndescribe('query public API', () => {\n  it('exports query parsers', () => {\n    expect(publicApi.parseProfileCardQuery).toBeDefined();\n  });\n});\n",
@@ -49,7 +164,42 @@ const projectFiles = {
     'packages/query/package.json': '{\n  "name": "@p/query",\n  "type": "module",\n  "private": true\n}\n',
     'packages/query/profile-card.test.ts': "import { describe, expect, it } from '@jest/globals';\n\nimport { parseProfileCardQuery } from './profile-card.js';\n\ndescribe('parseProfileCardQuery', () => {\n  it('returns undefined when name is missing', () => {\n    expect(parseProfileCardQuery(undefined)).toBeUndefined();\n    expect(parseProfileCardQuery({})).toBeUndefined();\n    expect(parseProfileCardQuery({ name: '' })).toBeUndefined();\n  });\n\n  it('parses supported profile card fields', () => {\n    expect(\n      parseProfileCardQuery({\n        avatarUrl: 'https://example.com/avatar.png',\n        description: 'Profile description',\n        name: 'Name',\n        tags: 'one, two,, three ',\n        title: 'Title',\n      }),\n    ).toEqual({\n      avatarUrl: 'https://example.com/avatar.png',\n      description: 'Profile description',\n      name: 'Name',\n      tags: ['one', 'two', 'three'],\n      title: 'Title',\n    });\n  });\n\n  it('omits tags when the query list is empty after trimming', () => {\n    expect(\n      parseProfileCardQuery({\n        name: 'Name',\n        tags: ', , ',\n      }),\n    ).toEqual({\n      name: 'Name',\n      tags: undefined,\n    });\n  });\n});\n",
     'packages/query/profile-card.ts': "import type { ParseProfileCardQuery, Query } from './types.js';\n\nconst getQueryValue = (query: Query, name: string): string | undefined => {\n  const value = query?.[name];\n\n  return value === '' ? undefined : value;\n};\n\nconst getQueryList = (query: Query, name: string): string[] | undefined => {\n  const value = getQueryValue(query, name);\n\n  if (!value) {\n    return undefined;\n  }\n\n  const list = value\n    .split(',')\n    .map((item) => item.trim())\n    .filter(Boolean);\n\n  return list.length > 0 ? list : undefined;\n};\n\n/** Parses request query parameters into profile-card props. */\nexport const parseProfileCardQuery: ParseProfileCardQuery = (query) => {\n  const name = getQueryValue(query, 'name');\n\n  if (!name) {\n    return undefined;\n  }\n\n  return {\n    name,\n    title: getQueryValue(query, 'title'),\n    description: getQueryValue(query, 'description'),\n    avatarUrl: getQueryValue(query, 'avatarUrl'),\n    tags: getQueryList(query, 'tags'),\n  };\n};\n",
-    'packages/query/README.md': "# @p/query\n\nQuery-string parsers for profile-card API endpoints.\n\n## Exports\n\n- `parseProfileCardQuery(query)` converts router query parameters into profile-card props.\n\n## Example\n\n```ts\nimport { parseProfileCardQuery } from '@p/query';\n\nconst props = parseProfileCardQuery({\n  name: 'Ada Lovelace',\n  title: 'Mathematician',\n  tags: 'math, computing',\n});\n```\n",
+    'packages/query/README.md': `# Query
+
+Query-string parsers for profile-card API endpoints.
+
+## Exports
+
+- \`parseProfileCardQuery(query)\` converts router query parameters into profile-card props.
+- \`Query\` describes the router query input shape.
+- \`ParseProfileCardQuery\` describes the parser signature.
+
+## Parameters
+
+\`name\` is required. When \`name\` is missing or empty, the parser returns \`undefined\`.
+
+Supported optional parameters:
+
+- \`title\`
+- \`description\`
+- \`avatarUrl\`
+- \`tags\`, as a comma-separated list
+
+Empty string values are treated as missing. \`tags\` are split on commas, trimmed, and empty items are removed.
+
+## Example
+
+\`\`\`ts
+import { parseProfileCardQuery } from '@p/query';
+
+const props = parseProfileCardQuery({
+  name: 'Ada Lovelace',
+  title: 'Mathematician',
+  description: 'First computer programmer.',
+  tags: 'math, computing',
+});
+\`\`\`
+`,
     'packages/query/types.ts': "import type { ProfileCard } from '@p/components/profile-card/types.js';\n\n/** Query string values provided by the API router. */\nexport type Query = Record<string, string | undefined> | undefined;\n\n/** Converts query string values into profile-card props or rejects incomplete input. */\nexport type ParseProfileCardQuery = (query: Query) => ProfileCard | undefined;\n",
     'stylelint.config.ts': "export { default } from '@vyriy/stylelint-config';\n",
     'workspaces/api/bin/build.sh': '#!/usr/bin/env sh\n\nset -e\n\nscriptdir="$PWD/workspaces/api";\n\n. "$PWD/workspaces/env.sh"\n\nNODE_ENV=production \\\nnpx webpack --config $scriptdir/webpack.config.ts\n\ncp $scriptdir/package.json dist/api/package.json\nnpm pkg delete "type" --prefix dist/api\nnpm pkg delete "private" --prefix dist/api\n',
@@ -58,25 +208,213 @@ const projectFiles = {
     'workspaces/api/index.test.ts': "import { describe, expect, it, jest } from '@jest/globals';\nimport type { APIGatewayProxyEvent } from '@vyriy/router';\n\nconst apiMock = jest.fn((handler) => ({\n  handler,\n}));\nconst serverMock = jest.fn();\n\njest.mock('@vyriy/handler', () => ({\n  api: apiMock,\n}));\n\njest.mock('@vyriy/server', () => ({\n  server: serverMock,\n}));\n\ndescribe('workspaces/api/index.ts', () => {\n  const getEvent = (\n    path: string,\n    queryStringParameters: APIGatewayProxyEvent['queryStringParameters'] = null,\n  ): APIGatewayProxyEvent =>\n    ({\n      body: null,\n      headers: {},\n      httpMethod: 'GET',\n      path,\n      pathParameters: null,\n      queryStringParameters,\n    }) as APIGatewayProxyEvent;\n\n  it('starts the server with the API router handler', async () => {\n    process.env.MODE = 'open';\n    process.env.TAG = 'vyriy-profile-card';\n    process.env.API = 'http://localhost:3000';\n    process.env.CDN = 'http://localhost:3001';\n    process.env.UI = 'http://localhost:3002';\n\n    await import('./index.js');\n\n    expect(apiMock).toHaveBeenCalledTimes(1);\n    expect(serverMock).toHaveBeenCalledTimes(1);\n    expect(serverMock).toHaveBeenCalledWith(apiMock.mock.results[0]?.value);\n\n    const handler = apiMock.mock.calls[0]?.[0] as (event: APIGatewayProxyEvent) => Promise<{\n      body: string;\n      headers?: Record<string, string>;\n      statusCode: number;\n    }>;\n\n    await expect(handler(getEvent('/'))).resolves.toEqual({\n      body: expect.stringContaining('<vyriy-profile-card'),\n      headers: {\n        'access-control-allow-origin': '*',\n        'cache-control': 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',\n        'content-type': 'text/html; charset=utf-8',\n        'x-content-type-options': 'nosniff',\n      },\n      isBase64Encoded: undefined,\n      multiValueHeaders: undefined,\n      statusCode: 200,\n    });\n\n    await expect(handler(getEvent('/prerender'))).resolves.toEqual({\n      body: JSON.stringify({\n        message: 'Query parameter \"name\" is required.',\n      }),\n      headers: undefined,\n      isBase64Encoded: undefined,\n      multiValueHeaders: undefined,\n      statusCode: 400,\n    });\n\n    const prerenderResponse = await handler(\n      getEvent('/prerender', {\n        description: 'Profile description',\n        name: 'Name',\n        tags: 'one, two',\n        title: 'Title',\n      }),\n    );\n\n    expect(prerenderResponse).toEqual({\n      body: expect.stringContaining('Name'),\n      headers: {\n        'access-control-allow-origin': '*',\n        'cache-control': 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',\n        'content-type': 'text/html; charset=utf-8',\n        'x-content-type-options': 'nosniff',\n      },\n      isBase64Encoded: undefined,\n      multiValueHeaders: undefined,\n      statusCode: 200,\n    });\n    expect(prerenderResponse.body).toContain('shadowrootmode=\"open\"');\n    expect(prerenderResponse.body).toContain('http://localhost:3002/main.css');\n\n    await expect(handler(getEvent('/semantic', { name: 'Name' }))).resolves.toEqual({\n      body: JSON.stringify({\n        '@context': 'https://schema.org',\n        '@type': 'Person',\n        name: 'Name',\n      }),\n      headers: {\n        'access-control-allow-origin': '*',\n        'cache-control': 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',\n        'content-type': 'application/ld+json; charset=utf-8',\n        'x-content-type-options': 'nosniff',\n      },\n      isBase64Encoded: undefined,\n      multiValueHeaders: undefined,\n      statusCode: 200,\n    });\n\n    await expect(handler(getEvent('/semantic'))).resolves.toEqual({\n      body: JSON.stringify({\n        message: 'Query parameter \"name\" is required.',\n      }),\n      headers: undefined,\n      isBase64Encoded: undefined,\n      multiValueHeaders: undefined,\n      statusCode: 400,\n    });\n\n    await expect(handler(getEvent('/manifest.yml'))).resolves.toEqual({\n      body: expect.stringContaining(\"name: 'Vyriy Profile Card'\"),\n      headers: {\n        'access-control-allow-origin': '*',\n        'cache-control': 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',\n        'content-type': 'text/yaml; charset=utf-8',\n        'x-content-type-options': 'nosniff',\n      },\n      isBase64Encoded: undefined,\n      multiValueHeaders: undefined,\n      statusCode: 200,\n    });\n\n    await expect(handler(getEvent('/healthcheck'))).resolves.toEqual({\n      body: JSON.stringify({\n        message: 'Not Found',\n      }),\n      statusCode: 404,\n    });\n  });\n});\n",
     'workspaces/api/index.ts': "import { server } from '@vyriy/server';\nimport { api } from '@vyriy/handler';\nimport { createRouter } from '@vyriy/router';\nimport { minify } from '@vyriy/html';\n\nimport { demo, manifest, prerender, semantic } from '@p/api';\nimport { parseProfileCardQuery } from '@p/query';\n\nserver(\n  api(async (event) =>\n    createRouter()\n      .get('/', () => ({\n        body: minify(demo()),\n        headers: {\n          'content-type': 'text/html; charset=utf-8',\n          'cache-control': 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',\n          'access-control-allow-origin': '*',\n          'x-content-type-options': 'nosniff',\n        },\n      }))\n      .get('/prerender', ({ query }) => {\n        const profileCard = parseProfileCardQuery(query);\n\n        if (!profileCard) {\n          return {\n            statusCode: 400,\n            body: JSON.stringify({ message: 'Query parameter \"name\" is required.' }),\n          };\n        }\n\n        return {\n          body: minify(prerender(profileCard)),\n          headers: {\n            'content-type': 'text/html; charset=utf-8',\n            'cache-control': 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',\n            'access-control-allow-origin': '*',\n            'x-content-type-options': 'nosniff',\n          },\n        };\n      })\n      .get('/semantic', ({ query }) => {\n        const profileCard = parseProfileCardQuery(query);\n\n        if (!profileCard) {\n          return {\n            statusCode: 400,\n            body: JSON.stringify({ message: 'Query parameter \"name\" is required.' }),\n          };\n        }\n\n        return {\n          body: semantic(profileCard),\n          headers: {\n            'content-type': 'application/ld+json; charset=utf-8',\n            'cache-control': 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',\n            'access-control-allow-origin': '*',\n            'x-content-type-options': 'nosniff',\n          },\n        };\n      })\n      .get('/manifest.yml', () => ({\n        body: manifest(),\n        headers: {\n          'content-type': 'text/yaml; charset=utf-8',\n          'cache-control': 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',\n          'access-control-allow-origin': '*',\n          'x-content-type-options': 'nosniff',\n        },\n      }))\n      .route(event),\n  ),\n);\n",
     'workspaces/api/package.json': '{\n  "name": "@w/api",\n  "type": "module",\n  "private": true\n}\n',
-    'workspaces/api/README.md': '# app API\n\nCalm cloud-ready application\n',
+    'workspaces/api/README.md': `# Api
+
+Server workspace for the profile-card microfrontend.
+
+## Routes
+
+- \`GET /\` returns a standalone HTML demo page.
+- \`GET /prerender\` returns server-rendered custom element HTML.
+- \`GET /semantic\` returns Schema.org Person JSON-LD.
+- \`GET /manifest.yml\` returns the OpenMFE manifest YAML.
+
+\`/prerender\` and \`/semantic\` require the \`name\` query parameter. They also accept \`title\`, \`description\`, \`avatarUrl\`, and comma-separated \`tags\`.
+
+## Local Development
+
+\`\`\`bash
+yarn start:api
+\`\`\`
+
+The start script loads \`workspaces/env.sh\`, listens on \`API_PORT\`, and prints example URLs for the demo, prerender, semantic, and manifest endpoints.
+
+Default local URL:
+
+\`\`\`text
+http://localhost:3000
+\`\`\`
+
+## Build
+
+\`\`\`bash
+yarn build:api
+\`\`\`
+
+The build writes the server bundle to \`dist/api\`.
+`,
     'workspaces/api/webpack.config.ts': "import { EnvironmentPlugin } from 'webpack';\nimport { path } from '@vyriy/path';\nimport { ssr, external } from '@vyriy/webpack-config';\n\nexport default ssr(\n  '@w/api',\n  {\n    path: path('dist', 'api'),\n    filename: 'index.js',\n    library: { type: 'commonjs2' },\n  },\n  (config) => ({\n    ...config,\n    externals: [external({ allowlist: [/^@p/, /^@w/, /^@vyriy/] })],\n    plugins: [\n      ...(config.plugins ?? []),\n      new EnvironmentPlugin([\n        'API',\n        'CDN',\n        'MODE',\n        'TAG',\n        'UI',\n      ]),\n    ],\n  }),\n);\n",
     'workspaces/env.sh': '#!/usr/bin/env sh\n\n: "${API_PORT:=3000}"\n: "${CDN_PORT:=3001}"\n: "${UI_PORT:=3002}"\n: "${API:=http://localhost:$API_PORT}"\n: "${CDN:=http://localhost:$CDN_PORT}"\n: "${UI:=http://localhost:$UI_PORT}"\n: "${TAG:=vyriy-profile-card}"\n: "${MODE:=open}"\n\nexport API_PORT\nexport CDN_PORT\nexport UI_PORT\nexport API\nexport CDN\nexport UI\nexport TAG\nexport MODE\n',
     'workspaces/static/bin/build.sh': '#!/usr/bin/env sh\n\nset -e\n\nscriptdir="$PWD/workspaces/static";\ndistdir="$PWD/dist/cdn";\n\ncp -R $scriptdir/public/* $distdir/\n',
-    'workspaces/static/bin/start.sh': '#!/usr/bin/env sh\n\nset -e\n\nscriptdir="$PWD/workspaces/static";\n\n. "$PWD/workspaces/env.sh"\n\nnpx serve --cors -p $CDN_PORT $scriptdir/public\n',
+    'workspaces/static/bin/start.sh': `#!/usr/bin/env sh
+
+set -e
+
+scriptdir="$PWD/workspaces/static";
+
+. "$PWD/workspaces/env.sh"
+
+npx vs -p $CDN_PORT $scriptdir/public
+`,
     'workspaces/static/doc.mdx': "import { Meta, Markdown } from '@storybook/addon-docs/blocks';\nimport ReadMe from './README.md?raw';\n\n<Meta title=\"Workspaces/Static\" />\n\n<Markdown>{ReadMe}</Markdown>\n",
     'workspaces/static/package.json': '{\n  "name": "@w/static",\n  "type": "module",\n  "private": true\n}\n',
     'workspaces/static/public/avatar.svg': '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800">\r\n<rect width="1200" height="800" fill="#0057B7"/>\r\n<rect width="1200" height="400" y="400" fill="#FFD700"/>\r\n</svg>',
     'workspaces/static/public/icon.svg': '<svg\n  width="256"\n  height="256"\n  viewBox="0 0 256 256"\n  fill="none"\n  xmlns="http://www.w3.org/2000/svg"\n  role="img"\n  aria-labelledby="title description"\n>\n  <title id="title">Vyriy Profile Card icon</title>\n  <desc id="description">A calm rounded square icon with a profile card symbol.</desc>\n\n  <rect width="256" height="256" rx="56" fill="#111827" />\n  <rect x="56" y="48" width="144" height="160" rx="24" fill="#F9FAFB" />\n  <circle cx="128" cy="104" r="36" fill="#9CA3AF" />\n  <rect x="84" y="156" width="88" height="14" rx="7" fill="#111827" />\n  <rect x="96" y="180" width="64" height="10" rx="5" fill="#6B7280" />\n  <circle cx="184" cy="184" r="20" fill="#10B981" />\n  <path\n    d="M175 184L181 190L194 176"\n    stroke="white"\n    stroke-width="6"\n    stroke-linecap="round"\n    stroke-linejoin="round"\n  />\n</svg>\n',
     'workspaces/static/public/screenshots/compact.svg': '<svg\n  width="1280"\n  height="720"\n  viewBox="0 0 1280 720"\n  fill="none"\n  xmlns="http://www.w3.org/2000/svg"\n  role="img"\n  aria-labelledby="title description"\n>\n  <title id="title">Default profile card screenshot</title>\n  <desc id="description">A profile card microfrontend rendered in a desktop host page.</desc>\n\n  <rect width="1280" height="720" fill="#F3F4F6" />\n  <rect x="80" y="72" width="1120" height="576" rx="32" fill="white" />\n\n  <rect x="128" y="120" width="360" height="480" rx="28" fill="#F9FAFB" stroke="#E5E7EB" />\n  <circle cx="308" cy="244" r="72" fill="#9CA3AF" />\n  <rect x="188" y="368" width="240" height="28" rx="14" fill="#111827" />\n  <rect x="224" y="420" width="168" height="18" rx="9" fill="#6B7280" />\n  <rect x="232" y="492" width="152" height="44" rx="22" fill="#10B981" />\n\n  <rect x="560" y="152" width="420" height="40" rx="20" fill="#111827" />\n  <rect x="560" y="232" width="520" height="20" rx="10" fill="#6B7280" />\n  <rect x="560" y="272" width="460" height="20" rx="10" fill="#9CA3AF" />\n  <rect x="560" y="312" width="360" height="20" rx="10" fill="#D1D5DB" />\n  <rect x="560" y="420" width="520" height="96" rx="24" fill="#F9FAFB" stroke="#E5E7EB" />\n</svg>\n',
     'workspaces/static/public/screenshots/default.svg': '<svg\n  width="1280"\n  height="720"\n  viewBox="0 0 1280 720"\n  fill="none"\n  xmlns="http://www.w3.org/2000/svg"\n  role="img"\n  aria-labelledby="title description"\n>\n  <title id="title">Default profile card screenshot</title>\n  <desc id="description">A profile card microfrontend rendered in a desktop host page.</desc>\n\n  <rect width="1280" height="720" fill="#F3F4F6" />\n  <rect x="80" y="72" width="1120" height="576" rx="32" fill="white" />\n\n  <rect x="128" y="120" width="360" height="480" rx="28" fill="#F9FAFB" stroke="#E5E7EB" />\n  <circle cx="308" cy="244" r="72" fill="#9CA3AF" />\n  <rect x="188" y="368" width="240" height="28" rx="14" fill="#111827" />\n  <rect x="224" y="420" width="168" height="18" rx="9" fill="#6B7280" />\n  <rect x="232" y="492" width="152" height="44" rx="22" fill="#10B981" />\n\n  <rect x="560" y="152" width="420" height="40" rx="20" fill="#111827" />\n  <rect x="560" y="232" width="520" height="20" rx="10" fill="#6B7280" />\n  <rect x="560" y="272" width="460" height="20" rx="10" fill="#9CA3AF" />\n  <rect x="560" y="312" width="360" height="20" rx="10" fill="#D1D5DB" />\n  <rect x="560" y="420" width="520" height="96" rx="24" fill="#F9FAFB" stroke="#E5E7EB" />\n</svg>\n',
-    'workspaces/static/README.md': '# @w/static\n\nStatic asset workspace for the profile-card microfrontend.\n\n## Assets\n\n- `avatar.svg` is the default demo avatar.\n- `icon.svg` is the manifest icon.\n- `screenshots/default.svg` and `screenshots/compact.svg` document visible profile-card states.\n\nThe workspace is served as the CDN origin during local development.\n',
+    'workspaces/static/README.md': `# Static
+
+Static asset workspace for the profile-card microfrontend.
+
+This workspace uses \`@vyriy/static\` to serve files during local development. The package exposes the \`vs\` command, which can also be installed globally to serve static data from any directory with a simple command.
+
+## Assets
+
+- \`avatar.svg\` is the default demo avatar.
+- \`icon.svg\` is the manifest icon.
+- \`screenshots/default.svg\` documents the default profile-card state.
+- \`screenshots/compact.svg\` documents the compact profile-card state.
+
+The workspace is served as the CDN origin during local development and copied into \`dist/cdn\` for production builds.
+
+## Local Development
+
+\`\`\`bash
+yarn start:static
+\`\`\`
+
+The start script loads \`workspaces/env.sh\` and serves \`workspaces/static/public\` on \`CDN_PORT\`.
+
+Internally it runs:
+
+\`\`\`bash
+npx vs -p $CDN_PORT workspaces/static/public
+\`\`\`
+
+With \`@vyriy/static\` installed globally, the same kind of static preview can be started directly:
+
+\`\`\`bash
+vs -p 3001 workspaces/static/public
+\`\`\`
+
+Default local URL:
+
+\`\`\`text
+http://localhost:3001
+\`\`\`
+
+## Build
+
+\`\`\`bash
+yarn build:static
+\`\`\`
+`,
     'workspaces/ui/bin/build.sh': '#!/usr/bin/env sh\n\nset -e\n\nscriptdir="$PWD/workspaces/ui";\n\n. "$PWD/workspaces/env.sh"\n\nNODE_ENV=production \\\nnpx webpack \\\n--config $scriptdir/webpack.config.ts\n',
     'workspaces/ui/bin/start.sh': '#!/usr/bin/env sh\n\nset -e\n\nscriptdir="$PWD/workspaces/ui";\n\n. "$PWD/workspaces/env.sh"\n\nnpx webpack serve \\\n--open \\\n--config $scriptdir/webpack.config.ts \\\n--port $UI_PORT\n',
     'workspaces/ui/doc.mdx': "import { Meta, Markdown } from '@storybook/addon-docs/blocks';\nimport ReadMe from './README.md?raw';\n\n<Meta title=\"Workspaces/UI\" />\n\n<Markdown>{ReadMe}</Markdown>\n",
     'workspaces/ui/index.test.tsx': "import { beforeAll, describe, expect, it, jest } from '@jest/globals';\nimport type { ReactElement } from 'react';\n\ntype CustomElementOptions = {\n  tag: string;\n  elements: () => {\n    elements: HTMLElement[];\n    root: HTMLElement;\n  };\n  render: (el: HTMLElement) => ReactElement<{\n    onClick: () => void;\n    tags?: string[];\n  }>;\n};\n\nconst customElementMock = jest.fn();\nconst dispatchProfileCardAnalyticsEventMock = jest.fn();\nconst dispatchProfileCardSelectEventMock = jest.fn();\nlet options: CustomElementOptions;\n\njest.mock('@vyriy/render/custom-element', () => ({\n  customElement: customElementMock,\n}));\n\njest.mock('@p/env', () => ({\n  getUi: () => 'http://localhost:3002',\n}));\n\njest.mock('@p/event', () => ({\n  dispatchProfileCardAnalyticsEvent: dispatchProfileCardAnalyticsEventMock,\n  dispatchProfileCardSelectEvent: dispatchProfileCardSelectEventMock,\n}));\n\ndescribe('workspaces/ui/index.tsx', () => {\n  beforeAll(async () => {\n    await import('./index.js');\n\n    [options] = (customElementMock.mock.calls[0] ?? []) as [CustomElementOptions];\n  });\n\n  it('registers the profile-card custom element with event dispatching', () => {\n    const renderElements = options.elements();\n    const host = document.createElement('vyriy-profile-card');\n\n    host.setAttribute('avatarUrl', 'https://example.com/avatar.png');\n    host.setAttribute('description', 'Profile description');\n    host.setAttribute('name', 'Ada Lovelace');\n    host.setAttribute('tags', '[\"math\",\"computing\"]');\n    host.setAttribute('title', 'Mathematician');\n\n    const element = options.render(host);\n\n    element.props.onClick();\n\n    expect(options.tag).toBe('vyriy-profile-card');\n    expect(renderElements.root).toBeInstanceOf(HTMLDivElement);\n    expect(renderElements.elements[0]).toBeInstanceOf(HTMLLinkElement);\n    expect((renderElements.elements[0] as HTMLLinkElement).href).toBe('http://localhost:3002/main.css');\n    expect(element.props.tags).toEqual(['math', 'computing']);\n    expect(dispatchProfileCardSelectEventMock).toHaveBeenCalledWith(host, {\n      avatarUrl: 'https://example.com/avatar.png',\n      name: 'Ada Lovelace',\n      role: 'Mathematician',\n    });\n    expect(dispatchProfileCardAnalyticsEventMock).toHaveBeenCalledWith(host, {\n      avatarUrl: 'https://example.com/avatar.png',\n      name: 'Ada Lovelace',\n      role: 'Mathematician',\n    });\n  });\n\n  it('ignores missing and invalid tags attributes', () => {\n    const host = document.createElement('vyriy-profile-card');\n\n    expect(options.render(host).props.tags).toBeUndefined();\n\n    host.setAttribute('tags', 'not json');\n\n    expect(options.render(host).props.tags).toBeUndefined();\n\n    host.setAttribute('tags', '{\"tag\":\"math\"}');\n\n    expect(options.render(host).props.tags).toBeUndefined();\n  });\n\n  it('falls back to empty profile values when attributes are missing', () => {\n    const host = document.createElement('vyriy-profile-card');\n    const element = options.render(host);\n\n    element.props.onClick();\n\n    expect(dispatchProfileCardSelectEventMock).toHaveBeenLastCalledWith(host, {\n      avatarUrl: null,\n      name: '',\n      role: undefined,\n    });\n  });\n});\n",
-    'workspaces/ui/index.tsx': "import { customElement } from '@vyriy/render/custom-element';\n\nimport { getUi } from '@p/env';\nimport { dispatchProfileCardAnalyticsEvent, dispatchProfileCardSelectEvent } from '@p/event';\n\nimport { ProfileCard } from '@p/components/profile-card';\nimport '@p/components/styles.scss';\n\nconst parseJsonAttribute = (value: string | null): string[] | undefined => {\n  if (!value) {\n    return undefined;\n  }\n\n  try {\n    const parsedValue: unknown = JSON.parse(value);\n\n    if (Array.isArray(parsedValue) && parsedValue.every((item) => typeof item === 'string')) {\n      return parsedValue;\n    }\n  } catch {\n    return undefined;\n  }\n\n  return undefined;\n};\n\nconst getProfileCardSelectDetail = (el: HTMLElement) => ({\n  avatarUrl: el.getAttribute('avatarUrl'),\n  name: el.getAttribute('name') ?? '',\n  role: el.getAttribute('title') ?? undefined,\n});\n\ncustomElement({\n  tag: 'vyriy-profile-card',\n  elements: () => {\n    const link = document.createElement('link');\n    const container = document.createElement('div');\n\n    link.rel = 'stylesheet';\n    link.href = `${getUi()}/main.css`;\n\n    return {\n      elements: [link, container],\n      root: container,\n    };\n  },\n  render: (el) => (\n    <ProfileCard\n      avatarUrl={el.getAttribute('avatarUrl') ?? ''}\n      description={el.getAttribute('description') ?? ''}\n      name={el.getAttribute('name') ?? ''}\n      onClick={() => {\n        const detail = getProfileCardSelectDetail(el);\n\n        dispatchProfileCardSelectEvent(el, detail);\n        dispatchProfileCardAnalyticsEvent(el, detail);\n      }}\n      tags={parseJsonAttribute(el.getAttribute('tags'))}\n      title={el.getAttribute('title') ?? ''}\n    />\n  ),\n});\n",
+    'workspaces/ui/index.tsx': `import { customElement } from '@vyriy/render/custom-element';
+
+import { dispatchProfileCardAnalyticsEvent, dispatchProfileCardSelectEvent } from '@p/event';
+import { getUi } from '@p/env';
+
+import { ProfileCard } from '@p/components/profile-card';
+import '@p/components/styles.scss';
+
+const parseJsonAttribute = (value: string | null): string[] | undefined => {
+  if (!value) {
+    return undefined;
+  }
+
+  try {
+    const parsedValue: unknown = JSON.parse(value);
+
+    if (Array.isArray(parsedValue) && parsedValue.every((item) => typeof item === 'string')) {
+      return parsedValue;
+    }
+  } catch {
+    return undefined;
+  }
+
+  return undefined;
+};
+
+const getProfileCardSelectDetail = (el: HTMLElement) => ({
+  avatarUrl: el.getAttribute('avatarUrl'),
+  name: el.getAttribute('name') ?? '',
+  role: el.getAttribute('title') ?? undefined,
+});
+
+customElement({
+  tag: 'vyriy-profile-card',
+  elements: () => {
+    const link = document.createElement('link');
+    const container = document.createElement('div');
+
+    link.rel = 'stylesheet';
+    link.href = \`\${getUi()}/main.css\`;
+
+    return {
+      elements: [link, container],
+      root: container,
+    };
+  },
+  render: (el) => (
+    <ProfileCard
+      avatarUrl={el.getAttribute('avatarUrl') ?? ''}
+      description={el.getAttribute('description') ?? ''}
+      name={el.getAttribute('name') ?? ''}
+      onClick={() => {
+        const detail = getProfileCardSelectDetail(el);
+
+        dispatchProfileCardSelectEvent(el, detail);
+        dispatchProfileCardAnalyticsEvent(el, detail);
+      }}
+      tags={parseJsonAttribute(el.getAttribute('tags'))}
+      title={el.getAttribute('title') ?? ''}
+    />
+  ),
+});
+`,
     'workspaces/ui/package.json': '{\n  "name": "@w/ui",\n  "type": "module",\n  "private": true\n}\n',
-    'workspaces/ui/README.md': '# @w/ui\n\nDemo entry point.\n',
+    'workspaces/ui/README.md': `# UI
+
+Browser workspace for the \`vyriy-profile-card\` custom element.
+
+## Runtime
+
+The entry point registers the custom element and renders \`ProfileCard\` inside its shadow root. The element reads these attributes:
+
+- \`name\`
+- \`title\`
+- \`description\`
+- \`avatarUrl\`
+- \`tags\`, as a JSON string array
+
+Clicking the rendered profile card dispatches \`vyriy-profile-card.select\` and \`openmfe.analytics\`.
+
+## Local Development
+
+\`\`\`bash
+yarn start:ui
+\`\`\`
+
+The start script loads \`workspaces/env.sh\`, starts webpack dev server on \`UI_PORT\`, and opens the generated demo page.
+
+Default local URL:
+
+\`\`\`text
+http://localhost:3002
+\`\`\`
+
+## Build
+
+\`\`\`bash
+yarn build:ui
+\`\`\`
+
+The build writes \`index.js\`, \`main.css\`, and the generated demo HTML into \`dist/cdn\`.
+`,
     'workspaces/ui/webpack.config.ts': "import { EnvironmentPlugin } from 'webpack';\n\nimport { csr, html } from '@vyriy/webpack-config';\nimport { path } from '@vyriy/path';\n\nexport default csr(\n  '@w/ui',\n  {\n    path: path('dist', 'cdn'),\n    filename: 'index.js',\n  },\n  (config) => ({\n    ...config,\n    plugins: [\n      ...(config.plugins ?? []),\n      new EnvironmentPlugin(['API', 'CDN', 'UI']),\n      html(\n        {\n          htmlAttributes: 'lang=\"en\"',\n          title: '<title>Demo</title>',\n          meta: '<meta charset=\"utf-8\" /><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />',\n          body: '<vyriy-profile-card name=\"Developer\" title=\"Senior IT Professional\" avatarUrl=\"http://localhost:3001/avatar.svg\"></vyriy-profile-card>',\n          script: [\n            '<script defer=\"defer\" src=\"/index.js\"></script>',\n            [\n              '<script type=\"module\">',\n              \"const card = document.querySelector('vyriy-profile-card');\",\n              \"card.addEventListener('vyriy-profile-card.select', (event) => {\",\n              \"  console.log('UI demo event:', event.detail);\",\n              '});',\n              '</scr' + 'ipt>',\n            ].join(''),\n          ].join(''),\n        },\n        { inject: false },\n      ),\n    ],\n  }),\n);\n",
 };
 export const mfe = (options) => ({
@@ -276,7 +614,49 @@ export default {
     'packages/components/profile-tags/README.md': "# ProfileTags\n\n`ProfileTags` renders a list of profile tags using `Badge`.\n\n## Usage\n\n```tsx\nimport { ProfileTags } from './profile-tags.js';\n\nexport const Example = () => <ProfileTags tags={['React', 'TypeScript']} />;\n```\n\n## Props\n\n```ts\nexport type ProfileTagsProps = {\n  tags: string[];\n  tone?: BadgeProps['tone'];\n} & ComponentProps<'ul'>;\n```\n\n## Accessibility\n\nTags are rendered as a semantic `<ul>` with one `<li>` per tag.\n\n## Notes\n\n- Empty tag arrays render `null`.\n- SSR/SSG-safe.\n- Shared SCSS styles.\n",
     'packages/components/profile-tags/styles.scss': '.profile-tags {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 0.4rem;\n  margin: 0;\n  padding: 0;\n  list-style: none;\n}\n\n.profile-tags__item {\n  display: inline-flex;\n}\n',
     'packages/components/profile-tags/types.ts': "import type { ComponentProps, FC } from 'react';\n\nimport type { BadgeProps } from '../badge/index.js';\n\n/** Props for the ProfileTags component. */\nexport type ProfileTagsProps = {\n  tags: string[];\n  tone?: BadgeProps['tone'];\n} & ComponentProps<'ul'>;\n\n/** ProfileTags component type. */\nexport type ProfileTagsType = FC<ProfileTagsProps>;\n",
-    'packages/components/README.md': '# @p/components\n\nReusable React primitives for the profile-card microfrontend.\n\n## Exports\n\nThe package exports the public profile-card component set:\n\n- `Avatar`\n- `Badge`\n- `ButtonLink`\n- `Card`\n- `IconLink`\n- `ProfileCard`\n- `ProfileDetails`\n- `ProfileHeader`\n- `ProfileLinks`\n- `ProfileMeta`\n- `ProfileTags`\n\nEach component has a focused README, Storybook docs, stories, and unit tests in its own folder.\n',
+    'packages/components/README.md': `# Components
+
+Reusable React primitives for the profile-card microfrontend.
+
+## Exports
+
+The package exports the public profile-card component set:
+
+- \`Avatar\`
+- \`Badge\`
+- \`ButtonLink\`
+- \`Card\`
+- \`IconLink\`
+- \`ProfileCard\`
+- \`ProfileDetails\`
+- \`ProfileHeader\`
+- \`ProfileLinks\`
+- \`ProfileMeta\`
+- \`ProfileTags\`
+
+Each component also exports its public prop and component types from its folder entry point.
+
+## Usage
+
+\`\`\`tsx
+import { ProfileCard } from '@p/components';
+import '@p/components/styles.scss';
+
+export const Example = () => (
+  <ProfileCard
+    avatarUrl="/avatar.svg"
+    description="First computer programmer."
+    name="Ada Lovelace"
+    tags={['math', 'computing']}
+    title="Mathematician"
+  />
+);
+\`\`\`
+
+## Component Docs
+
+Each component has a focused README, Storybook docs, stories, and unit tests in its own folder. Use those folder READMEs for prop-level details and supported visual states.
+`,
     'packages/components/styles.d.ts': "declare module '*.scss';\ndeclare module '*.scss?inline' {\n  const css: string;\n  export default css;\n}\ndeclare module '*.svg' {\n  const src: string;\n  export default src;\n}\n",
     'packages/components/styles.scss': "@use './avatar/styles' as avatar;\n@use './badge/styles' as badge;\n@use './button-link/styles' as button-link;\n@use './card/styles' as card;\n@use './icon-link/styles' as icon-link;\n@use './profile-card/styles' as profile-card;\n@use './profile-details/styles' as profile-details;\n@use './profile-header/styles' as profile-header;\n@use './profile-links/styles' as profile-links;\n@use './profile-meta/styles' as profile-meta;\n@use './profile-tags/styles' as profile-tags;\n",
     'packages/components/package.json': JSON.stringify({
@@ -354,24 +734,38 @@ export default {
             'npm-run-all2': packageJson.peerDependencies['npm-run-all2'],
             prettier: packageJson.peerDependencies['prettier'],
             rimraf: packageJson.peerDependencies['rimraf'],
-            serve: packageJson.peerDependencies['serve'],
             storybook: packageJson.peerDependencies['storybook'],
             stylelint: packageJson.peerDependencies['stylelint'],
             tsx: packageJson.peerDependencies['tsx'],
             typescript: packageJson.peerDependencies['typescript'],
             webpack: packageJson.peerDependencies['webpack'],
             'webpack-cli': packageJson.peerDependencies['webpack-cli'],
+            '@vyriy/static': `^${packageJson.version}`,
         },
     }, null, 2) + '\n',
-    'README.md': `# ${options.name}
+    'README.md': `# MFE
 
-${options.description}
+Profile-card microfrontend starter for Vyriy and OpenMFE-oriented development.
+
+The repository is split into reusable packages and runnable workspaces. Packages own typed component, API, event, query, and environment behavior.
+Workspaces compose those packages into the local API server, static asset origin, and browser custom element build.
 
 ## Setup
 
 \`\`\`bash
 yarn install
 \`\`\`
+
+## Project Structure
+
+- \`packages/api\` builds demo HTML, prerendered custom element markup, JSON-LD, and the OpenMFE manifest.
+- \`packages/components\` provides the React profile-card component set.
+- \`packages/env\` reads required runtime environment values.
+- \`packages/event\` dispatches typed profile-card selection and analytics events.
+- \`packages/query\` parses API query strings into profile-card props.
+- \`workspaces/api\` serves the demo, prerender, semantic, and manifest endpoints.
+- \`workspaces/static\` serves CDN assets such as the avatar, manifest icon, and screenshots with \`@vyriy/static\`.
+- \`workspaces/ui\` registers the \`vyriy-profile-card\` custom element and builds browser assets.
 
 ## Start
 
@@ -391,11 +785,16 @@ yarn start:ui
 
 ## Local URLs
 
-Default ports are defined in \`workspaces/env.sh\`:
+Default ports and origins are defined in \`workspaces/env.sh\`:
 
 - API: \`http://localhost:3000\`
 - Static/CDN assets: \`http://localhost:3001\`
 - UI dev server: \`http://localhost:3002\`
+
+Default runtime values:
+
+- \`TAG=vyriy-profile-card\`
+- \`MODE=open\`
 
 Useful API URLs:
 
@@ -404,18 +803,54 @@ Useful API URLs:
 - Semantic JSON-LD: \`http://localhost:3000/semantic?name=Developer&title=Senior%20IT%20Professional&avatarUrl=http://localhost:3001/avatar.svg\`
 - Manifest: \`http://localhost:3000/manifest.yml\`
 
+\`/prerender\` and \`/semantic\` require \`name\` and accept optional \`title\`, \`description\`, \`avatarUrl\`, and comma-separated \`tags\`.
+
+## Static Assets
+
+Static files are served with \`@vyriy/static\`. The package exposes the \`vs\` command, so a globally installed copy can serve any static directory with a small command:
+
+\`\`\`bash
+vs -p 3001 workspaces/static/public
+\`\`\`
+
+In this project, \`yarn start:static\` runs the same static server through \`npx vs\` and the \`CDN_PORT\` value from \`workspaces/env.sh\`.
+
+## Build
+
+\`\`\`bash
+yarn build
+\`\`\`
+
+The build writes server output to \`dist/api\` and browser/static CDN output to \`dist/cdn\`.
+
 ## Validation
+
+\`\`\`bash
+yarn check
+\`\`\`
+
+Focused validation commands:
 
 \`\`\`bash
 yarn lint
 yarn test
 yarn build
 \`\`\`
+
+## Project Guidance
+
+These articles describe the development approach behind this preset and provide practical guidance for evolving a project on top of it:
+
+- [Calm Development Environment: Node.js, Corepack, Yarn and Static Preview](https://vyriy.dev/blog/calm-development-setup/) - how to keep the local development environment predictable and easy to reproduce.
+- [Calm App Structure for the Vyriy Ecosystem](https://vyriy.dev/blog/vyriy-calm-app-structure/) - a practical project structure for Vyriy applications: shared configs, small packages, thin workspaces, Storybook docs, tests, and deployable entry points.
+- [One Handler, Many Runtimes](https://vyriy.dev/examples/one-handler-many-runtimes/) - how @vyriy/handler, @vyriy/router, and @vyriy/server compose a calm Lambda-compatible API that can run locally, in Docker, Fargate-style HTTP runtimes, and AWS Lambda.
+- [Calm Component Structure](https://vyriy.dev/blog/calm-component-structure/) - how to organize component code, tests, stories, and public exports.
+- [Storybook as Project Documentation](https://vyriy.dev/blog/storybook-as-project-documentation/) - how to use Storybook as living project documentation and a component playground.
 `,
     'doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
 import ReadMe from './README.md?raw';
 
-<Meta title="${options.name}" />
+<Meta title="MFE" />
 
 <Markdown>{ReadMe}</Markdown>
 `,

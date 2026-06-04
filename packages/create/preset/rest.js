@@ -33,14 +33,14 @@ export const rest = (options) => ({
             test: "run-s 'test:*'",
             'fix:prettier': 'prettier . --write',
             'fix:eslint': 'eslint . --fix',
+            'start:api': 'sh workspaces/api/bin/start.sh',
             'lint:ts': 'tsc',
             'lint:prettier': 'prettier . --check',
             'lint:eslint': 'eslint .',
+            'build:api': 'rimraf dist && sh workspaces/api/bin/build.sh',
             'build:storybook': 'cross-env STORYBOOK_DISABLE_TELEMETRY=1 storybook build --quiet --disable-telemetry',
             'test:jest': 'jest',
             postinstall: 'husky',
-            'start:api': 'sh workspaces/api/bin/start.sh',
-            'build:api': 'rimraf dist && sh workspaces/api/bin/build.sh',
         },
         dependencies: {
             '@vyriy/typescript-config': `^${packageJson.version}`,
@@ -67,11 +67,119 @@ export const rest = (options) => ({
             '@vyriy/html': `^${packageJson.version}`,
         },
     }, null, 2) + '\n',
-    'README.md': `# ${options.name}\n\n${options.description}\n`,
+    'README.md': `# REST API
+
+Calm cloud-ready application built as a Yarn workspace.
+
+The repository currently contains a single API workspace that serves a small
+HTTP API, publishes an OpenAPI document, and renders the document with Scalar.
+The root package owns shared tooling for TypeScript, ESLint, Prettier, Jest,
+Storybook, and workspace-level build scripts.
+
+## Requirements
+
+- Node.js \`>=24.0.0\`
+- Yarn \`4.16.0\`
+
+## Workspaces
+
+| Workspace                                | Description                                            |
+| ---------------------------------------- | ------------------------------------------------------ |
+| [\`@w/api\`](./workspaces/api/README.md) | HTTP API server with OpenAPI and Scalar documentation. |
+
+## Local development
+
+Install dependencies:
+
+\`\`\`bash
+yarn install
+\`\`\`
+
+Start all configured services:
+
+\`\`\`bash
+yarn start
+\`\`\`
+
+Start only the API:
+
+\`\`\`bash
+yarn start:api
+\`\`\`
+
+The API listens on \`PORT\` through \`@vyriy/server\`; when \`PORT\` is not set, the
+default port is \`3000\`.
+
+After the API starts, open:
+
+- \`http://localhost:3000/\` for the Scalar API reference.
+- \`http://localhost:3000/openapi.json\` for the raw OpenAPI document.
+- \`http://localhost:3000/api/test\` for the test endpoint.
+
+## Documentation
+
+Run Storybook:
+
+\`\`\`bash
+yarn storybook
+\`\`\`
+
+The root \`doc.mdx\` imports this README for project-level documentation.
+\`workspaces/api/doc.mdx\` imports the API workspace README for API-specific
+documentation.
+
+## Validation
+
+Run all checks:
+
+\`\`\`bash
+yarn check
+\`\`\`
+
+Run checks separately:
+
+\`\`\`bash
+yarn lint
+yarn build
+yarn test
+\`\`\`
+
+Run the focused API test suite:
+
+\`\`\`bash
+yarn jest workspaces/api --runInBand --coverage=false
+\`\`\`
+
+## Build
+
+Build all configured outputs:
+
+\`\`\`bash
+yarn build
+\`\`\`
+
+Build only the API bundle:
+
+\`\`\`bash
+yarn build:api
+\`\`\`
+
+The API build writes a CommonJS server bundle to \`dist/api/index.js\` and copies
+a runtime \`package.json\` into \`dist/api\`.
+
+## Project Guidance
+
+These articles describe the development approach behind this preset and provide practical guidance for evolving a project on top of it:
+
+- [Calm Development Environment: Node.js, Corepack, Yarn and Static Preview](https://vyriy.dev/blog/calm-development-setup/) - how to keep the local development environment predictable and easy to reproduce.
+- [Calm App Structure for the Vyriy Ecosystem](https://vyriy.dev/blog/vyriy-calm-app-structure/) - a practical project structure for Vyriy applications: shared configs, small packages, thin workspaces, Storybook docs, tests, and deployable entry points.
+- [One Handler, Many Runtimes](https://vyriy.dev/examples/one-handler-many-runtimes/) - how @vyriy/handler, @vyriy/router, and @vyriy/server compose a calm Lambda-compatible API that can run locally, in Docker, Fargate-style HTTP runtimes, and AWS Lambda.
+- [Storybook as Project Documentation](https://vyriy.dev/blog/storybook-as-project-documentation/) - how to use Storybook as living project documentation and a component playground.
+`,
     'doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
 import ReadMe from './README.md?raw';
 
-<Meta title="${options.name}" />
+<Meta title="REST API" />
 
 <Markdown>{ReadMe}</Markdown>
 `,
@@ -197,7 +305,75 @@ import ReadMe from './README.md?raw';
 
 <Markdown>{ReadMe}</Markdown>
 `,
-    'workspaces/api/README.md': `# ${options.name} API\n\n${options.description}\n`,
+    'workspaces/api/README.md': `# REST API
+
+Calm cloud-ready application API workspace.
+
+This workspace starts a small HTTP API with \`@vyriy/server\`, adapts the router
+through \`@vyriy/handler\`, and documents the available endpoints with an
+OpenAPI document rendered by Scalar.
+
+## Routes
+
+| Method   | Path              | Description                                       |
+| -------- | ----------------- | ------------------------------------------------- |
+| \`GET\`  | \`/\`             | Serves the Scalar API reference UI.               |
+| \`GET\`  | \`/openapi.json\` | Returns the OpenAPI 3.0 document for the API.     |
+| \`GET\`  | \`/api/test\`     | Returns a JSON test response: \`{ "test": "ok" }\`. |
+
+Unknown routes return a \`404\` JSON response.
+
+## Local development
+
+Start the API from the repository root:
+
+\`\`\`bash
+yarn start:api
+\`\`\`
+
+The server listens on \`PORT\` through \`@vyriy/server\`; when \`PORT\` is not set,
+the default port is \`3000\`.
+
+After the server starts, open:
+
+- \`http://localhost:3000/\` for the API reference UI.
+- \`http://localhost:3000/openapi.json\` for the raw OpenAPI document.
+- \`http://localhost:3000/api/test\` for the test endpoint.
+
+## Validation
+
+Run the API test suite:
+
+\`\`\`bash
+yarn jest workspaces/api --runInBand --coverage=false
+\`\`\`
+
+Run the full repository checks:
+
+\`\`\`bash
+yarn check
+\`\`\`
+
+## Build
+
+Build the API bundle from the repository root:
+
+\`\`\`bash
+yarn build:api
+\`\`\`
+
+The build writes a CommonJS server bundle to \`dist/api/index.js\` and copies a
+runtime \`package.json\` into \`dist/api\`.
+
+## Implementation notes
+
+- \`index.ts\` owns the router, OpenAPI document, Scalar UI route, and server
+  startup.
+- \`index.test.ts\` mocks the server adapter, loads \`index.ts\`, and validates the
+  registered route behavior.
+- \`doc.mdx\` imports this README so the same documentation appears in Storybook
+  under \`Workspaces/API\`.
+`,
     'workspaces/api/webpack.config.ts': `import { path } from '@vyriy/path';
 import { ssr, external } from '@vyriy/webpack-config';
 
@@ -313,7 +489,7 @@ router.get('/', async () => {
   });
 });
 
-server(api(async (event) => router.route(event)));
+server(api(router.handle()));
 `,
     'workspaces/api/index.test.ts': `import { describe, expect, it, jest } from '@jest/globals';
 import type { APIGatewayProxyEvent } from '@vyriy/router';

@@ -20,7 +20,7 @@ vyriy-static public
 vyriy-static --port 3000 dist
 ```
 
-When no directory is provided to the CLI, it serves the current directory.
+When no directory is provided to the CLI, it tries `dist`, `build`, `public`, `out`, and then the current directory.
 
 CLI flags:
 
@@ -45,7 +45,10 @@ import { createRouter } from '@vyriy/router';
 export const assets = useStatic();
 export const app = useSpa({ directory: 'dist', index: 'index.html' });
 
-export const router = withStatic(createRouter(), { directory: 'dist' }).static('/');
+export const router = withStatic(createRouter())
+  .get('/api', () => ({ body: JSON.stringify({ ok: true }) }))
+  .static('/dist', { directory: 'dist' })
+  .static('/', { directory: 'public' });
 export const spaRouter = withSpa(createRouter(), 'dist');
 
 const code = await staticServer({ directory: 'dist' });
@@ -53,7 +56,8 @@ const code = await staticServer({ directory: 'dist' });
 
 - `useStatic({ directory, index, error })` serves files from a directory.
 - `useSpa(options)` serves static files and falls back to the configured index file for missing `GET` and `HEAD` paths.
-- `withStatic(router, options).static(path)` adds prefix-based static mounts.
+- `withStatic(router).static(path, options)` adds prefix-based static mounts.
+- `withStatic(router, options).static(path)` keeps a shared default for static mounts.
 - `withSpa(router, directoryOrOptions)` adds static-first SPA fallback behavior.
 
 Defaults are `directory: 'dist'`, `index: 'index.html'`, and `error: '404.html'`.

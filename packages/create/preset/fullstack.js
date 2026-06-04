@@ -17,28 +17,263 @@ const projectFiles = {
     'packages/env/env.test.ts': "import { afterEach, describe, expect, it } from '@jest/globals';\n\nimport { getApi, getCdn, getUi } from './env.js';\n\ndescribe('env getters', () => {\n  afterEach(() => {\n    delete process.env.API;\n    delete process.env.CDN;\n    delete process.env.UI;\n  });\n\n  it('reads required environment values', () => {\n    process.env.API = 'http://localhost:3000';\n    process.env.CDN = 'http://localhost:3001';\n    process.env.UI = 'http://localhost:3002';\n\n    expect(getApi()).toBe('http://localhost:3000');\n    expect(getCdn()).toBe('http://localhost:3001');\n    expect(getUi()).toBe('http://localhost:3002');\n  });\n\n  it('throws when a required environment value is missing', () => {\n    expect(() => getUi()).toThrow('Environment variable UI is not defined!');\n  });\n});\n",
     'packages/env/env.ts': "import { getEnv } from '@vyriy/env';\n\n/** Reads the API origin used for server endpoints. */\nexport const getApi = () => getEnv('API');\n\n/** Reads the CDN origin used for static assets. */\nexport const getCdn = () => getEnv('CDN');\n\n/** Reads the UI origin used for browser assets. */\nexport const getUi = () => getEnv('UI');\n",
     'packages/env/index.test.ts': "import { afterEach, describe, expect, it } from '@jest/globals';\n\nimport * as publicApi from './index.js';\n\nconst ENV_NAMES = [\n  'API',\n  'CDN',\n  'UI',\n] as const;\n\nconst clearEnv = () => {\n  for (const name of ENV_NAMES) {\n    delete process.env[name];\n  }\n};\n\ndescribe('env public API', () => {\n  afterEach(() => {\n    clearEnv();\n  });\n\n  it('exports env getters', () => {\n    expect(publicApi.getApi).toBeDefined();\n    expect(publicApi.getCdn).toBeDefined();\n    expect(publicApi.getUi).toBeDefined();\n  });\n\n  it('reads environment variables by public getter name', () => {\n    process.env.API = 'http://localhost:3000';\n    process.env.CDN = 'http://localhost:3001';\n    process.env.UI = 'http://localhost:3002';\n\n    expect(publicApi.getApi()).toBe('http://localhost:3000');\n    expect(publicApi.getCdn()).toBe('http://localhost:3001');\n    expect(publicApi.getUi()).toBe('http://localhost:3002');\n  });\n\n  it('throws when a required environment variable is missing', () => {\n    clearEnv();\n\n    expect(() => publicApi.getApi()).toThrow('Environment variable API is not defined!');\n  });\n});\n",
-    'packages/env/README.md': '# @p/env\n\nRequired environment readers shared by API and UI workspaces.\n\n## Exports\n\n- `getApi()` reads `API`.\n- `getCdn()` reads `CDN`.\n- `getUi()` reads `UI`.\n\nEach getter throws when its environment variable is missing.\n',
+    'packages/env/README.md': `# Env
+
+Required environment readers shared by the API and UI workspaces.
+
+## Exports
+
+- \`getApi()\` reads \`API\`.
+- \`getCdn()\` reads \`CDN\`.
+- \`getUi()\` reads \`UI\`.
+
+Each getter throws when its environment variable is missing.
+
+## Usage
+
+\`\`\`ts
+import { getApi, getCdn, getUi } from '@p/env';
+
+const apiOrigin = getApi();
+const cdnOrigin = getCdn();
+const uiOrigin = getUi();
+\`\`\`
+
+## Local Defaults
+
+Workspace scripts source \`workspaces/env.sh\`, which provides local defaults:
+
+- \`API_PORT=3000\`
+- \`CDN_PORT=3001\`
+- \`UI_PORT=3002\`
+- \`API=http://localhost:$API_PORT\`
+- \`CDN=http://localhost:$CDN_PORT\`
+- \`UI=http://localhost:$UI_PORT\`
+
+Override these variables before running a workspace script when a different origin or port is needed.
+
+## Notes
+
+- The package is private to this repository.
+- The public entry point re-exports from \`env.ts\`.
+- The getters are thin wrappers around \`@vyriy/env\` and keep environment access explicit at call sites.
+`,
     'stylelint.config.ts': "export { default } from '@vyriy/stylelint-config';\n",
     'workspaces/api/bin/build.sh': '#!/usr/bin/env sh\n\nset -e\n\nscriptdir="$PWD/workspaces/api";\n\n. "$PWD/workspaces/env.sh"\n\nNODE_ENV=production \\\nnpx webpack --config $scriptdir/webpack.config.ts\n\ncp $scriptdir/package.json dist/api/package.json\nnpm pkg delete "type" --prefix dist/api\nnpm pkg delete "private" --prefix dist/api\n',
-    'workspaces/api/bin/start.sh': '#!/usr/bin/env sh\n\nset -e\n\nscriptdir="$PWD/workspaces/api";\n\n. "$PWD/workspaces/env.sh"\n\necho "Demo:\\n$API/\\n"\necho "Prerender:\\n$API/prerender?name=Developer&title=Senior%20IT%20Professional&avatarUrl=http://localhost:3001/avatar.svg\\n"\necho "Semantic:\\n$API/semantic?name=Developer&title=Senior%20IT%20Professional&avatarUrl=http://localhost:3001/avatar.svg\\n"\necho "Manifest:\\n$API/manifest.yml\\n"\n\nNODE_ENV=production \\\nLOG_LEVEL=info \\\nPORT=$API_PORT \\\ntsx watch $scriptdir/index.ts\n',
+    'workspaces/api/bin/start.sh': `#!/usr/bin/env sh
+
+set -e
+
+scriptdir="$PWD/workspaces/api";
+
+. "$PWD/workspaces/env.sh"
+
+echo "Demo:\n$API/\n"
+echo "Prerender:\n$API/prerender?name=Developer&title=Senior%20IT%20Professional&avatarUrl=http://localhost:3001/avatar.svg\n"
+echo "Semantic:\n$API/semantic?name=Developer&title=Senior%20IT%20Professional&avatarUrl=http://localhost:3001/avatar.svg\n"
+echo "Manifest:\n$API/manifest.yml\n"
+
+NODE_ENV=production \
+LOG_LEVEL=info \
+PORT=$API_PORT \
+tsx watch $scriptdir/index.tsx
+`,
     'workspaces/api/doc.mdx': "import { Meta, Markdown } from '@storybook/addon-docs/blocks';\nimport ReadMe from './README.md?raw';\n\n<Meta title=\"Workspaces/API\" />\n\n<Markdown>{ReadMe}</Markdown>\n",
     'workspaces/api/package.json': '{\n  "name": "@w/api",\n  "type": "module",\n  "private": true\n}\n',
-    'workspaces/api/README.md': '# app API\n\nCalm cloud-ready application\n',
+    'workspaces/api/README.md': `# API
+
+Server-rendered demo workspace for the profile-card application.
+
+## Behavior
+
+The API starts an \`@vyriy/server\` handler and serves the root route:
+
+- \`GET /\` returns an HTML document with a server-rendered \`ProfileCard\`.
+- Unknown routes return the router \`404\` response.
+
+The HTML includes:
+
+- \`http://localhost:3002/main.css\` by default
+- \`http://localhost:3002/index.js\` by default
+- the demo avatar at \`http://localhost:3001/avatar.svg\`
+
+The UI origin is read through \`getUi()\` from \`@p/env\`.
+
+## Local Development
+
+From the repository root:
+
+\`\`\`bash
+yarn start:api
+\`\`\`
+
+The script sources \`workspaces/env.sh\` and starts \`workspaces/api/index.tsx\` with \`tsx watch\`.
+
+Default local values:
+
+- \`API_PORT=3000\`
+- \`API=http://localhost:3000\`
+- \`UI=http://localhost:3002\`
+
+Run the static and UI workspaces alongside the API when loading the full page:
+
+\`\`\`bash
+yarn start
+\`\`\`
+
+## Build
+
+\`\`\`bash
+yarn build:api
+\`\`\`
+
+The build emits the server bundle to \`dist/api/index.js\` and copies the workspace \`package.json\` into \`dist/api\`.
+
+## Validation
+
+\`\`\`bash
+yarn test:jest workspaces/api
+\`\`\`
+
+The tests verify server registration, the rendered root response, response headers, linked UI assets, and the \`404\` path.
+`,
     'workspaces/api/index.test.tsx': "import { describe, expect, it, jest } from '@jest/globals';\nimport type { APIGatewayProxyEvent } from '@vyriy/router';\n\nconst apiMock = jest.fn((handler) => ({ handler }));\nconst serverMock = jest.fn();\n\njest.mock('@vyriy/handler', () => ({\n  api: apiMock,\n}));\n\njest.mock('@vyriy/server', () => ({\n  server: serverMock,\n}));\n\njest.mock('@p/env', () => ({\n  getUi: () => 'http://localhost:3002',\n}));\n\ndescribe('workspaces/api/index.tsx', () => {\n  type ApiHandler = (event: APIGatewayProxyEvent) => Promise<{\n    body: string;\n    headers?: Record<string, string>;\n    statusCode: number;\n  }>;\n\n  const getEvent = (path: string): APIGatewayProxyEvent =>\n    ({\n      body: null,\n      headers: {},\n      httpMethod: 'GET',\n      path,\n      pathParameters: null,\n      queryStringParameters: null,\n    }) as APIGatewayProxyEvent;\n\n  const loadHandler = async (): Promise<ApiHandler> => {\n    await jest.isolateModulesAsync(async () => {\n      await import('./index.js');\n    });\n\n    expect(apiMock).toHaveBeenCalledTimes(1);\n    expect(serverMock).toHaveBeenCalledTimes(1);\n    expect(serverMock).toHaveBeenCalledWith(apiMock.mock.results[0]?.value);\n\n    return apiMock.mock.calls[0]?.[0] as ApiHandler;\n  };\n\n  it('starts the server with the API handler', async () => {\n    await loadHandler();\n\n    expect(apiMock).toHaveBeenCalledTimes(1);\n  });\n\n  it('renders the demo page for the root route', async () => {\n    const handler = await loadHandler();\n    const response = await handler(getEvent('/'));\n\n    expect(response).toEqual({\n      body: expect.any(String),\n      headers: {\n        'access-control-allow-origin': '*',\n        'cache-control': 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',\n        'content-type': 'text/html; charset=utf-8',\n        'x-content-type-options': 'nosniff',\n      },\n      isBase64Encoded: undefined,\n      multiValueHeaders: undefined,\n      statusCode: 200,\n    });\n    expect(response.body).toContain('<title>Demo</title>');\n    expect(response.body).toContain('href=\"http://localhost:3002/main.css\"');\n    expect(response.body).toContain('<div id=\"root\" rendered>');\n    expect(response.body).toContain('Developer');\n    expect(response.body).toContain('Senior IT Professional');\n    expect(response.body).toContain('http://localhost:3001/avatar.svg');\n    expect(response.body).toContain('src=\"http://localhost:3002/index.js\"');\n  });\n\n  it('returns not found for unknown routes', async () => {\n    const handler = await loadHandler();\n\n    await expect(handler(getEvent('/missing'))).resolves.toEqual({\n      body: JSON.stringify({\n        message: 'Not Found',\n      }),\n      statusCode: 404,\n    });\n  });\n});\n",
     'workspaces/api/index.tsx': "import { server } from '@vyriy/server';\nimport { api } from '@vyriy/handler';\nimport { createRouter } from '@vyriy/router';\nimport { minify, html } from '@vyriy/html';\nimport { html as react } from '@vyriy/render';\n\nimport { ProfileCard } from '@p/components/profile-card';\nimport { getUi } from '@p/env';\n\nserver(\n  api(async (event) =>\n    createRouter()\n      .get('/', () => ({\n        body: minify(\n          html({\n            htmlAttributes: 'lang=\"en\"',\n            title: '<title>Demo</title>',\n            meta: '<meta charset=\"utf-8\" /><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />',\n            link: `<link rel=\"stylesheet\" type=\"text/css\" href=\"${getUi()}/main.css\" />`,\n            body: `<div id=\"root\" rendered>${react(\n              <ProfileCard\n                name=\"Developer\"\n                title=\"Senior IT Professional\"\n                avatarUrl=\"http://localhost:3001/avatar.svg\"\n              />,\n            )}</div>`,\n            script: `<script defer=\"defer\" src=\"${getUi()}/index.js\"></script>`,\n          }),\n        ),\n        headers: {\n          'content-type': 'text/html; charset=utf-8',\n          'cache-control': 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',\n          'access-control-allow-origin': '*',\n          'x-content-type-options': 'nosniff',\n        },\n      }))\n      .route(event),\n  ),\n);\n",
     'workspaces/api/webpack.config.ts': "import { EnvironmentPlugin } from 'webpack';\nimport { path } from '@vyriy/path';\nimport { ssr, external } from '@vyriy/webpack-config';\n\nexport default ssr(\n  '@w/api',\n  {\n    path: path('dist', 'api'),\n    filename: 'index.js',\n    library: { type: 'commonjs2' },\n  },\n  (config) => ({\n    ...config,\n    externals: [external({ allowlist: [/^@p/, /^@w/, /^@vyriy/] })],\n    plugins: [\n      ...(config.plugins ?? []),\n      new EnvironmentPlugin([\n        'API',\n        'CDN',\n        'UI',\n      ]),\n    ],\n  }),\n);\n",
     'workspaces/env.sh': '#!/usr/bin/env sh\n\n: "${API_PORT:=3000}"\n: "${CDN_PORT:=3001}"\n: "${UI_PORT:=3002}"\n: "${API:=http://localhost:$API_PORT}"\n: "${CDN:=http://localhost:$CDN_PORT}"\n: "${UI:=http://localhost:$UI_PORT}"\n\nexport API_PORT\nexport CDN_PORT\nexport UI_PORT\nexport API\nexport CDN\nexport UI\n',
     'workspaces/static/bin/build.sh': '#!/usr/bin/env sh\n\nset -e\n\nscriptdir="$PWD/workspaces/static";\ndistdir="$PWD/dist/cdn";\n\ncp -R $scriptdir/public/* $distdir/\n',
-    'workspaces/static/bin/start.sh': '#!/usr/bin/env sh\n\nset -e\n\nscriptdir="$PWD/workspaces/static";\n\n. "$PWD/workspaces/env.sh"\n\nnpx serve --cors -p $CDN_PORT $scriptdir/public\n',
+    'workspaces/static/bin/start.sh': `#!/usr/bin/env sh
+
+set -e
+
+scriptdir="$PWD/workspaces/static";
+
+. "$PWD/workspaces/env.sh"
+
+npx vs -p $CDN_PORT $scriptdir/public
+`,
     'workspaces/static/doc.mdx': "import { Meta, Markdown } from '@storybook/addon-docs/blocks';\nimport ReadMe from './README.md?raw';\n\n<Meta title=\"Workspaces/Static\" />\n\n<Markdown>{ReadMe}</Markdown>\n",
     'workspaces/static/package.json': '{\n  "name": "@w/static",\n  "type": "module",\n  "private": true\n}\n',
     'workspaces/static/public/avatar.svg': '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800">\r\n<rect width="1200" height="800" fill="#0057B7"/>\r\n<rect width="1200" height="400" y="400" fill="#FFD700"/>\r\n</svg>',
-    'workspaces/static/README.md': '# @w/static\n\nStatic asset workspace for the profile-card UI.\n\n## Assets\n\n- `avatar.svg` is the default demo avatar.\n\nThe workspace is served as the CDN origin during local development.\n',
+    'workspaces/static/README.md': `# Static
+
+Static asset workspace for the profile-card UI. It is served with \`vs\`, the CLI provided by \`@vyriy/static\`.
+
+## Assets
+
+- \`avatar.svg\` is the default demo avatar.
+
+## Local Development
+
+From the repository root:
+
+\`\`\`bash
+yarn start:static
+\`\`\`
+
+The script sources \`workspaces/env.sh\` and runs:
+
+\`\`\`bash
+npx vs -p $CDN_PORT workspaces/static/public
+\`\`\`
+
+This serves every file in \`workspaces/static/public\` as a directly addressable static asset for the project.
+
+Default local values:
+
+- \`CDN_PORT=3001\`
+- \`CDN=http://localhost:3001\`
+
+The API and UI demo use the avatar at:
+
+\`\`\`text
+http://localhost:3001/avatar.svg
+\`\`\`
+
+## Global CLI
+
+\`@vyriy/static\` can be installed globally when you want the \`vs\` command available without \`npx\` or project scripts:
+
+\`\`\`bash
+npm install --global @vyriy/static
+vs -p 3001 workspaces/static/public
+\`\`\`
+
+Use the same command shape for any static directory:
+
+\`\`\`bash
+vs -p <port> <static-directory>
+\`\`\`
+
+## Build
+
+\`\`\`bash
+yarn build:static
+\`\`\`
+
+The build copies files from \`workspaces/static/public\` into \`dist/cdn\`.
+
+## Notes
+
+- Keep files in \`public\` directly addressable by URL.
+- Add shared static demo assets here rather than coupling them to the API or UI workspace.
+`,
     'workspaces/ui/bin/build.sh': '#!/usr/bin/env sh\n\nset -e\n\nscriptdir="$PWD/workspaces/ui";\n\n. "$PWD/workspaces/env.sh"\n\nNODE_ENV=production \\\nnpx webpack \\\n--config $scriptdir/webpack.config.ts\n',
     'workspaces/ui/bin/start.sh': '#!/usr/bin/env sh\n\nset -e\n\nscriptdir="$PWD/workspaces/ui";\n\n. "$PWD/workspaces/env.sh"\n\nnpx webpack serve \\\n--open \\\n--config $scriptdir/webpack.config.ts \\\n--port $UI_PORT\n',
     'workspaces/ui/doc.mdx': "import { Meta, Markdown } from '@storybook/addon-docs/blocks';\nimport ReadMe from './README.md?raw';\n\n<Meta title=\"Workspaces/UI\" />\n\n<Markdown>{ReadMe}</Markdown>\n",
     'workspaces/ui/package.json': '{\n  "name": "@w/ui",\n  "type": "module",\n  "private": true\n}\n',
-    'workspaces/ui/README.md': '# @w/ui\n\nDemo entry point.\n',
+    'workspaces/ui/README.md': `# UI
+
+Client-rendered demo workspace for the profile-card application.
+
+## Behavior
+
+The UI entry point mounts a \`ProfileCard\` into \`#root\` with the same demo data used by the API-rendered page.
+
+It imports shared component styles from:
+
+\`\`\`ts
+import '@p/components/styles.scss';
+\`\`\`
+
+## Local Development
+
+From the repository root:
+
+\`\`\`bash
+yarn start:ui
+\`\`\`
+
+The script sources \`workspaces/env.sh\` and starts webpack dev server for \`workspaces/ui/index.tsx\`.
+
+Default local values:
+
+- \`UI_PORT=3002\`
+- \`UI=http://localhost:3002\`
+- \`CDN=http://localhost:3001\`
+
+Run the full local application when the API, CDN assets, and UI bundle should all be available:
+
+\`\`\`bash
+yarn start
+\`\`\`
+
+## Build
+
+\`\`\`bash
+yarn build:ui
+\`\`\`
+
+The build emits the browser bundle and generated HTML into \`dist/cdn\`.
+
+## Validation
+
+\`\`\`bash
+yarn test:jest workspaces/ui
+\`\`\`
+
+The tests verify that the entry point mounts into \`#root\` and renders the demo \`ProfileCard\` props.
+`,
     'workspaces/ui/index.test.tsx': "import { describe, expect, it, jest } from '@jest/globals';\nimport { isValidElement } from 'react';\nimport type { ReactElement } from 'react';\n\nconst elementMock = jest.fn();\n\njest.mock('@vyriy/render/element', () => ({\n  element: elementMock,\n}));\n\ntype ProfileCardProps = {\n  avatarUrl: string;\n  name: string;\n  title: string;\n};\n\ndescribe('workspaces/ui/index.tsx', () => {\n  const loadEntry = async () => {\n    const root = document.createElement('div');\n    root.id = 'root';\n    document.body.replaceChildren();\n    document.body.append(root);\n\n    await jest.isolateModulesAsync(async () => {\n      await import('./index.js');\n    });\n\n    const [{ component }] = elementMock.mock.calls[0] as [{ component: ReactElement<ProfileCardProps> }];\n\n    return {\n      root,\n      component,\n    };\n  };\n\n  it('mounts the UI into the root element', async () => {\n    const { root, component } = await loadEntry();\n\n    expect(elementMock).toHaveBeenCalledTimes(1);\n    expect(elementMock).toHaveBeenCalledWith({\n      root,\n      component,\n    });\n  });\n\n  it('renders the profile card demo component', async () => {\n    const { component } = await loadEntry();\n\n    expect(isValidElement(component)).toBe(true);\n    expect(typeof component.type).toBe('function');\n    expect((component.type as { name?: string }).name).toBe('ProfileCard');\n    expect(component.props).toEqual({\n      avatarUrl: 'http://localhost:3001/avatar.svg',\n      name: 'Developer',\n      title: 'Senior IT Professional',\n    });\n  });\n});\n",
     'workspaces/ui/index.tsx': "import { element } from '@vyriy/render/element';\n\nimport { ProfileCard } from '@p/components/profile-card';\nimport '@p/components/styles.scss';\n\nelement({\n  root: document.getElementById('root'),\n  component: (\n    <ProfileCard name=\"Developer\" title=\"Senior IT Professional\" avatarUrl=\"http://localhost:3001/avatar.svg\" />\n  ),\n});\n",
     'workspaces/ui/webpack.config.ts': "import { EnvironmentPlugin } from 'webpack';\n\nimport { csr, html } from '@vyriy/webpack-config';\nimport { path } from '@vyriy/path';\n\nexport default csr(\n  '@w/ui',\n  {\n    path: path('dist', 'cdn'),\n    filename: 'index.js',\n  },\n  (config) => ({\n    ...config,\n    plugins: [\n      ...(config.plugins ?? []),\n      new EnvironmentPlugin(['API', 'CDN', 'UI']),\n      html({\n        htmlAttributes: 'lang=\"en\"',\n        title: '<title>Demo</title>',\n        meta: '<meta charset=\"utf-8\" /><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />',\n        body: '<div id=\"root\"></div>',\n      }),\n    ],\n  }),\n);\n",
@@ -241,7 +476,70 @@ export default {
     'packages/components/profile-tags/README.md': "# ProfileTags\n\n`ProfileTags` renders a list of profile tags using `Badge`.\n\n## Usage\n\n```tsx\nimport { ProfileTags } from './profile-tags.js';\n\nexport const Example = () => <ProfileTags tags={['React', 'TypeScript']} />;\n```\n\n## Props\n\n```ts\nexport type ProfileTagsProps = {\n  tags: string[];\n  tone?: BadgeProps['tone'];\n} & ComponentProps<'ul'>;\n```\n\n## Accessibility\n\nTags are rendered as a semantic `<ul>` with one `<li>` per tag.\n\n## Notes\n\n- Empty tag arrays render `null`.\n- SSR/SSG-safe.\n- Shared SCSS styles.\n",
     'packages/components/profile-tags/styles.scss': '.profile-tags {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 0.4rem;\n  margin: 0;\n  padding: 0;\n  list-style: none;\n}\n\n.profile-tags__item {\n  display: inline-flex;\n}\n',
     'packages/components/profile-tags/types.ts': "import type { ComponentProps, FC } from 'react';\n\nimport type { BadgeProps } from '../badge/index.js';\n\n/** Props for the ProfileTags component. */\nexport type ProfileTagsProps = {\n  tags: string[];\n  tone?: BadgeProps['tone'];\n} & ComponentProps<'ul'>;\n\n/** ProfileTags component type. */\nexport type ProfileTagsType = FC<ProfileTagsProps>;\n",
-    'packages/components/README.md': '# @p/components\n\nReusable React primitives for the profile-card microfrontend.\n\n## Exports\n\nThe package exports the public profile-card component set:\n\n- `Avatar`\n- `Badge`\n- `ButtonLink`\n- `Card`\n- `IconLink`\n- `ProfileCard`\n- `ProfileDetails`\n- `ProfileHeader`\n- `ProfileLinks`\n- `ProfileMeta`\n- `ProfileTags`\n\nEach component has a focused README, Storybook docs, stories, and unit tests in its own folder.\n',
+    'packages/components/README.md': `# Components
+
+Reusable React components for the profile-card demo. The package is private to
+this repository and is consumed by the API and UI workspaces.
+
+## Exports
+
+Import the full public surface from \`@p/components\`:
+
+- \`Avatar\`
+- \`Badge\`
+- \`ButtonLink\`
+- \`Card\`
+- \`IconLink\`
+- \`ProfileCard\`
+- \`ProfileDetails\`
+- \`ProfileHeader\`
+- \`ProfileLinks\`
+- \`ProfileMeta\`
+- \`ProfileTags\`
+
+Focused component entry points are also available:
+
+\`\`\`tsx
+import { ProfileCard } from '@p/components/profile-card';
+\`\`\`
+
+## Usage
+
+\`\`\`tsx
+import { ProfileCard } from '@p/components/profile-card';
+import '@p/components/styles.scss';
+
+export const Example = () => (
+  <ProfileCard
+    name="Developer"
+    title="Senior IT Professional"
+    description="Building calm architecture for cloud-ready applications."
+    avatarUrl="http://localhost:3001/avatar.svg"
+    tags={['React', 'TypeScript', 'Vyriy']}
+    meta={[{ label: 'Project', value: 'Fullstack preset' }]}
+    links={[{ href: 'https://vyriy.dev', label: 'Website', external: true }]}
+  />
+);
+\`\`\`
+
+## Structure
+
+Each public component lives in its own folder with:
+
+- a focused \`README.md\`
+- Storybook docs in \`doc.mdx\`
+- stories for visual states
+- behavior tests and public entry-point tests
+- component-local SCSS
+
+The package-level \`index.ts\` is a re-export surface only.
+
+## Notes
+
+- Components are SSR/SSG-friendly and avoid browser globals during render.
+- Shared styles are exposed through \`@p/components/styles.scss\`.
+- Public imports use ESM \`.js\` relative specifiers in TypeScript source.
+`,
     'packages/components/styles.d.ts': "declare module '*.scss';\ndeclare module '*.scss?inline' {\n  const css: string;\n  export default css;\n}\ndeclare module '*.svg' {\n  const src: string;\n  export default src;\n}\n",
     'packages/components/styles.scss': "@use './avatar/styles' as avatar;\n@use './badge/styles' as badge;\n@use './button-link/styles' as button-link;\n@use './card/styles' as card;\n@use './icon-link/styles' as icon-link;\n@use './profile-card/styles' as profile-card;\n@use './profile-details/styles' as profile-details;\n@use './profile-header/styles' as profile-header;\n@use './profile-links/styles' as profile-links;\n@use './profile-meta/styles' as profile-meta;\n@use './profile-tags/styles' as profile-tags;\n",
     'packages/components/package.json': JSON.stringify({
@@ -318,24 +616,30 @@ export default {
             'npm-run-all2': packageJson.peerDependencies['npm-run-all2'],
             prettier: packageJson.peerDependencies.prettier,
             rimraf: packageJson.peerDependencies.rimraf,
-            serve: packageJson.peerDependencies.serve,
             storybook: packageJson.peerDependencies.storybook,
             stylelint: packageJson.peerDependencies.stylelint,
             tsx: packageJson.peerDependencies.tsx,
             typescript: packageJson.peerDependencies.typescript,
             webpack: packageJson.peerDependencies.webpack,
             'webpack-cli': packageJson.peerDependencies['webpack-cli'],
+            '@vyriy/static': `^${packageJson.version}`,
         },
     }, null, 2) + '\n',
-    'README.md': `# ${options.name}
+    'README.md': `# Fullstack
 
-${options.description}
+Calm cloud-ready profile-card application.
+
+This repository contains a small fullstack demo with shared React components,
+required environment readers, a server-rendered API page, a static asset origin,
+and a client-rendered UI bundle.
 
 ## Setup
 
 \`\`\`bash
 yarn install
 \`\`\`
+
+The project uses Yarn workspaces and Node \`>=24.0.0\`.
 
 ## Start
 
@@ -353,13 +657,78 @@ yarn start:static
 yarn start:ui
 \`\`\`
 
+\`yarn start:static\` uses the \`vs\` CLI from \`@vyriy/static\` to serve project
+static files from \`workspaces/static/public\`.
+
 ## Local URLs
 
-Default ports are defined in \`workspaces/env.sh\`:
+Default ports and origins are defined in \`workspaces/env.sh\`:
 
 - API: \`http://localhost:3000\`
 - Static/CDN assets: \`http://localhost:3001\`
 - UI dev server: \`http://localhost:3002\`
+
+Override \`API_PORT\`, \`CDN_PORT\`, \`UI_PORT\`, \`API\`, \`CDN\`, or \`UI\` before
+running a script when local services need different addresses.
+
+## Workspaces
+
+- \`packages/components\` provides the shared profile-card React component set.
+- \`packages/env\` provides required environment readers for \`API\`, \`CDN\`, and
+  \`UI\`.
+- \`workspaces/api\` serves the SSR demo page at \`GET /\`.
+- \`workspaces/static\` serves public static assets such as \`avatar.svg\` through
+  \`vs\` from \`@vyriy/static\`.
+- \`workspaces/ui\` builds and serves the browser entry point.
+
+Each package or workspace has its own README with focused usage notes.
+
+## Static Server
+
+\`@vyriy/static\` provides the \`vs\` command for serving static files. The project
+uses it through \`npx\` in \`workspaces/static/bin/start.sh\`:
+
+\`\`\`bash
+npx vs -p 3001 workspaces/static/public
+\`\`\`
+
+It can also be installed globally when the same static server is useful outside
+the workspace scripts:
+
+\`\`\`bash
+npm install --global @vyriy/static
+vs -p 3001 workspaces/static/public
+\`\`\`
+
+## Storybook
+
+Run Storybook docs and component stories:
+
+\`\`\`bash
+yarn storybook
+\`\`\`
+
+Storybook loads package and workspace \`doc.mdx\` files and shared component
+styles from \`packages/components/styles.scss\`.
+
+## Build
+
+Build all production outputs:
+
+\`\`\`bash
+yarn build
+\`\`\`
+
+Focused builds are also available:
+
+\`\`\`bash
+yarn build:api
+yarn build:static
+yarn build:ui
+yarn build:storybook
+\`\`\`
+
+The API bundle is emitted to \`dist/api\`; UI and static assets are emitted to \`dist/cdn\`.
 
 ## Validation
 
@@ -368,11 +737,23 @@ yarn lint
 yarn test
 yarn build
 \`\`\`
+
+Use \`yarn check\` to run linting, build, and tests in one command.
+
+## Project Guidance
+
+These articles describe the development approach behind this preset and provide practical guidance for evolving a project on top of it:
+
+- [Calm Development Environment: Node.js, Corepack, Yarn and Static Preview](https://vyriy.dev/blog/calm-development-setup/) - how to keep the local development environment predictable and easy to reproduce.
+- [Calm App Structure for the Vyriy Ecosystem](https://vyriy.dev/blog/vyriy-calm-app-structure/) - a practical project structure for Vyriy applications: shared configs, small packages, thin workspaces, Storybook docs, tests, and deployable entry points.
+- [One Handler, Many Runtimes](https://vyriy.dev/examples/one-handler-many-runtimes/) - how @vyriy/handler, @vyriy/router, and @vyriy/server compose a calm Lambda-compatible API that can run locally, in Docker, Fargate-style HTTP runtimes, and AWS Lambda.
+- [Calm Component Structure](https://vyriy.dev/blog/calm-component-structure/) - how to organize component code, tests, stories, and public exports.
+- [Storybook as Project Documentation](https://vyriy.dev/blog/storybook-as-project-documentation/) - how to use Storybook as living project documentation and a component playground.
 `,
     'doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
 import ReadMe from './README.md?raw';
 
-<Meta title="${options.name}" />
+<Meta title="Fullstack" />
 
 <Markdown>{ReadMe}</Markdown>
 `,

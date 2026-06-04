@@ -9,11 +9,97 @@ const agentsPath = [
 ].find(existsSync) ?? '';
 const agentsContent = agentsPath ? readFileSync(agentsPath, 'utf8') : '';
 export const gql = (options) => ({
-    'README.md': `# ${options.name}\n\n${options.description}\n`,
+    'README.md': `# GraphQL API
+
+Calm cloud-ready GraphQL application.
+
+This repository is a Yarn workspace monorepo with a reusable GraphQL API package and a runtime workspace that serves it over HTTP.
+
+## Requirements
+
+- Node.js \`>=24.0.0\`
+- Yarn \`4.16.0\`
+
+## Workspaces
+
+- \`packages/graphql\` - reusable \`@p/graphql\` package that owns the GraphQL schema, embedded GraphiQL page, and public router export.
+- \`workspaces/graphql\` - \`@w/graphql\` runtime workspace that mounts the shared router through \`@vyriy/handler\` and \`@vyriy/server\`.
+
+## Development
+
+Install dependencies:
+
+\`\`\`bash
+yarn install
+\`\`\`
+
+Start the local GraphQL server:
+
+\`\`\`bash
+yarn start:graphql
+\`\`\`
+
+Open \`http://localhost:3000\` to use GraphiQL, or send a request directly:
+
+\`\`\`bash
+curl http://localhost:3000 \
+  --header 'Content-Type: application/json' \
+  --data '{"query":"{ hello test { ok message } }"}'
+\`\`\`
+
+## Scripts
+
+- \`yarn start\` - starts all runtime workspaces.
+- \`yarn start:graphql\` - starts the GraphQL HTTP server.
+- \`yarn build\` - builds all deployable outputs.
+- \`yarn build:graphql\` - builds the GraphQL runtime to \`dist/graphql\`.
+- \`yarn test\` - runs the Jest test suite.
+- \`yarn lint\` - runs TypeScript, Prettier, and ESLint checks.
+- \`yarn check\` - runs linting, builds, and tests.
+
+## GraphQL
+
+The root endpoint is handled by \`@p/graphql\`:
+
+- \`GET /\` serves the embedded GraphiQL page.
+- \`POST /\` executes GraphQL requests.
+
+Current schema fields:
+
+\`\`\`graphql
+type Query {
+  hello: String
+  test: Test
+}
+
+type Test {
+  ok: Boolean
+  message: String
+}
+
+type Mutation {
+  ping(message: String): String
+}
+\`\`\`
+
+See the package and runtime READMEs for the detailed API and deployment notes:
+
+- \`packages/graphql/README.md\`
+- \`workspaces/graphql/README.md\`
+
+## Project Guidance
+
+These articles describe the development approach behind this preset and provide practical guidance for evolving a project on top of it:
+
+- [Calm Development Environment: Node.js, Corepack, Yarn and Static Preview](https://vyriy.dev/blog/calm-development-setup/) - how to keep the local development environment predictable and easy to reproduce.
+- [Calm App Structure for the Vyriy Ecosystem](https://vyriy.dev/blog/vyriy-calm-app-structure/) - a practical project structure for Vyriy applications: shared configs, small packages, thin workspaces, Storybook docs, tests, and deployable entry points.
+- [One Handler, Many Runtimes](https://vyriy.dev/examples/one-handler-many-runtimes/) - how @vyriy/handler, @vyriy/router, and @vyriy/server compose a calm Lambda-compatible API that can run locally, in Docker, Fargate-style HTTP runtimes, and AWS Lambda.
+- [Storybook as Project Documentation](https://vyriy.dev/blog/storybook-as-project-documentation/) - how to use Storybook as living project documentation and a component playground.
+`,
     'doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
 import ReadMe from './README.md?raw';
 
-<Meta title="${options.name}" />
+<Meta title="GraphQL API" />
 
 <Markdown>{ReadMe}</Markdown>
 `,
@@ -317,41 +403,91 @@ describe('packages/graphql/index.ts', () => {
   "private": true
 }
 `,
-    'packages/graphql/README.md': `# @p/graphql
+    'packages/graphql/README.md': `# GraphQL
 
 Reusable GraphQL API package for the application.
 
-## Exports
+The package owns the GraphQL schema, embeds the GraphiQL browser UI, and exposes an \`@vyriy/router\` router that can be mounted by an HTTP runtime.
 
-- \`router\` - an \`@vyriy/router\` instance that serves the GraphiQL page and GraphQL HTTP requests.
+## Public API
 
-## Routes
+### \`router\`
 
-### \`GET /\`
+\`router\` is the package public export. It handles the root GraphQL endpoint:
 
-Returns an embedded GraphiQL page for exploring the schema in a browser.
+- \`GET /\` returns the embedded GraphiQL page with \`Content-Type: text/html; charset=UTF-8\`.
+- \`POST /\` executes a GraphQL request body against the package schema.
 
-### \`POST /\`
+\`\`\`ts
+import { router } from '@p/graphql';
 
-The router expects a JSON body with a GraphQL request:
+const response = await router.route(event);
+\`\`\`
+
+## GraphQL HTTP
+
+\`POST /\` expects a JSON body with a GraphQL request:
 
 \`\`\`json
 {
-  "query": "{ hello }",
+  "query": "query Hello { hello }",
   "variables": {},
   "operationName": "Hello"
 }
 \`\`\`
 
-Invalid JSON or an empty body returns \`400\` with \`Invalid JSON body\`. A body without \`query\` returns \`400\` with \`Missing GraphQL query\`.
+Supported fields:
+
+- \`query\` - required GraphQL query or mutation source.
+- \`variables\` - optional GraphQL variables object.
+- \`operationName\` - optional operation name used when the request contains more than one operation.
+
+Successful requests return the standard GraphQL execution result as JSON:
+
+\`\`\`json
+{
+  "data": {
+    "hello": "Hello from GraphQL"
+  }
+}
+\`\`\`
+
+Invalid input returns a \`400\` response with a GraphQL-style \`errors\` array:
+
+- Missing or invalid JSON body: \`Invalid JSON body\`
+- Body without \`query\`: \`Missing GraphQL query\`
 
 ## Schema
 
-The package schema currently supports:
+The current schema supports these fields:
 
-- \`hello: String\`
-- \`test: Test\`
-- \`ping(message: String): String\`
+\`\`\`graphql
+type Query {
+  hello: String
+  test: Test
+}
+
+type Test {
+  ok: Boolean
+  message: String
+}
+
+type Mutation {
+  ping(message: String): String
+}
+\`\`\`
+
+Example query:
+
+\`\`\`graphql
+query Status {
+  hello
+  test {
+    ok
+    message
+  }
+}
+\`\`\`
 
 Example mutation:
 
@@ -359,6 +495,18 @@ Example mutation:
 mutation Ping($message: String) {
   ping(message: $message)
 }
+\`\`\`
+
+## GraphiQL
+
+\`GET /\` serves the embedded GraphiQL page. The page loads GraphiQL, the explorer plugin, React, and GraphQL from pinned \`esm.sh\` URLs and configures the fetcher for \`http://localhost:3000\`.
+
+## Tests
+
+Run the package tests from the repository root:
+
+\`\`\`bash
+yarn jest packages/graphql --runInBand --coverage=false
 \`\`\`
 `,
     'packages/graphql/router.test.ts': `import { describe, expect, it } from '@jest/globals';
@@ -685,7 +833,7 @@ NODE_ENV=production LOG_LEVEL=info tsx $scriptdir/index.ts
     'workspaces/graphql/doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
 import ReadMe from './README.md?raw';
 
-<Meta title="Workspaces/Graphql" />
+<Meta title="Workspaces/GraphQL" />
 
 <Markdown>{ReadMe}</Markdown>
 `,
@@ -784,7 +932,7 @@ import { api } from '@vyriy/handler';
 
 import { router } from '@p/graphql';
 
-server(api(async (event) => router.route(event)));
+server(api(router.handle()));
 `,
     'workspaces/graphql/package.json': `{
   "name": "@w/graphql",
@@ -792,26 +940,28 @@ server(api(async (event) => router.route(event)));
   "private": true
 }
 `,
-    'workspaces/graphql/README.md': `# @w/graphql
+    'workspaces/graphql/README.md': `# GraphQL
 
 GraphQL runtime workspace for the application.
 
 This workspace starts the HTTP server and mounts the reusable \`@p/graphql\` router through \`@vyriy/handler\` and \`@vyriy/server\`.
 
-## Routes
+## Runtime
 
-- \`GET /\` - serves the embedded GraphiQL page.
-- \`POST /\` - executes GraphQL requests against the package schema.
+The workspace entrypoint is \`index.ts\`. It adapts API Gateway-style events with \`api()\` and passes the handler to \`server()\`:
 
-Example request body:
-
-\`\`\`json
-{
-  "query": "{ hello test { ok message } }"
-}
+\`\`\`ts
+server(api(router.handle()));
 \`\`\`
 
-## Development
+The shared router handles:
+
+- \`GET /\` - serves the embedded GraphiQL page.
+- \`POST /\` - executes GraphQL requests against the \`@p/graphql\` schema.
+
+Other paths are handled by the router fallback and return \`404\`.
+
+## Local Development
 
 Start the local GraphQL server:
 
@@ -819,20 +969,34 @@ Start the local GraphQL server:
 yarn start:graphql
 \`\`\`
 
+The start script runs \`workspaces/graphql/index.ts\` with \`NODE_ENV=production\` and \`LOG_LEVEL=info\`.
+
+Example request:
+
+\`\`\`bash
+curl http://localhost:3000 \
+  --header 'Content-Type: application/json' \
+  --data '{"query":"{ hello test { ok message } }"}'
+\`\`\`
+
+Open \`http://localhost:3000\` in a browser to use GraphiQL.
+
+## Build
+
 Build the deployable bundle:
 
 \`\`\`bash
 yarn build:graphql
 \`\`\`
 
-The build output is written to \`dist/graphql\`.
+The build writes a CommonJS server bundle to \`dist/graphql/index.js\`, copies the workspace \`package.json\`, and removes deployment-irrelevant \`type\` and \`private\` fields from the generated package metadata.
 
-## Implementation
+## Tests
 
-The workspace entrypoint is \`index.ts\`. It wraps the shared router with \`api()\` and passes it to \`server()\`:
+Run the workspace tests from the repository root:
 
-\`\`\`ts
-server(api(async (event) => router.route(event)));
+\`\`\`bash
+yarn jest workspaces/graphql --runInBand --coverage=false
 \`\`\`
 `,
     'workspaces/graphql/webpack.config.ts': `import { path } from '@vyriy/path';

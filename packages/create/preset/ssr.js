@@ -35,15 +35,15 @@ export const ssr = (options) => ({
             'fix:prettier': 'prettier . --write',
             'fix:eslint': 'eslint . --fix',
             'fix:stylelint': 'stylelint "**/*.{css,scss}" --fix',
+            'start:api': 'sh workspaces/api/bin/start.sh',
             'lint:ts': 'tsc',
             'lint:prettier': 'prettier . --check',
             'lint:eslint': 'eslint .',
             'lint:stylelint': 'stylelint "**/*.{css,scss}"',
+            'build:api': 'rimraf dist && sh workspaces/api/bin/build.sh',
             'build:storybook': 'cross-env STORYBOOK_DISABLE_TELEMETRY=1 storybook build --quiet --disable-telemetry',
             'test:jest': 'jest',
             postinstall: 'husky',
-            'start:api': 'sh workspaces/api/bin/start.sh',
-            'build:api': 'rimraf dist && sh workspaces/api/bin/build.sh',
         },
         dependencies: {
             '@vyriy/typescript-config': `^${packageJson.version}`,
@@ -75,13 +75,101 @@ export const ssr = (options) => ({
             '@vyriy/cn': `^${packageJson.version}`,
             '@vyriy/html': `^${packageJson.version}`,
             sass: packageJson.peerDependencies.sass,
+            '@vyriy/render': `^${packageJson.version}`,
         },
     }, null, 2) + '\n',
-    'README.md': `# ${options.name}\n\n${options.description}\n`,
+    'README.md': `# SSR
+
+Calm cloud-ready SSR application preset.
+
+This repository is a small TypeScript workspace for server-rendered React output. The API workspace fetches content through a service adapter, renders shared React components on the server, and returns complete HTML.
+
+## Structure
+
+\`\`\`text
+packages/
+  components/  Shared SSR-friendly React components.
+  services/    Replaceable service adapters, including CMS access.
+workspaces/
+  api/         Server entry point that renders the page response.
+\`\`\`
+
+Documentation is rendered through Storybook MDX wrappers. The root \`doc.mdx\` displays this README, while package and workspace docs display their own README files.
+
+## Application Flow
+
+1. \`workspaces/api/index.tsx\` starts the server.
+2. The request handler calls \`cms.getContent()\` from \`@p/services/cms\`.
+3. The returned body is rendered with \`Page\` from \`@p/components\`.
+4. The response is wrapped into a complete HTML document and returned as \`text/html\`.
+
+## Requirements
+
+- Node.js \`>=24.0.0\`
+- Yarn \`4.16.0\`
+
+Install dependencies:
+
+\`\`\`bash
+yarn install
+\`\`\`
+
+## Commands
+
+Start the SSR API:
+
+\`\`\`bash
+yarn start
+\`\`\`
+
+Build the API bundle and Storybook documentation:
+
+\`\`\`bash
+yarn build
+\`\`\`
+
+Run validation:
+
+\`\`\`bash
+yarn check
+\`\`\`
+
+Run individual checks:
+
+\`\`\`bash
+yarn lint
+yarn test
+\`\`\`
+
+Open Storybook documentation:
+
+\`\`\`bash
+yarn storybook
+\`\`\`
+
+## Packages
+
+- \`@p/components\` exports shared React components for server-rendered surfaces.
+- \`@p/services\` exports service adapters that keep integration details outside UI and workspace code.
+- \`@w/api\` is the SSR server workspace and deployable application entry point.
+
+## Development Notes
+
+Keep public behavior documented where it is introduced. When adding shared components or services, update the matching package README, public re-exports, and focused tests. Prefer SSR-safe code paths and avoid browser globals during render.
+
+## Project Guidance
+
+These articles describe the development approach behind this preset and provide practical guidance for evolving a project on top of it:
+
+- [Calm Development Environment: Node.js, Corepack, Yarn and Static Preview](https://vyriy.dev/blog/calm-development-setup/) - how to keep the local development environment predictable and easy to reproduce.
+- [Calm App Structure for the Vyriy Ecosystem](https://vyriy.dev/blog/vyriy-calm-app-structure/) - a practical project structure for Vyriy applications: shared configs, small packages, thin workspaces, Storybook docs, tests, and deployable entry points.
+- [One Handler, Many Runtimes](https://vyriy.dev/examples/one-handler-many-runtimes/) - how @vyriy/handler, @vyriy/router, and @vyriy/server compose a calm Lambda-compatible API that can run locally, in Docker, Fargate-style HTTP runtimes, and AWS Lambda.
+- [Storybook as Project Documentation](https://vyriy.dev/blog/storybook-as-project-documentation/) - how to use Storybook as living project documentation and a component playground.
+`,
     'doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
 import ReadMe from './README.md?raw';
 
-<Meta title="${options.name}" />
+<Meta title="SSR" />
 
 <Markdown>{ReadMe}</Markdown>
 `,
@@ -187,6 +275,97 @@ export default {
         private: true,
         type: 'module',
     }, null, 2) + '\n',
+    'packages/components/doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
+import ReadMe from './README.md?raw';
+
+<Meta title="Packages/Components" />
+
+<Markdown>{ReadMe}</Markdown>
+`,
+    'packages/components/README.md': `# Components
+
+Shared React components for SSR-friendly application surfaces.
+
+The package keeps reusable UI small and framework-neutral. Components should render without browser globals, accept typed props, and stay easy to compose from server-rendered workspaces.
+
+## Exports
+
+### \`Page\`
+
+Renders page body content inside the standard page content container.
+
+\`\`\`tsx
+import { Page } from '@p/components';
+
+export const App = () => <Page content="This is a rendered page." />;
+\`\`\`
+
+Rendered markup:
+
+\`\`\`html
+<div class="content">This is a rendered page.</div>
+\`\`\`
+
+## Styling
+
+\`Page\` uses the \`content\` class. The host workspace owns the actual CSS so the component can stay reusable across SSR and SSG outputs.
+
+## Development
+
+Add new public components as focused files with matching tests, then re-export them from the package entry point.
+
+Focused validation:
+
+\`\`\`bash
+yarn jest packages/components --runInBand --coverage=false
+\`\`\`
+`,
+    'packages/services/doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
+import ReadMe from './README.md?raw';
+
+<Meta title="Packages/Services" />
+
+<Markdown>{ReadMe}</Markdown>
+`,
+    'packages/services/README.md': `# Services
+
+Shared service adapters for application workspaces.
+
+The package is the place for replaceable integrations such as CMS access, API clients, and other server-safe service boundaries. Keep adapters typed, deterministic in tests, and free from direct UI concerns.
+
+## Exports
+
+### \`cms\`
+
+CMS content adapter used by the API workspace before rendering the page.
+
+\`\`\`ts
+import { cms } from '@p/services/cms';
+
+const content = await cms.getContent();
+\`\`\`
+
+\`getContent()\` currently returns sample content:
+
+\`\`\`ts
+{
+  title: 'Sample Content',
+  body: 'This is a sample content fetched from the CMS.',
+}
+\`\`\`
+
+The returned shape is intended for server rendering: \`title\` is used for document metadata, and \`body\` is passed to the page component.
+
+## Development
+
+Keep service modules behind small public methods so real providers can replace placeholders without coupling callers to a specific CMS, network client, or runtime host.
+
+Focused validation:
+
+\`\`\`bash
+yarn jest packages/services --runInBand --coverage=false
+\`\`\`
+`,
     'packages/components/index.ts': "export * from './page/index.js';\n",
     'packages/components/index.test.tsx': `import { describe, expect, it } from '@jest/globals';
 
@@ -301,7 +480,76 @@ import ReadMe from './README.md?raw';
 
 <Markdown>{ReadMe}</Markdown>
 `,
-    'workspaces/api/README.md': `# ${options.name} API\n\n${options.description}\n`,
+    'workspaces/api/README.md': `# API
+
+SSR server workspace for the \`ssr\` preset.
+
+The workspace owns the deployable server entry point. It fetches page content, renders shared React components on the server, wraps the result into a complete HTML document, and returns an HTML response.
+
+## Entry Point
+
+\`index.tsx\` starts the server with \`@vyriy/server\` and registers an async handler with \`@vyriy/handler\`.
+
+Request flow:
+
+1. Load content with \`cms.getContent()\` from \`@p/services/cms\`.
+2. Render \`<Page content={content.body} />\` from \`@p/components\`.
+3. Read compiled \`styles.css\` from the project runtime directory.
+4. Build and minify the HTML document with \`@vyriy/html\`.
+5. Return \`200\` with \`content-type: text/html; charset=utf-8\`.
+
+## Runtime Output
+
+The handler returns a complete HTML response:
+
+\`\`\`ts
+{
+  statusCode: 200,
+  headers: {
+    'content-type': 'text/html; charset=utf-8',
+  },
+  body: '<!doctype html>...',
+}
+\`\`\`
+
+The document title comes from \`content.title\`, and the rendered body comes from \`content.body\`.
+
+## Scripts
+
+Start the API from the repository root:
+
+\`\`\`bash
+yarn start:api
+\`\`\`
+
+The start script compiles \`packages/components/page/styles.scss\` into \`dist/api/styles.css\`, then runs \`workspaces/api/index.tsx\` with \`tsx\`.
+
+Build the deployable API output:
+
+\`\`\`bash
+yarn build:api
+\`\`\`
+
+The build script writes the server bundle, compiled CSS, and runtime package metadata into \`dist/api\`.
+
+## Validation
+
+Run the focused API tests:
+
+\`\`\`bash
+yarn jest workspaces/api --runInBand --coverage=false
+\`\`\`
+
+Run the full project validation:
+
+\`\`\`bash
+yarn check
+\`\`\`
+
+## Development Notes
+
+Keep workspace code focused on orchestration. Shared UI belongs in \`@p/components\`, and integration behavior belongs in \`@p/services\`, so the server entry point stays easy to replace or deploy in a different runtime.
+`,
     'workspaces/api/webpack.config.ts': `import { path } from '@vyriy/path';
 import { ssr, external } from '@vyriy/webpack-config';
 
@@ -324,17 +572,15 @@ export default ssr(
         private: true,
     }, null, 2) + '\n',
     'workspaces/api/index.tsx': `import { readFileSync } from 'node:fs';
-import { renderToString } from 'react-dom/server';
 
 import { server } from '@vyriy/server';
 import { api } from '@vyriy/handler';
 import { html, minify } from '@vyriy/html';
 import { path } from '@vyriy/path';
+import { html as renderHtml } from '@vyriy/render/html';
 
 import { cms } from '@p/services/cms';
 import { Page } from '@p/components';
-
-const dashboardStyles = readFileSync(path('styles.css'), 'utf8');
 
 server(
   api(async () => {
@@ -350,8 +596,8 @@ server(
           htmlAttributes: 'lang="en"',
           title: \`<title>\${content.title}</title>\`,
           meta: '<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />',
-          style: \`<style>\${dashboardStyles.trim()}</style>\`,
-          body: renderToString(<Page content={content.body} />),
+          style: \`<style>\${readFileSync(path('styles.css'), 'utf8').trim()}</style>\`,
+          body: renderHtml(<Page content={content.body} />),
         }),
       ),
     };

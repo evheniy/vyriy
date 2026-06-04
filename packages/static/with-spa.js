@@ -17,6 +17,9 @@ export const withSpa = (router, directoryOrOptions = {}) => {
             router.get(path, handler);
             return api;
         },
+        handle() {
+            return (event) => api.route(event);
+        },
         patch(path, handler) {
             router.patch(path, handler);
             return api;

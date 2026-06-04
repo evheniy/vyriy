@@ -20,10 +20,10 @@ const toStaticPath = (mount, requestPath) => {
     return undefined;
 };
 const isStaticMethod = (method) => method === 'GET' || method === 'HEAD';
-export const withStatic = (router, options = {}) => {
+const toStaticOptions = (options) => typeof options === 'string' ? { directory: options } : (options ?? {});
+export const withStatic = (router, options) => {
     const mounts = [];
     const createStaticHandler = useStatic;
-    const staticHandler = createStaticHandler(options);
     const api = {
         delete(path, handler) {
             router.delete(path, handler);
@@ -36,6 +36,9 @@ export const withStatic = (router, options = {}) => {
         get(path, handler) {
             router.get(path, handler);
             return api;
+        },
+        handle() {
+            return (event) => api.route(event);
         },
         patch(path, handler) {
             router.patch(path, handler);
@@ -55,11 +58,11 @@ export const withStatic = (router, options = {}) => {
                 return result;
             }
             for (const mount of mounts) {
-                const staticPath = toStaticPath(mount, event.path);
+                const staticPath = toStaticPath(mount.path, event.path);
                 if (staticPath === undefined) {
                     continue;
                 }
-                const staticResult = await staticHandler({
+                const staticResult = await mount.handler({
                     ...event,
                     path: staticPath,
                 }, {});
@@ -67,8 +70,13 @@ export const withStatic = (router, options = {}) => {
             }
             return result;
         },
-        static(path) {
-            mounts.push(normalizeMount(path));
+        static(path, mountOptions) {
+            const staticOptions = mountOptions ?? options;
+            mounts.push({
+                handler: createStaticHandler(toStaticOptions(staticOptions)),
+                path: normalizeMount(path),
+            });
+            mounts.sort((left, right) => right.path.length - left.path.length);
             return api;
         },
     };

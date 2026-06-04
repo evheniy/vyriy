@@ -217,3 +217,21 @@ The current CLI presets are the first practical layer of that direction: they ma
 - Yarn (`4.16.0`, managed by the root `packageManager` field)
 
 In projects that plan to use this library, `typescript` is also expected to be installed in the consumer project (latest stable version `>= 6.0.0`).
+
+## Consulting
+
+Vyriy is also a practical foundation for my consulting work around calm frontend and Node.js architecture.
+
+I can help teams with:
+
+- React architecture
+- SSR / SSG / static publishing
+- micro frontend integration
+- Storybook as project documentation
+- Node.js tooling and CLI
+- frontend project structure
+- AWS-ready frontend infrastructure
+
+If your team is working with similar problems, I can help review, simplify, or improve the system.
+
+[Work with me](https://vyriy.dev/consulting/)

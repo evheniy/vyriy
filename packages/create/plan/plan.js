@@ -1,7 +1,7 @@
 import { stdin, stdout } from 'node:process';
 import { dirname, resolve } from 'node:path';
 import { createInterface } from 'node:readline';
-import { prompt, preset as promptPreset, scope as promptScope } from '../prompt/index.js';
+import { prompt, preset as promptPreset } from '../prompt/index.js';
 import { question as createQuestion } from './question.js';
 const toDirectoryName = (name, fallback) => {
     const directoryName = name.trim().replaceAll(/[\s\\/]+/g, '_');
@@ -17,7 +17,6 @@ export const plan = async (dirName, appPath) => {
         const description = await prompt(question, 'Project description', 'Calm cloud-ready application');
         const target = await prompt(question, 'Target directory', getTargetDefault(name, dirName, appPath));
         const preset = await promptPreset(question, stdout);
-        const scope = await promptScope(question, preset, name);
         const confirmation = (await prompt(question, 'Use this project plan?', 'y')).toLowerCase();
         return confirmation === 'y'
             ? {
@@ -25,7 +24,6 @@ export const plan = async (dirName, appPath) => {
                 description,
                 target,
                 preset,
-                scope,
             }
             : undefined;
     }

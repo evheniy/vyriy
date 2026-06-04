@@ -35,15 +35,15 @@ export const spa = (options) => ({
             'fix:prettier': 'prettier . --write',
             'fix:eslint': 'eslint . --fix',
             'fix:stylelint': 'stylelint "**/*.{css,scss}" --fix',
+            'start:spa': 'sh workspaces/spa/bin/start.sh',
             'lint:ts': 'tsc',
             'lint:prettier': 'prettier . --check',
             'lint:eslint': 'eslint .',
             'lint:stylelint': 'stylelint "**/*.{css,scss}"',
+            'build:spa': 'rimraf dist && sh workspaces/spa/bin/build.sh',
             'build:storybook': 'cross-env STORYBOOK_DISABLE_TELEMETRY=1 storybook build --quiet --disable-telemetry',
             'test:jest': 'jest',
             postinstall: 'husky',
-            'start:spa': 'sh workspaces/spa/bin/start.sh',
-            'build:spa': 'rimraf dist && sh workspaces/spa/bin/build.sh',
         },
         dependencies: {
             '@vyriy/typescript-config': `^${packageJson.version}`,
@@ -73,13 +73,119 @@ export const spa = (options) => ({
             '@vyriy/cn': `^${packageJson.version}`,
             '@vyriy/html': `^${packageJson.version}`,
             '@vyriy/browserslist-config': `^${packageJson.version}`,
+            '@vyriy/render': `^${packageJson.version}`,
         },
     }, null, 2) + '\n',
-    'README.md': `# ${options.name}\n\n${options.description}\n`,
+    'README.md': `# SPA
+
+Calm cloud-ready application built as a Yarn workspace monorepo.
+
+## Workspaces
+
+### \`@w/spa\`
+
+Client-side React application in \`workspaces/spa\`.
+
+- Entry point: \`workspaces/spa/index.tsx\`
+- Webpack config: \`workspaces/spa/webpack.config.ts\`
+- Production output: \`dist/spa/index.js\`
+- Documentation: \`workspaces/spa/README.md\`
+
+### \`@p/components\`
+
+Shared React component package in \`packages/components\`.
+
+- Public entry point: \`packages/components/index.ts\`
+- Current public exports: \`Page\`, \`PageProps\`, \`PageType\`
+- Documentation: \`packages/components/README.md\`
+
+## Requirements
+
+- Node.js \`>=24.0.0\`
+- Yarn \`4.16.0\`
+
+## Development
+
+Start the SPA development server:
+
+\`\`\`bash
+yarn start:spa
+\`\`\`
+
+Start Storybook:
+
+\`\`\`bash
+yarn storybook
+\`\`\`
+
+Run all start scripts:
+
+\`\`\`bash
+yarn start
+\`\`\`
+
+## Build
+
+Build the SPA:
+
+\`\`\`bash
+yarn build:spa
+\`\`\`
+
+Build Storybook:
+
+\`\`\`bash
+yarn build:storybook
+\`\`\`
+
+Run all build scripts:
+
+\`\`\`bash
+yarn build
+\`\`\`
+
+## Validation
+
+Run the full project check:
+
+\`\`\`bash
+yarn check
+\`\`\`
+
+Run individual validation steps:
+
+\`\`\`bash
+yarn lint
+yarn test
+\`\`\`
+
+Run focused Jest checks:
+
+\`\`\`bash
+yarn jest packages/components --runInBand --coverage=false
+yarn jest workspaces/spa --runInBand --coverage=false
+\`\`\`
+
+## Formatting And Fixes
+
+Apply configured format, ESLint, and Stylelint fixes:
+
+\`\`\`bash
+yarn fix
+\`\`\`
+
+## Project Guidance
+
+These articles describe the development approach behind this preset and provide practical guidance for evolving a project on top of it:
+
+- [Calm Development Environment: Node.js, Corepack, Yarn and Static Preview](https://vyriy.dev/blog/calm-development-setup/) - how to keep the local development environment predictable and easy to reproduce.
+- [Calm App Structure for the Vyriy Ecosystem](https://vyriy.dev/blog/vyriy-calm-app-structure/) - a practical project structure for Vyriy applications: shared configs, small packages, thin workspaces, Storybook docs, tests, and deployable entry points.
+- [Storybook as Project Documentation](https://vyriy.dev/blog/storybook-as-project-documentation/) - how to use Storybook as living project documentation and a component playground.
+`,
     'doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
 import ReadMe from './README.md?raw';
 
-<Meta title="${options.name}" />
+<Meta title="SPA" />
 
 <Markdown>{ReadMe}</Markdown>
 `,
@@ -180,6 +286,67 @@ export default {
     'jest.config.ts': "export { default } from '@vyriy/jest-config';\n",
     'stylelint.config.ts': "export { default } from '@vyriy/stylelint-config';\n",
     'assets.d.ts': "declare module '*.scss';\n",
+    'packages/components/doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
+import ReadMe from './README.md?raw';
+
+<Meta title="Packages/Components" />
+
+<Markdown>{ReadMe}</Markdown>
+`,
+    'packages/components/README.md': `# Components
+
+Shared React components for the SPA workspace.
+
+## Exports
+
+### \`Page\`
+
+SSR-friendly page wrapper that renders string content inside the page content container.
+
+\`\`\`tsx
+import { Page } from '@p/components';
+
+export const Example = () => <Page content="Page body" />;
+\`\`\`
+
+Rendered markup:
+
+\`\`\`html
+<div class="content">Page body</div>
+\`\`\`
+
+### \`PageProps\`
+
+Props accepted by \`Page\`.
+
+\`\`\`ts
+type PageProps = {
+  content: string;
+};
+\`\`\`
+
+### \`PageType\`
+
+React component type for \`Page\`.
+
+\`\`\`ts
+type PageType = FC<PageProps>;
+\`\`\`
+
+## Validation
+
+Run the package tests from the repository root:
+
+\`\`\`bash
+yarn jest packages/components --runInBand --coverage=false
+\`\`\`
+
+Run the full project check when changing public behavior:
+
+\`\`\`bash
+yarn check
+\`\`\`
+`,
     'packages/components/package.json': JSON.stringify({
         name: '@p/components',
         private: true,
@@ -273,7 +440,66 @@ import ReadMe from './README.md?raw';
 
 <Markdown>{ReadMe}</Markdown>
 `,
-    'workspaces/spa/README.md': `# ${options.name} SPA\n\n${options.description}\n`,
+    'workspaces/spa/README.md': `# SPA
+
+Client-side React application workspace for the project.
+
+## Entry Point
+
+The application starts from \`index.tsx\`. It mounts into the \`#root\` element created by the workspace Webpack HTML plugin and renders the shared \`Page\` component from \`@p/components\`.
+
+\`\`\`tsx
+import { Page } from '@p/components';
+
+import '@p/components/page/styles.scss';
+
+element({
+  root: document.getElementById('root'),
+  component: <Page content="Test content" />,
+});
+\`\`\`
+
+## Build Output
+
+The Webpack configuration builds the SPA into:
+
+\`\`\`text
+dist/spa/index.js
+\`\`\`
+
+The generated HTML document uses:
+
+\`\`\`html
+<title>SPA</title>
+<div id="root"></div>
+\`\`\`
+
+## Development
+
+Start the local development server from the repository root:
+
+\`\`\`bash
+yarn start:spa
+\`\`\`
+
+Build the production bundle:
+
+\`\`\`bash
+yarn build:spa
+\`\`\`
+
+Run the focused workspace test:
+
+\`\`\`bash
+yarn jest workspaces/spa --runInBand --coverage=false
+\`\`\`
+
+Run the full project check when changing shared behavior or build configuration:
+
+\`\`\`bash
+yarn check
+\`\`\`
+`,
     'workspaces/spa/webpack.config.ts': `import { csr, html } from '@vyriy/webpack-config';
 import { path } from '@vyriy/path';
 
@@ -302,13 +528,16 @@ export default csr(
         type: 'module',
         private: true,
     }, null, 2) + '\n',
-    'workspaces/spa/index.tsx': `import { createRoot } from 'react-dom/client';
+    'workspaces/spa/index.tsx': `import { element } from '@vyriy/render/element';
 
 import { Page } from '@p/components';
 
 import '@p/components/page/styles.scss';
 
-createRoot(document.getElementById('root')!).render(<Page content="Test content" />);
+element({
+  root: document.getElementById('root'),
+  component: <Page content="Test content" />,
+});
 `,
     'workspaces/spa/index.test.tsx': `import type { ReactElement, ReactNode } from 'react';
 import { describe, expect, it, jest } from '@jest/globals';

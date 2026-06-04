@@ -3,7 +3,7 @@ export type StaticBinCommand = {
     readonly type: 'help' | 'version';
 } | {
     readonly type: 'serve';
-    readonly directory: string;
+    readonly directory?: string;
     readonly port?: string;
 };
 export type RunStaticCli = (args?: readonly string[], command?: string, alias?: false | string) => Promise<void>;

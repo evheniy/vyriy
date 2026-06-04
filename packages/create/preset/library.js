@@ -8,20 +8,83 @@ const agentsPath = [
     resolve(presetDir, '../../../../AGENTS.md'),
 ].find(existsSync) ?? '';
 const agentsContent = agentsPath ? readFileSync(agentsPath, 'utf8') : '';
-export const library = (options) => {
-    const packageScope = options.scope ?? `@${options.name}`;
-    const packageName = `${packageScope}/${options.name}`;
-    return {
-        'README.md': `# ${options.name}\n\n${options.description}\n`,
-        'doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
+export const library = (options) => ({
+    'README.md': `# Library
+
+Reusable React component library for library applications.
+
+This repository is a Yarn workspace with shared package tooling, Storybook documentation, and Jest tests.
+
+## Packages
+
+### \`@library/components\`
+
+React components exported from \`packages/components\`.
+
+\`\`\`tsx
+import { Button } from '@library/components';
+\`\`\`
+
+The package currently includes:
+
+| Component | Description                                             |
+| --------- | ------------------------------------------------------- |
+| \`Button\`  | Styled HTML button with primary and secondary variants. |
+
+## Development
+
+Install dependencies:
+
+\`\`\`bash
+yarn install
+\`\`\`
+
+Run Storybook:
+
+\`\`\`bash
+yarn storybook
+\`\`\`
+
+Run the full validation suite:
+
+\`\`\`bash
+yarn check
+\`\`\`
+
+Focused commands are also available:
+
+\`\`\`bash
+yarn lint
+yarn build
+yarn test
+\`\`\`
+
+## Documentation
+
+Storybook renders the package documentation from the repository README files:
+
+- \`README.md\` for the library overview.
+- \`packages/components/README.md\` for the components package.
+- \`packages/components/button/README.md\` for Button usage and props.
+
+## Project Guidance
+
+These articles describe the development approach behind this preset and provide practical guidance for evolving a project on top of it:
+
+- [Calm Development Environment: Node.js, Corepack, Yarn and Static Preview](https://vyriy.dev/blog/calm-development-setup/) - how to keep the local development environment predictable and easy to reproduce.
+- [Calm App Structure for the Vyriy Ecosystem](https://vyriy.dev/blog/vyriy-calm-app-structure/) - a practical project structure for Vyriy applications: shared configs, small packages, thin workspaces, Storybook docs, tests, and deployable entry points.
+- [Calm Component Structure](https://vyriy.dev/blog/calm-component-structure/) - how to organize component code, tests, stories, and public exports.
+- [Storybook as Project Documentation](https://vyriy.dev/blog/storybook-as-project-documentation/) - how to use Storybook as living project documentation and a component playground.
+`,
+    'doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
 import ReadMe from './README.md?raw';
 
-<Meta title="${options.name}" />
+<Meta title="Library" />
 
 <Markdown>{ReadMe}</Markdown>
 `,
-        'AGENTS.md': agentsContent,
-        '.editorconfig': `# https://editorconfig.org
+    'AGENTS.md': agentsContent,
+    '.editorconfig': `# https://editorconfig.org
 root = true
 
 [*]
@@ -56,7 +119,7 @@ indent_size = 2
 [*.sh]
 indent_size = 2
 `,
-        '.gitignore': `.yarn/*
+    '.gitignore': `.yarn/*
 !.yarn/cache
 !.yarn/patches
 !.yarn/plugins
@@ -78,15 +141,15 @@ cdk.context.json
 
 !/**/.gitkeep
 `,
-        '.npmrc': 'engine-strict=true\n',
-        '.nvmrc': 'lts/krypton\n',
-        '.yarnrc.yml': 'nodeLinker: node-modules\nnpmMinimalAgeGate: 0\n',
-        '.husky/commit-msg': '#!/bin/sh\n',
-        '.husky/post-checkout': '#!/bin/sh\n\nyarn\n',
-        '.husky/post-merge': '#!/bin/sh\n\nyarn\n',
-        '.husky/pre-commit': '#!/bin/sh\n\nyarn check\n',
-        '.husky/pre-push': '#!/bin/sh\n\nyarn check\n',
-        '.storybook/main.ts': `import config from '@vyriy/storybook-config';
+    '.npmrc': 'engine-strict=true\n',
+    '.nvmrc': 'lts/krypton\n',
+    '.yarnrc.yml': 'nodeLinker: node-modules\nnpmMinimalAgeGate: 0\n',
+    '.husky/commit-msg': '#!/bin/sh\n',
+    '.husky/post-checkout': '#!/bin/sh\n\nyarn\n',
+    '.husky/post-merge': '#!/bin/sh\n\nyarn\n',
+    '.husky/pre-commit': '#!/bin/sh\n\nyarn check\n',
+    '.husky/pre-push': '#!/bin/sh\n\nyarn check\n',
+    '.storybook/main.ts': `import config from '@vyriy/storybook-config';
 import { path } from '@vyriy/path';
 
 export default {
@@ -97,162 +160,110 @@ export default {
   ],
 };
 `,
-        '.storybook/preview.tsx': "export { default } from '@vyriy/storybook-config/preview';\n",
-        'yarn.lock': '',
-        'tsconfig.json': JSON.stringify({
-            extends: '@vyriy/typescript-config/index.json',
-            include: [
-                '.storybook/**/*.ts',
-                '.storybook/**/*.tsx',
-                'packages/**/*.ts',
-                'packages/**/*.tsx',
-                'workspaces/**/*.ts',
-                'workspaces/**/*.tsx',
-                '*.ts',
-            ],
-        }, null, 2) + '\n',
-        'prettier.config.ts': "export { default } from '@vyriy/prettier-config';\n",
-        '.prettierignore': 'node_modules\ndist\ncoverage\nstorybook-static\nconsumer\n',
-        'eslint.config.ts': "export { default } from '@vyriy/eslint-config';\n",
-        'jest.config.ts': "export { default } from '@vyriy/jest-config';\n",
-        'package.json': JSON.stringify({
-            name: options.name,
-            version: '0.0.0',
-            description: options.description,
-            private: true,
-            type: 'module',
-            agents: './AGENTS.md',
-            packageManager: packageJson.packageManager,
-            engines: {
-                node: packageJson.engines.node,
-            },
-            workspaces: [
-                'packages/*',
-            ],
-            license: 'MIT',
-            repository: {
-                type: 'git',
-                url: `https://github.com/${options.name}/${options.name}`,
-            },
-            scripts: {
-                storybook: 'cross-env STORYBOOK_DISABLE_TELEMETRY=1 storybook dev -p 6006 --disable-telemetry',
-                check: 'run-s lint build test',
-                fix: "run-s 'fix:*'",
-                lint: "run-s 'lint:*'",
-                build: "run-s 'build:*'",
-                test: "run-s 'test:*'",
-                'fix:prettier': 'prettier . --write',
-                'fix:eslint': 'eslint . --fix',
-                'fix:stylelint': 'stylelint "**/*.{css,scss}" --fix',
-                'lint:ts': 'tsc',
-                'lint:prettier': 'prettier . --check',
-                'lint:eslint': 'eslint .',
-                'lint:stylelint': 'stylelint "**/*.{css,scss}"',
-                'build:dist': 'rimraf dist && tsc -p tsconfig.build.json && vyriy dist',
-                'build:storybook': 'cross-env STORYBOOK_DISABLE_TELEMETRY=1 storybook build --quiet --disable-telemetry',
-                'test:jest': 'jest',
-                postinstall: 'husky',
-            },
-            dependencies: {
-                '@vyriy/typescript-config': `^${packageJson.version}`,
-                typescript: packageJson.peerDependencies.typescript,
-                '@vyriy/prettier-config': `^${packageJson.version}`,
-                prettier: packageJson.peerDependencies.prettier,
-                '@vyriy/eslint-config': `^${packageJson.version}`,
-                eslint: packageJson.peerDependencies.eslint,
-                '@vyriy/jest-config': `^${packageJson.version}`,
-                jest: packageJson.peerDependencies.jest,
-                '@vyriy/storybook-config': `^${packageJson.version}`,
-                storybook: packageJson.peerDependencies.storybook,
-                '@vyriy/path': `^${packageJson.version}`,
-                vyriy: `^${packageJson.version}`,
-                husky: packageJson.peerDependencies.husky,
-                'npm-run-all2': packageJson.peerDependencies['npm-run-all2'],
-                'cross-env': packageJson.peerDependencies['cross-env'],
-                react: packageJson.peerDependencies.react,
-                'react-dom': packageJson.peerDependencies['react-dom'],
-                '@types/react': packageJson.peerDependencies['@types/react'],
-                '@types/react-dom': packageJson.peerDependencies['@types/react-dom'],
-                '@vyriy/stylelint-config': `^${packageJson.version}`,
-                stylelint: packageJson.peerDependencies.stylelint,
-                rimraf: packageJson.peerDependencies.rimraf,
-            },
-        }, null, 2) + '\n',
-        'tsconfig.build.json': JSON.stringify({
-            extends: './tsconfig.json',
-            include: [
-                'packages/**/*.ts',
-                'packages/**/*.tsx',
-                'packages/**/*.json',
-            ],
-            exclude: [
-                '**/*.test.ts',
-                '**/*.test.tsx',
-                '**/*.stories.ts',
-                '**/*.stories.tsx',
-            ],
-            compilerOptions: {
-                rootDir: './packages',
-                outDir: './dist',
-                noEmit: false,
-                declaration: true,
-                allowImportingTsExtensions: false,
-            },
-        }, null, 2) + '\n',
-        'stylelint.config.ts': "export { default } from '@vyriy/stylelint-config';\n",
-        [`packages/${options.name}/package.json`]: JSON.stringify({
-            name: packageName,
-            version: '0.0.0',
-            description: options.description,
-            private: true,
-            type: 'module',
-            main: 'index.js',
-            dependencies: {
-                '@vyriy/cn': `^${packageJson.version}`,
-            },
-            peerDependencies: {
-                react: packageJson.peerDependencies.react,
-            },
-        }, null, 2) + '\n',
-        [`packages/${options.name}/README.md`]: `# ${packageName}\n\n${options.description}\n`,
-        [`packages/${options.name}/doc.mdx`]: `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
-import ReadMe from './README.md?raw';
-
-<Meta title="UI/Button" />
-
-<Markdown>{ReadMe}</Markdown>
-`,
-        [`packages/${options.name}/index.ts`]: "export * from './button.js';\nexport type * from './types.js';\n",
-        [`packages/${options.name}/types.ts`]: `import type { ComponentProps, FC } from 'react';
-
-export type ButtonProps = ComponentProps<'button'> & {
-  readonly variant?: 'primary' | 'secondary';
-};
-
-export type ButtonType = FC<ButtonProps>;
-`,
-        [`packages/${options.name}/button.tsx`]: `import { cn } from '@vyriy/cn';
-
-import type { ButtonType } from './types.js';
-
-import './button.scss';
-
-export const Button: ButtonType = ({ className, variant = 'primary', ...props }) => (
-  <button type="button" className={cn('button', \`button--\${variant}\`, className)} {...props} />
-);
-`,
-        [`packages/${options.name}/index.test.ts`]: `import { describe, expect, it } from '@jest/globals';
-
-import { Button } from './button.js';
-import { Button as PublicButton } from './index.js';
-
-describe('ui entry point', () => {
-  it('exports Button', () => {
-    expect(PublicButton).toBe(Button);
-  });
-});
-`,
-        [`packages/${options.name}/button.scss`]: `.button {
+    '.storybook/preview.tsx': "export { default } from '@vyriy/storybook-config/preview';\n",
+    'yarn.lock': '',
+    'tsconfig.json': JSON.stringify({
+        extends: '@vyriy/typescript-config/index.json',
+        include: [
+            '.storybook/**/*.ts',
+            '.storybook/**/*.tsx',
+            'packages/**/*.ts',
+            'packages/**/*.tsx',
+            'workspaces/**/*.ts',
+            'workspaces/**/*.tsx',
+            '*.ts',
+        ],
+    }, null, 2) + '\n',
+    'prettier.config.ts': "export { default } from '@vyriy/prettier-config';\n",
+    '.prettierignore': 'node_modules\ndist\ncoverage\nstorybook-static\nconsumer\n',
+    'eslint.config.ts': "export { default } from '@vyriy/eslint-config';\n",
+    'jest.config.ts': "export { default } from '@vyriy/jest-config';\n",
+    'package.json': JSON.stringify({
+        name: options.name,
+        version: '0.0.0',
+        description: options.description,
+        private: true,
+        type: 'module',
+        agents: './AGENTS.md',
+        packageManager: packageJson.packageManager,
+        engines: {
+            node: packageJson.engines.node,
+        },
+        workspaces: [
+            'packages/*',
+        ],
+        license: 'MIT',
+        repository: {
+            type: 'git',
+            url: `https://github.com/${options.name}/${options.name}`,
+        },
+        scripts: {
+            storybook: 'cross-env STORYBOOK_DISABLE_TELEMETRY=1 storybook dev -p 6006 --disable-telemetry',
+            check: 'run-s lint build test',
+            fix: "run-s 'fix:*'",
+            lint: "run-s 'lint:*'",
+            build: "run-s 'build:*'",
+            test: "run-s 'test:*'",
+            'fix:prettier': 'prettier . --write',
+            'fix:eslint': 'eslint . --fix',
+            'fix:stylelint': 'stylelint "**/*.{css,scss}" --fix',
+            'lint:ts': 'tsc',
+            'lint:prettier': 'prettier . --check',
+            'lint:eslint': 'eslint .',
+            'lint:stylelint': 'stylelint "**/*.{css,scss}"',
+            'build:dist': 'rimraf dist && tsc -p tsconfig.build.json && vd',
+            'build:storybook': 'cross-env STORYBOOK_DISABLE_TELEMETRY=1 storybook build --quiet --disable-telemetry',
+            'test:jest': 'jest',
+            postinstall: 'husky',
+        },
+        dependencies: {
+            '@vyriy/typescript-config': `^${packageJson.version}`,
+            typescript: packageJson.peerDependencies.typescript,
+            '@vyriy/prettier-config': `^${packageJson.version}`,
+            prettier: packageJson.peerDependencies.prettier,
+            '@vyriy/eslint-config': `^${packageJson.version}`,
+            eslint: packageJson.peerDependencies.eslint,
+            '@vyriy/jest-config': `^${packageJson.version}`,
+            jest: packageJson.peerDependencies.jest,
+            '@vyriy/storybook-config': `^${packageJson.version}`,
+            storybook: packageJson.peerDependencies.storybook,
+            '@vyriy/path': `^${packageJson.version}`,
+            husky: packageJson.peerDependencies.husky,
+            'npm-run-all2': packageJson.peerDependencies['npm-run-all2'],
+            'cross-env': packageJson.peerDependencies['cross-env'],
+            react: packageJson.peerDependencies.react,
+            'react-dom': packageJson.peerDependencies['react-dom'],
+            '@types/react': packageJson.peerDependencies['@types/react'],
+            '@types/react-dom': packageJson.peerDependencies['@types/react-dom'],
+            '@vyriy/stylelint-config': `^${packageJson.version}`,
+            stylelint: packageJson.peerDependencies.stylelint,
+            rimraf: packageJson.peerDependencies.rimraf,
+            '@vyriy/dist': `^${packageJson.version}`,
+        },
+    }, null, 2) + '\n',
+    'tsconfig.build.json': JSON.stringify({
+        extends: './tsconfig.json',
+        include: [
+            'packages/**/*.ts',
+            'packages/**/*.tsx',
+            'packages/**/*.json',
+        ],
+        exclude: [
+            '**/*.test.ts',
+            '**/*.test.tsx',
+            '**/*.stories.ts',
+            '**/*.stories.tsx',
+        ],
+        compilerOptions: {
+            rootDir: './packages',
+            outDir: './dist',
+            noEmit: false,
+            declaration: true,
+            allowImportingTsExtensions: false,
+        },
+    }, null, 2) + '\n',
+    'stylelint.config.ts': "export { default } from '@vyriy/stylelint-config';\n",
+    'packages/components/button/button.scss': `.button {
   border: 1px solid transparent;
   border-radius: 6px;
   cursor: pointer;
@@ -271,13 +282,12 @@ describe('ui entry point', () => {
   color: #24292f;
 }
 `,
-        [`packages/${options.name}/styles.d.ts`]: "declare module '*.scss';\n",
-        [`packages/${options.name}/button.stories.tsx`]: `import type { Meta, StoryObj } from '@storybook/react-webpack5';
+    'packages/components/button/button.stories.tsx': `import type { Meta, StoryObj } from '@storybook/react-webpack5';
 
 import { Button } from './button.js';
 
 const meta = {
-  title: 'UI/Button',
+  title: 'Components/Button',
   component: Button,
   args: {
     children: 'Button',
@@ -321,7 +331,7 @@ export const Secondary: Story = {
   },
 };
 `,
-        [`packages/${options.name}/button.test.tsx`]: `import type { ReactElement } from 'react';
+    'packages/components/button/button.test.tsx': `import type { ReactElement } from 'react';
 import { describe, expect, it } from '@jest/globals';
 
 import { Button } from './button.js';
@@ -352,5 +362,161 @@ describe('Button', () => {
   });
 });
 `,
-    };
+    'packages/components/button/button.tsx': `import { cn } from '@vyriy/cn';
+
+import type { ButtonType } from './types.js';
+
+import './button.scss';
+
+export const Button: ButtonType = ({ className, variant = 'primary', ...props }) => (
+  <button type="button" className={cn('button', \`button--\${variant}\`, className)} {...props} />
+);
+`,
+    'packages/components/button/doc.mdx': `import { Canvas, Controls, Meta, Markdown, Stories } from '@storybook/addon-docs/blocks';
+import ReadMe from './README.md?raw';
+import * as ButtonStories from './button.stories';
+
+<Meta of={ButtonStories} />
+
+<Markdown>{ReadMe}</Markdown>
+
+<Canvas of={ButtonStories.Primary} />
+
+<Controls of={ButtonStories.Primary} />
+
+<Stories />
+`,
+    'packages/components/button/index.test.ts': `import { describe, expect, it } from '@jest/globals';
+
+import { Button } from './button.js';
+import { Button as PublicButton } from './index.js';
+
+describe('ui entry point', () => {
+  it('exports Button', () => {
+    expect(PublicButton).toBe(Button);
+  });
+});
+`,
+    'packages/components/button/index.ts': `export * from './button.js';
+export type * from './types.js';
+`,
+    'packages/components/button/README.md': `# Button
+
+\`Button\` is a lightweight React button component with library styling and native button props.
+
+## Import
+
+\`\`\`tsx
+import { Button } from '@library/components';
+import type { ButtonProps } from '@library/components';
+\`\`\`
+
+## Usage
+
+\`\`\`tsx
+<Button>Save</Button>
+\`\`\`
+
+The primary variant is used by default. Use the secondary variant for lower-emphasis actions.
+
+\`\`\`tsx
+<Button variant="secondary">Cancel</Button>
+\`\`\`
+
+Native button props are supported and forwarded to the rendered \`<button>\`.
+
+\`\`\`tsx
+<Button type="submit" disabled>
+  Submit
+</Button>
+\`\`\`
+
+Custom classes are composed with the component classes.
+
+\`\`\`tsx
+<Button className="settings-action">Open settings</Button>
+\`\`\`
+
+## Props
+
+\`ButtonProps\` extends \`ComponentProps<'button'>\`.
+
+| Prop        | Type                       | Default     | Description                                        |
+| ----------- | -------------------------- | ----------- | -------------------------------------------------- |
+| \`variant\`   | \`'primary' | 'secondary'\` | \`'primary'\` | Controls the visual style.                         |
+| \`className\` | \`string\`                   | -           | Adds custom classes alongside the library classes. |
+| \`children\`  | \`ReactNode\`                | -           | Button content.                                    |
+`,
+    'packages/components/button/types.ts': `import type { ComponentProps, FC } from 'react';
+
+export type ButtonProps = ComponentProps<'button'> & {
+  readonly variant?: 'primary' | 'secondary';
 };
+
+export type ButtonType = FC<ButtonProps>;
+`,
+    'packages/components/doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
+import ReadMe from './README.md?raw';
+
+<Meta title="Components" />
+
+<Markdown>{ReadMe}</Markdown>
+`,
+    'packages/components/index.test.ts': `import { describe, expect, it } from '@jest/globals';
+
+import { Button } from './button/index.js';
+import { Button as PublicButton } from './index.js';
+
+describe('components entry point', () => {
+  it('exports Button', () => {
+    expect(PublicButton).toBe(Button);
+  });
+});
+`,
+    'packages/components/index.ts': `export * from './button/index.js';
+`,
+    'packages/components/package.json': `{
+  "name": "@${options.name}/components",
+  "version": "0.0.0",
+  "description": "Calm cloud-ready application",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@vyriy/cn": "^${packageJson.version}"
+  }
+}
+`,
+    'packages/components/README.md': `# Components
+
+Reusable React components for library applications.
+
+## Exports
+
+\`\`\`tsx
+import { Button } from '@library/components';
+import type { ButtonProps } from '@library/components';
+\`\`\`
+
+## Components
+
+### Button
+
+\`Button\` renders an SSR-friendly HTML \`button\` with library styles and two visual variants.
+
+\`\`\`tsx
+import { Button } from '@library/components';
+
+export const SaveAction = () => <Button onClick={() => undefined}>Save</Button>;
+\`\`\`
+
+Use \`variant="secondary"\` for lower-emphasis actions:
+
+\`\`\`tsx
+<Button variant="secondary">Cancel</Button>
+\`\`\`
+
+See the Button documentation for the full component API.
+`,
+    'packages/components/styles.d.ts': `declare module '*.scss';
+`,
+});

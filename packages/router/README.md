@@ -54,7 +54,7 @@ router.fallback(async ({ event }) => ({
   }),
 }));
 
-export const handler = (event: Parameters<typeof router.route>[0]) => router.route(event);
+export const handler = router.handle();
 ```
 
 ## Stream Router
@@ -83,10 +83,7 @@ streamRouter.fallback(({ event }, responseStream) => {
   );
 });
 
-export const handler = (
-  event: Parameters<typeof streamRouter.route>[0],
-  responseStream: Parameters<typeof streamRouter.route>[1],
-) => streamRouter.route(event, responseStream);
+export const handler = streamRouter.handle();
 ```
 
 ## Calm Composition
@@ -106,7 +103,7 @@ router.get('/health', () => ({
   }),
 }));
 
-const handler = api((event) => router.route(event));
+const handler = api(router.handle());
 
 server(handler);
 ```
@@ -125,7 +122,7 @@ router.get('/events', (_params, responseStream) => {
   responseStream.end('ok');
 });
 
-const handler = streamApi((event, responseStream) => router.route(event, responseStream));
+const handler = streamApi(router.handle());
 
 streamServer(handler);
 ```
@@ -144,7 +141,7 @@ router.get('/health', () => ({
   }),
 }));
 
-export const handler = api((event) => router.route(event));
+export const handler = api(router.handle());
 ```
 
 ## Exports
@@ -166,7 +163,9 @@ import { Router, StreamRouter } from '@vyriy/router/router';
 - `router.delete(path, handler)` registers a `DELETE` handler.
 - `router.patch(path, handler)` registers a `PATCH` handler.
 - `router.fallback(handler)` registers a handler for unmatched requests.
+- `router.handle()` returns `(event) => router.route(event)` for API Gateway wrappers.
 - `router.route(event)` resolves the matching route and returns an API Gateway response.
+- `streamRouter.handle()` returns `(event, responseStream) => streamRouter.route(event, responseStream)` for stream wrappers.
 - `streamRouter.route(event, responseStream)` resolves the matching route and writes to the stream.
 
 Route handlers may omit `statusCode`; the router normalizes missing status codes to `200` before returning from `router.route(event)`.
