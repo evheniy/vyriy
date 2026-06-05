@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/static",
-  "version": "0.5.6",
+  "version": "0.6.0",
   "description": "Static file and SPA serving helpers for Vyriy servers.",
   "type": "module",
   "bin": {
@@ -8,9 +8,9 @@
     "vyriy-static": "./bin/index.js"
   },
   "dependencies": {
-    "@vyriy/handler": "0.5.6",
-    "@vyriy/router": "0.5.6",
-    "@vyriy/server": "0.5.6"
+    "@vyriy/handler": "0.6.0",
+    "@vyriy/router": "0.6.0",
+    "@vyriy/server": "0.6.0"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",
@@ -27,6 +27,36 @@
       "import": "./index.js",
       "default": "./index.js"
     },
+    "./cache": {
+      "types": "./cache.d.ts",
+      "import": "./cache.js",
+      "default": "./cache.js"
+    },
+    "./cache.js": {
+      "types": "./cache.d.ts",
+      "import": "./cache.js",
+      "default": "./cache.js"
+    },
+    "./content": {
+      "types": "./content.d.ts",
+      "import": "./content.js",
+      "default": "./content.js"
+    },
+    "./content.js": {
+      "types": "./content.d.ts",
+      "import": "./content.js",
+      "default": "./content.js"
+    },
+    "./file": {
+      "types": "./file.d.ts",
+      "import": "./file.js",
+      "default": "./file.js"
+    },
+    "./file.js": {
+      "types": "./file.d.ts",
+      "import": "./file.js",
+      "default": "./file.js"
+    },
     "./index": {
       "types": "./index.d.ts",
       "import": "./index.js",
@@ -36,6 +66,16 @@
       "types": "./index.d.ts",
       "import": "./index.js",
       "default": "./index.js"
+    },
+    "./options": {
+      "types": "./options.d.ts",
+      "import": "./options.js",
+      "default": "./options.js"
+    },
+    "./options.js": {
+      "types": "./options.d.ts",
+      "import": "./options.js",
+      "default": "./options.js"
     },
     "./server": {
       "types": "./server.d.ts",
@@ -66,16 +106,6 @@
       "types": "./use-static.d.ts",
       "import": "./use-static.js",
       "default": "./use-static.js"
-    },
-    "./with-spa": {
-      "types": "./with-spa.d.ts",
-      "import": "./with-spa.js",
-      "default": "./with-spa.js"
-    },
-    "./with-spa.js": {
-      "types": "./with-spa.d.ts",
-      "import": "./with-spa.js",
-      "default": "./with-spa.js"
     },
     "./with-static": {
       "types": "./with-static.d.ts",

@@ -1,11 +1,11 @@
 {
   "name": "create-vyriy",
-  "version": "0.5.6",
+  "version": "0.6.0",
   "description": "Create Vyriy projects from reusable starter contracts.",
   "type": "module",
   "bin": "./bin/index.js",
   "dependencies": {
-    "@vyriy/create": "0.5.6"
+    "@vyriy/create": "0.6.0"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",

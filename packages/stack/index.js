@@ -9,6 +9,7 @@ export * as ecs from './ecs/index.js';
 export * as lambda from './lambda/index.js';
 export * as route53 from './route53/index.js';
 export * as s3 from './s3/index.js';
+export * as ses from './ses/index.js';
 export * as sns from './sns/index.js';
 export * as sqs from './sqs/index.js';
 export * as ssm from './ssm/index.js';

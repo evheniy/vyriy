@@ -1,2 +1,2 @@
-import type { StaticHandler, StaticOptions } from './types.js';
-export declare const useStatic: (options?: StaticOptions) => StaticHandler;
+import type { StaticHandler, UseStaticOptions } from './types.js';
+export declare const useStatic: (directory?: string, options?: UseStaticOptions) => StaticHandler;

@@ -1,14 +1,14 @@
 {
   "name": "@vyriy/server",
-  "version": "0.5.6",
+  "version": "0.6.0",
   "description": "Small HTTP server adapter for Lambda-style Vyriy handlers",
   "type": "module",
   "dependencies": {
     "@types/aws-lambda": "^8.10.161",
-    "@vyriy/env": "0.5.6",
-    "@vyriy/error": "0.5.6",
-    "@vyriy/handler": "0.5.6",
-    "@vyriy/logger": "0.5.6"
+    "@vyriy/env": "0.6.0",
+    "@vyriy/error": "0.6.0",
+    "@vyriy/handler": "0.6.0",
+    "@vyriy/logger": "0.6.0"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",

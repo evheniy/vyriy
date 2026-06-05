@@ -1,45 +1,28 @@
-import { readFile, realpath, stat } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-const DEFAULT_DIRECTORY = 'dist';
-const DEFAULT_INDEX = 'index.html';
-const DEFAULT_ERROR = '404.html';
+import { createCacheHeaders, maybeNotModified, resolveCacheOptions } from './cache.js';
+import { getContentType, isTextExtension } from './content.js';
+import { resolveExistingFile, resolveRoot } from './file.js';
+import { normalizeStaticOptions } from './options.js';
 const NOT_FOUND_BODY = JSON.stringify({ message: 'Not Found' });
 const METHOD_NOT_ALLOWED_BODY = JSON.stringify({ message: 'Method Not Allowed' });
-const CONTENT_TYPES = {
-    '.css': 'text/css; charset=utf-8',
-    '.csv': 'text/csv; charset=utf-8',
-    '.gif': 'image/gif',
-    '.html': 'text/html; charset=utf-8',
-    '.ico': 'image/x-icon',
-    '.jpeg': 'image/jpeg',
-    '.jpg': 'image/jpeg',
-    '.js': 'text/javascript; charset=utf-8',
-    '.json': 'application/json; charset=utf-8',
-    '.map': 'application/json; charset=utf-8',
-    '.mjs': 'text/javascript; charset=utf-8',
-    '.pdf': 'application/pdf',
-    '.png': 'image/png',
-    '.svg': 'image/svg+xml; charset=utf-8',
-    '.txt': 'text/plain; charset=utf-8',
-    '.webp': 'image/webp',
-    '.woff': 'font/woff',
-    '.woff2': 'font/woff2',
-    '.xml': 'application/xml; charset=utf-8',
+const isStaticMethod = (method) => method === 'GET' || method === 'HEAD';
+const toHeadersObject = (headers) => {
+    if (!headers) {
+        return {};
+    }
+    if (headers instanceof Headers) {
+        return Object.fromEntries(headers.entries());
+    }
+    if (Array.isArray(headers)) {
+        return Object.fromEntries(headers);
+    }
+    return Object.fromEntries(Object.entries(headers).map(([key, value]) => [key, String(value)]));
 };
-const TEXT_TYPES = new Set([
-    '.css',
-    '.csv',
-    '.html',
-    '.js',
-    '.json',
-    '.map',
-    '.mjs',
-    '.svg',
-    '.txt',
-    '.xml',
-]);
-const getContentType = (extension) => CONTENT_TYPES[extension.toLowerCase()] ?? 'application/octet-stream';
-const isTextExtension = (extension) => TEXT_TYPES.has(extension.toLowerCase());
+const mergeCustomHeaders = (headers, customHeaders, context) => ({
+    ...headers,
+    ...toHeadersObject(typeof customHeaders === 'function' ? customHeaders(context) : customHeaders),
+});
 const notFound = (body = NOT_FOUND_BODY, headers) => ({
     statusCode: 404,
     body,
@@ -55,74 +38,60 @@ const methodNotAllowed = () => ({
         'content-type': 'application/json; charset=utf-8',
     },
 });
-const isStaticMethod = (method) => method === 'GET' || method === 'HEAD';
-const isInsideDirectory = (directory, candidate) => {
-    const relative = path.relative(directory, candidate);
-    return relative === '' || (!relative.startsWith('..') && !path.isAbsolute(relative));
-};
-const normalizeOptions = ({ directory = DEFAULT_DIRECTORY, error = DEFAULT_ERROR, index = DEFAULT_INDEX, }) => ({
-    directory,
-    error,
-    index,
-});
-const createFileResult = async (realFilePath, fileSize, method) => {
-    const extension = path.extname(realFilePath);
+const createFileResult = async (event, requestPath, file, options, statusCode = 200) => {
+    const extension = path.extname(file.filePath);
     const isText = isTextExtension(extension);
-    if (method === 'HEAD') {
+    const cache = resolveCacheOptions(options.cache, file.filePath, 'default');
+    const headers = mergeCustomHeaders({
+        'content-length': String(file.size),
+        'content-type': getContentType(extension),
+        ...createCacheHeaders(cache, file.size, file.modifiedTime),
+    }, options.headers, {
+        filePath: file.filePath,
+        requestPath,
+        statusCode,
+    });
+    const notModified = statusCode === 200 ? maybeNotModified(event, headers) : undefined;
+    if (notModified) {
+        return notModified;
+    }
+    if (event.httpMethod === 'HEAD') {
         return {
-            statusCode: 200,
+            statusCode,
             body: '',
-            headers: {
-                'content-length': String(fileSize),
-                'content-type': getContentType(extension),
-            },
+            headers,
             isBase64Encoded: false,
         };
     }
-    const content = await readFile(realFilePath);
+    const content = await readFile(file.filePath);
     return {
-        statusCode: 200,
+        statusCode,
         body: content.toString(isText ? 'utf8' : 'base64'),
-        headers: {
-            'content-length': String(fileSize),
-            'content-type': getContentType(extension),
-        },
+        headers,
         isBase64Encoded: !isText,
     };
 };
-const readStaticFile = async (root, filePath, method) => {
-    if (!isInsideDirectory(root, filePath)) {
-        return undefined;
-    }
-    const realFilePath = await realpath(filePath);
-    if (!isInsideDirectory(root, realFilePath)) {
-        return undefined;
-    }
-    const fileStat = await stat(realFilePath);
-    if (!fileStat.isFile()) {
-        return undefined;
-    }
-    return createFileResult(realFilePath, fileStat.size, method);
-};
-const readErrorFile = async (root, error, method) => {
-    try {
-        const result = await readStaticFile(root, path.resolve(root, error), method);
-        if (!result) {
+export const useStatic = (directory = 'dist', options = {}) => {
+    const normalizedOptions = normalizeStaticOptions(directory, options);
+    let root;
+    const getRoot = () => (root ??= resolveRoot(normalizedOptions.directory));
+    const readFileResult = async (event, requestPath, statusCode = 200) => {
+        const staticRoot = await getRoot();
+        const file = await resolveExistingFile(staticRoot, requestPath, normalizedOptions.index);
+        return file ? createFileResult(event, requestPath, file, normalizedOptions, statusCode) : undefined;
+    };
+    const readNotFoundFile = async (event) => {
+        if (!normalizedOptions.notFound) {
             return notFound();
         }
-        return {
-            ...result,
-            statusCode: 404,
-        };
-    }
-    catch {
-        return notFound();
-    }
-};
-export const useStatic = (options = {}) => {
-    const { directory, error, index } = normalizeOptions(options);
-    let root;
-    const getRoot = () => (root ??= realpath(directory));
+        try {
+            const result = await readFileResult(event, `/${normalizedOptions.notFound}`, 404);
+            return result ?? notFound();
+        }
+        catch {
+            return notFound();
+        }
+    };
     return async (event) => {
         if (!isStaticMethod(event.httpMethod)) {
             return methodNotAllowed();
@@ -134,37 +103,12 @@ export const useStatic = (options = {}) => {
         catch {
             return notFound();
         }
-        let staticRoot;
         try {
-            staticRoot = await getRoot();
+            const result = await readFileResult(event, decodedPath);
+            return result ?? readNotFoundFile(event);
         }
         catch {
-            return notFound();
-        }
-        const requestedPath = decodedPath.replace(/^\/+/, '') || index;
-        const candidate = path.resolve(staticRoot, requestedPath);
-        if (!isInsideDirectory(staticRoot, candidate)) {
-            return readErrorFile(staticRoot, error, event.httpMethod);
-        }
-        let filePath = candidate;
-        try {
-            const fileStat = await stat(filePath);
-            if (fileStat.isDirectory()) {
-                filePath = path.join(filePath, index);
-            }
-        }
-        catch {
-            return readErrorFile(staticRoot, error, event.httpMethod);
-        }
-        if (!isInsideDirectory(staticRoot, filePath)) {
-            return readErrorFile(staticRoot, error, event.httpMethod);
-        }
-        try {
-            const result = await readStaticFile(staticRoot, filePath, event.httpMethod);
-            return result ?? readErrorFile(staticRoot, error, event.httpMethod);
-        }
-        catch {
-            return readErrorFile(staticRoot, error, event.httpMethod);
+            return readNotFoundFile(event);
         }
     };
 };

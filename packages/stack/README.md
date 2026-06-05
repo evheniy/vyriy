@@ -35,6 +35,8 @@ The `aws-cdk-lib` package is listed because CDK apps and bin entrypoints use CDK
 - `route53.createARecord(scope, id, props)` creates a Route 53 A record.
 - `route53.createCloudFrontTarget(distribution)` creates a Route 53 alias target for CloudFront.
 - `acm.createCertificate(scope, id, props)` creates an ACM certificate.
+- `ses.createRawEmailBucket(scope, id, props?)` creates a secure retained S3 bucket for raw SES emails.
+- `ses.createEmailReceiving(scope, id, props)` creates an SES domain identity, receipt rule set, receipt rule, raw email bucket permissions, S3-to-Lambda notification, and optional SSM parameter read access.
 - `deployment.createBucketDeployment(scope, id, props)` deploys files to S3 with a `512` MB default memory limit.
 - `deployment.createHtmlCacheControl()` creates cache-control headers for HTML files that should revalidate before reuse.
 - `deployment.createImmutableCacheControl(days?)` creates long-lived immutable cache-control headers.
@@ -145,6 +147,61 @@ stack(
       new CfnOutput(this, 'DistributionUrl', { value: `https://${siteDistribution.domainName}/` });
 
       new CfnOutput(this, 'SiteUrl', { value: `https://${domain}/` });
+    }
+  },
+);
+```
+
+## SES Email Receiving Example
+
+This example configures a domain to receive email through SES, store raw MIME messages in S3, and invoke a Lambda for application-specific processing such as sending a Telegram notification.
+
+SES inbound receiving is region-limited, so deploy this in a region that supports SES email receiving and point your domain MX record to that regional SES inbound endpoint.
+
+```ts
+import { CfnOutput, Stack, type StackProps } from 'aws-cdk-lib';
+import type { Construct } from 'constructs';
+
+import { stack } from '@vyriy/cdk';
+import { lambda, ses } from '@vyriy/stack';
+import { path } from '@vyriy/path';
+
+stack(
+  class EmailStack extends Stack {
+    constructor(scope: Construct, id: string, props: StackProps & { env: { account: string; region: string } }) {
+      super(scope, id, props);
+
+      const domainName = 'site.com';
+      const recipient = `consulting@${domainName}`;
+      const processor = lambda.createLambda(this, 'EmailProcessor', {
+        code: lambda.Code.fromAsset(path('dist', 'email-processor')),
+        description: `Processes raw emails sent to ${recipient}`,
+        environment: {
+          RAW_EMAIL_PREFIX: 'incoming/',
+          TELEGRAM_BOT_TOKEN_PARAMETER_NAME: '/site/consulting-email/telegram/bot-token',
+          TELEGRAM_CHAT_ID_PARAMETER_NAME: '/site/consulting-email/telegram/chat-id',
+        },
+        handler: 'index.handler',
+      });
+
+      const emailReceiving = ses.createEmailReceiving(this, 'ConsultingEmail', {
+        domainName,
+        processor,
+        rawEmailPrefix: 'incoming/',
+        receiptRuleName: 'consulting',
+        receiptRuleSetName: 'site-consulting-email',
+        recipients: [recipient],
+        ssmParameterNames: [
+          '/site/consulting-email/telegram/bot-token',
+          '/site/consulting-email/telegram/chat-id',
+        ],
+      });
+
+      processor.addEnvironment('RAW_EMAIL_BUCKET_NAME', emailReceiving.emailBucket.bucketName);
+
+      new CfnOutput(this, 'RawEmailBucketName', { value: emailReceiving.emailBucket.bucketName });
+      new CfnOutput(this, 'ConsultingEmail', { value: recipient });
+      new CfnOutput(this, 'EmailReceiptRuleSetName', { value: 'site-consulting-email' });
     }
   },
 );

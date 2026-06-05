@@ -18,6 +18,14 @@ Create options:
   vyriy create --no-install     Create files without installing dependencies
   vyriy create --no-verify      Install dependencies without running checks
 
+Static options:
+  vyriy static --port 3000 dist             Serve on a specific port
+  vyriy static dist --cache static          Cache preset: none, default, static, immutable
+  vyriy static dist --index index.html      Static directory index file
+  vyriy static dist --not-found 404.html    Static 404 response file
+  vyriy static dist --spa                   Enable SPA fallback mode
+  vyriy static dist --fallback index.html   SPA fallback file
+
 Examples:
   vyriy create app
   vyriy create app --dry-run
@@ -26,6 +34,8 @@ Examples:
   vyriy dist
   vyriy static
   vyriy static --port 3000 dist
+  vyriy static dist --cache static
+  vyriy static dist --spa --fallback index.html --cache static
   vyriy static dist
   vyriy check`;
 export const cli = async (args = []) => {

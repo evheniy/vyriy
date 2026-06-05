@@ -122,6 +122,42 @@ export const handler = sns(async (event) => {
 });
 ```
 
+Use a prebuilt DynamoDB Streams handler chain:
+
+```ts
+import { dynamodb } from '@vyriy/handler';
+
+export const handler = dynamodb(async (event) => {
+  for (const record of event.Records) {
+    console.info(record.eventName);
+  }
+});
+```
+
+Use a prebuilt S3 event handler chain:
+
+```ts
+import { s3 } from '@vyriy/handler';
+
+export const handler = s3(async (event) => {
+  for (const record of event.Records) {
+    console.info(record.s3.bucket.name, record.s3.object.key);
+  }
+});
+```
+
+Use a prebuilt SES receipt handler chain:
+
+```ts
+import { ses } from '@vyriy/handler';
+
+export const handler = ses(async (event) => {
+  for (const record of event.Records) {
+    console.info(record.ses.mail.messageId, record.ses.mail.source);
+  }
+});
+```
+
 Use a prebuilt schedule handler chain:
 
 ```ts
@@ -192,6 +228,15 @@ export const handler = compose(
   API Gateway chain with error handling, logging, timeout handling, context setup, smoke checks, healthcheck handling, default headers, and CORS preflight handling.
 - `streamApi`
   Response streaming API Gateway chain with the same wrapper behavior as `api`. Handlers receive `(event, responseStream, context)` and write directly to the Lambda response stream.
+
+- `dynamodb`
+  DynamoDB Streams chain with logging, timeout handling, context setup, smoke checks, and rethrown errors.
+
+- `s3`
+  S3 event chain with logging, timeout handling, context setup, smoke checks, and rethrown errors.
+
+- `ses`
+  SES receipt rule chain for incoming email processing with logging, timeout handling, context setup, smoke checks, and rethrown errors.
 
 - `schedule`
   EventBridge schedule chain with logging, timeout handling, context setup, smoke checks, and rethrown errors.
@@ -364,7 +409,7 @@ export const handler = withSmoke()(async () => {
 });
 ```
 
-`withSmoke()` is used by the API, schedule, SNS, and SQS chains.
+`withSmoke()` is used by the API, DynamoDB Streams, S3, SES receipt, schedule, SNS, and SQS chains.
 
 ## Types
 
@@ -377,5 +422,6 @@ import type { Context, Decorator, Handler, HandlerParams, Response } from '@vyri
 ## Notes
 
 - `api` includes API-specific wrappers such as healthcheck handling, default headers, and CORS preflight handling
-- `schedule`, `sns`, and `sqs` use `withError()` so failures are rethrown for event-source retry behavior
+- `dynamodb`, `s3`, `ses`, `schedule`, `sns`, and `sqs` use `withError()` so failures are rethrown for event-source retry behavior
+- `ses` targets SES receipt rule Lambda events for incoming email; SES event publishing notifications can still be handled through the `sns` chain when delivered via SNS
 - `withSmoke()` delegates matching to `@vyriy/smoke` and returns its API Gateway-compatible response

@@ -1,17 +1,17 @@
 {
   "name": "@vyriy/scripts",
-  "version": "0.5.6",
+  "version": "0.6.0",
   "description": "Shared scripts package for Vyriy projects",
   "type": "module",
   "dependencies": {
-    "@vyriy/cdk": "0.5.6",
-    "@vyriy/exec": "0.5.6",
-    "@vyriy/logger": "0.5.6",
-    "@vyriy/request": "0.5.6",
-    "@vyriy/retry": "0.5.6",
-    "@vyriy/script": "0.5.6",
-    "@vyriy/services": "0.5.6",
-    "@vyriy/smoke": "0.5.6"
+    "@vyriy/cdk": "0.6.0",
+    "@vyriy/exec": "0.6.0",
+    "@vyriy/logger": "0.6.0",
+    "@vyriy/request": "0.6.0",
+    "@vyriy/retry": "0.6.0",
+    "@vyriy/script": "0.6.0",
+    "@vyriy/services": "0.6.0",
+    "@vyriy/smoke": "0.6.0"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",

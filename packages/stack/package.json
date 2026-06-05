@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/stack",
-  "version": "0.5.6",
+  "version": "0.6.0",
   "description": "AWS CDK stack helpers for Vyriy infrastructure",
   "type": "module",
   "dependencies": {
@@ -141,6 +141,16 @@
       "types": "./s3/index.d.ts",
       "import": "./s3/index.js",
       "default": "./s3/index.js"
+    },
+    "./ses/index": {
+      "types": "./ses/index.d.ts",
+      "import": "./ses/index.js",
+      "default": "./ses/index.js"
+    },
+    "./ses/index.js": {
+      "types": "./ses/index.d.ts",
+      "import": "./ses/index.js",
+      "default": "./ses/index.js"
     },
     "./sns/index": {
       "types": "./sns/index.d.ts",

@@ -100,8 +100,21 @@ Starts the reusable `@vyriy/static` server command:
 vyriy static
 vyriy static public
 vyriy static --port 3000 dist
+vyriy static dist --cache static
+vyriy static dist --spa --fallback index.html --cache static
 vyriy static --help
 vyriy static --version
+```
+
+Static options are delegated to `@vyriy/static`:
+
+```bash
+vyriy static dist --cache none
+vyriy static dist --cache default
+vyriy static dist --cache static
+vyriy static dist --cache immutable
+vyriy static dist --index index.html --not-found 404.html
+vyriy static dist --spa --fallback index.html
 ```
 
 ## Presets

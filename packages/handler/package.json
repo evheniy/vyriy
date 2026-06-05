@@ -1,15 +1,15 @@
 {
   "name": "@vyriy/handler",
-  "version": "0.5.6",
+  "version": "0.6.0",
   "description": "Composable AWS Lambda handler chains and wrappers for Vyriy projects",
   "type": "module",
   "dependencies": {
     "@types/aws-lambda": "^8.10.161",
-    "@vyriy/chaos": "0.5.6",
-    "@vyriy/config": "0.5.6",
-    "@vyriy/logger": "0.5.6",
-    "@vyriy/smoke": "0.5.6",
-    "@vyriy/timeout": "0.5.6"
+    "@vyriy/chaos": "0.6.0",
+    "@vyriy/config": "0.6.0",
+    "@vyriy/logger": "0.6.0",
+    "@vyriy/smoke": "0.6.0",
+    "@vyriy/timeout": "0.6.0"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",
@@ -46,6 +46,16 @@
       "import": "./compose.js",
       "default": "./compose.js"
     },
+    "./dynamodb": {
+      "types": "./dynamodb.d.ts",
+      "import": "./dynamodb.js",
+      "default": "./dynamodb.js"
+    },
+    "./dynamodb.js": {
+      "types": "./dynamodb.d.ts",
+      "import": "./dynamodb.js",
+      "default": "./dynamodb.js"
+    },
     "./factory": {
       "types": "./factory.d.ts",
       "import": "./factory.js",
@@ -66,6 +76,16 @@
       "import": "./index.js",
       "default": "./index.js"
     },
+    "./s3": {
+      "types": "./s3.d.ts",
+      "import": "./s3.js",
+      "default": "./s3.js"
+    },
+    "./s3.js": {
+      "types": "./s3.d.ts",
+      "import": "./s3.js",
+      "default": "./s3.js"
+    },
     "./schedule": {
       "types": "./schedule.d.ts",
       "import": "./schedule.js",
@@ -75,6 +95,16 @@
       "types": "./schedule.d.ts",
       "import": "./schedule.js",
       "default": "./schedule.js"
+    },
+    "./ses": {
+      "types": "./ses.d.ts",
+      "import": "./ses.js",
+      "default": "./ses.js"
+    },
+    "./ses.js": {
+      "types": "./ses.d.ts",
+      "import": "./ses.js",
+      "default": "./ses.js"
     },
     "./sns": {
       "types": "./sns.d.ts",
