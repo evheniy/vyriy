@@ -1,12 +1,12 @@
 {
   "name": "@vyriy/script",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "description": "Script utilities for Vyriy projects",
   "type": "module",
   "dependencies": {
-    "@vyriy/config": "0.5.5",
-    "@vyriy/logger": "0.5.5",
-    "@vyriy/timeout": "0.5.5"
+    "@vyriy/config": "0.5.6",
+    "@vyriy/logger": "0.5.6",
+    "@vyriy/timeout": "0.5.6"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",

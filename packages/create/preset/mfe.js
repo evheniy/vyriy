@@ -312,11 +312,106 @@ yarn build:static
     'workspaces/ui/bin/build.sh': '#!/usr/bin/env sh\n\nset -e\n\nscriptdir="$PWD/workspaces/ui";\n\n. "$PWD/workspaces/env.sh"\n\nNODE_ENV=production \\\nnpx webpack \\\n--config $scriptdir/webpack.config.ts\n',
     'workspaces/ui/bin/start.sh': '#!/usr/bin/env sh\n\nset -e\n\nscriptdir="$PWD/workspaces/ui";\n\n. "$PWD/workspaces/env.sh"\n\nnpx webpack serve \\\n--open \\\n--config $scriptdir/webpack.config.ts \\\n--port $UI_PORT\n',
     'workspaces/ui/doc.mdx': "import { Meta, Markdown } from '@storybook/addon-docs/blocks';\nimport ReadMe from './README.md?raw';\n\n<Meta title=\"Workspaces/UI\" />\n\n<Markdown>{ReadMe}</Markdown>\n",
-    'workspaces/ui/index.test.tsx': "import { beforeAll, describe, expect, it, jest } from '@jest/globals';\nimport type { ReactElement } from 'react';\n\ntype CustomElementOptions = {\n  tag: string;\n  elements: () => {\n    elements: HTMLElement[];\n    root: HTMLElement;\n  };\n  render: (el: HTMLElement) => ReactElement<{\n    onClick: () => void;\n    tags?: string[];\n  }>;\n};\n\nconst customElementMock = jest.fn();\nconst dispatchProfileCardAnalyticsEventMock = jest.fn();\nconst dispatchProfileCardSelectEventMock = jest.fn();\nlet options: CustomElementOptions;\n\njest.mock('@vyriy/render/custom-element', () => ({\n  customElement: customElementMock,\n}));\n\njest.mock('@p/env', () => ({\n  getUi: () => 'http://localhost:3002',\n}));\n\njest.mock('@p/event', () => ({\n  dispatchProfileCardAnalyticsEvent: dispatchProfileCardAnalyticsEventMock,\n  dispatchProfileCardSelectEvent: dispatchProfileCardSelectEventMock,\n}));\n\ndescribe('workspaces/ui/index.tsx', () => {\n  beforeAll(async () => {\n    await import('./index.js');\n\n    [options] = (customElementMock.mock.calls[0] ?? []) as [CustomElementOptions];\n  });\n\n  it('registers the profile-card custom element with event dispatching', () => {\n    const renderElements = options.elements();\n    const host = document.createElement('vyriy-profile-card');\n\n    host.setAttribute('avatarUrl', 'https://example.com/avatar.png');\n    host.setAttribute('description', 'Profile description');\n    host.setAttribute('name', 'Ada Lovelace');\n    host.setAttribute('tags', '[\"math\",\"computing\"]');\n    host.setAttribute('title', 'Mathematician');\n\n    const element = options.render(host);\n\n    element.props.onClick();\n\n    expect(options.tag).toBe('vyriy-profile-card');\n    expect(renderElements.root).toBeInstanceOf(HTMLDivElement);\n    expect(renderElements.elements[0]).toBeInstanceOf(HTMLLinkElement);\n    expect((renderElements.elements[0] as HTMLLinkElement).href).toBe('http://localhost:3002/main.css');\n    expect(element.props.tags).toEqual(['math', 'computing']);\n    expect(dispatchProfileCardSelectEventMock).toHaveBeenCalledWith(host, {\n      avatarUrl: 'https://example.com/avatar.png',\n      name: 'Ada Lovelace',\n      role: 'Mathematician',\n    });\n    expect(dispatchProfileCardAnalyticsEventMock).toHaveBeenCalledWith(host, {\n      avatarUrl: 'https://example.com/avatar.png',\n      name: 'Ada Lovelace',\n      role: 'Mathematician',\n    });\n  });\n\n  it('ignores missing and invalid tags attributes', () => {\n    const host = document.createElement('vyriy-profile-card');\n\n    expect(options.render(host).props.tags).toBeUndefined();\n\n    host.setAttribute('tags', 'not json');\n\n    expect(options.render(host).props.tags).toBeUndefined();\n\n    host.setAttribute('tags', '{\"tag\":\"math\"}');\n\n    expect(options.render(host).props.tags).toBeUndefined();\n  });\n\n  it('falls back to empty profile values when attributes are missing', () => {\n    const host = document.createElement('vyriy-profile-card');\n    const element = options.render(host);\n\n    element.props.onClick();\n\n    expect(dispatchProfileCardSelectEventMock).toHaveBeenLastCalledWith(host, {\n      avatarUrl: null,\n      name: '',\n      role: undefined,\n    });\n  });\n});\n",
+    'workspaces/ui/index.test.tsx': `import { beforeAll, describe, expect, it, jest } from '@jest/globals';
+import type { ReactElement } from 'react';
+
+type CustomElementOptions = {
+  tag: string;
+  elements: () => {
+    elements: HTMLElement[];
+    root: HTMLElement;
+  };
+  render: (el: HTMLElement) => ReactElement<{
+    onClick: () => void;
+    tags?: string[];
+  }>;
+};
+
+const customElementMock = jest.fn();
+const dispatchProfileCardAnalyticsEventMock = jest.fn();
+const dispatchProfileCardSelectEventMock = jest.fn();
+let options: CustomElementOptions;
+
+jest.mock('@vyriy/render/custom-element', () => ({
+  customElement: customElementMock,
+}));
+
+jest.mock('@p/event', () => ({
+  dispatchProfileCardAnalyticsEvent: dispatchProfileCardAnalyticsEventMock,
+  dispatchProfileCardSelectEvent: dispatchProfileCardSelectEventMock,
+}));
+
+describe('workspaces/ui/index.tsx', () => {
+  beforeAll(async () => {
+    process.env.UI = 'http://localhost:3002';
+
+    await import('./index.js');
+
+    [options] = (customElementMock.mock.calls[0] ?? []) as [CustomElementOptions];
+  });
+
+  it('registers the profile-card custom element with event dispatching', () => {
+    const renderElements = options.elements();
+    const host = document.createElement('vyriy-profile-card');
+
+    host.setAttribute('avatarUrl', 'https://example.com/avatar.png');
+    host.setAttribute('description', 'Profile description');
+    host.setAttribute('name', 'Ada Lovelace');
+    host.setAttribute('tags', '["math","computing"]');
+    host.setAttribute('title', 'Mathematician');
+
+    const element = options.render(host);
+
+    element.props.onClick();
+
+    expect(options.tag).toBe('vyriy-profile-card');
+    expect(renderElements.root).toBeInstanceOf(HTMLDivElement);
+    expect(renderElements.elements[0]).toBeInstanceOf(HTMLLinkElement);
+    expect((renderElements.elements[0] as HTMLLinkElement).href).toBe('http://localhost:3002/main.css');
+    expect(element.props.tags).toEqual(['math', 'computing']);
+    expect(dispatchProfileCardSelectEventMock).toHaveBeenCalledWith(host, {
+      avatarUrl: 'https://example.com/avatar.png',
+      name: 'Ada Lovelace',
+      role: 'Mathematician',
+    });
+    expect(dispatchProfileCardAnalyticsEventMock).toHaveBeenCalledWith(host, {
+      avatarUrl: 'https://example.com/avatar.png',
+      name: 'Ada Lovelace',
+      role: 'Mathematician',
+    });
+  });
+
+  it('ignores missing and invalid tags attributes', () => {
+    const host = document.createElement('vyriy-profile-card');
+
+    expect(options.render(host).props.tags).toBeUndefined();
+
+    host.setAttribute('tags', 'not json');
+
+    expect(options.render(host).props.tags).toBeUndefined();
+
+    host.setAttribute('tags', '{"tag":"math"}');
+
+    expect(options.render(host).props.tags).toBeUndefined();
+  });
+
+  it('falls back to empty profile values when attributes are missing', () => {
+    const host = document.createElement('vyriy-profile-card');
+    const element = options.render(host);
+
+    element.props.onClick();
+
+    expect(dispatchProfileCardSelectEventMock).toHaveBeenLastCalledWith(host, {
+      avatarUrl: null,
+      name: '',
+      role: undefined,
+    });
+  });
+});
+`,
     'workspaces/ui/index.tsx': `import { customElement } from '@vyriy/render/custom-element';
 
 import { dispatchProfileCardAnalyticsEvent, dispatchProfileCardSelectEvent } from '@p/event';
-import { getUi } from '@p/env';
 
 import { ProfileCard } from '@p/components/profile-card';
 import '@p/components/styles.scss';
@@ -352,7 +447,7 @@ customElement({
     const container = document.createElement('div');
 
     link.rel = 'stylesheet';
-    link.href = \`\${getUi()}/main.css\`;
+    link.href = \`\${process.env.UI}/main.css\`;
 
     return {
       elements: [link, container],

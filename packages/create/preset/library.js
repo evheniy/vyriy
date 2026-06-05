@@ -441,11 +441,11 @@ Custom classes are composed with the component classes.
 
 \`ButtonProps\` extends \`ComponentProps<'button'>\`.
 
-| Prop        | Type                       | Default     | Description                                        |
-| ----------- | -------------------------- | ----------- | -------------------------------------------------- |
-| \`variant\`   | \`'primary' | 'secondary'\` | \`'primary'\` | Controls the visual style.                         |
-| \`className\` | \`string\`                   | -           | Adds custom classes alongside the library classes. |
-| \`children\`  | \`ReactNode\`                | -           | Button content.                                    |
+| Prop        | Type        | Default      | Description                                        |
+| ----------- | ----------- | ------------ | -------------------------------------------------- | -------------------------- |
+| \`variant\`   | \`'primary'  | 'secondary'\` | \`'primary'\`                                        | Controls the visual style. |
+| \`className\` | \`string\`    | -            | Adds custom classes alongside the library classes. |
+| \`children\`  | \`ReactNode\` | -            | Button content.                                    |
 `,
     'packages/components/button/types.ts': `import type { ComponentProps, FC } from 'react';
 

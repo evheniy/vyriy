@@ -83,8 +83,8 @@ Storybook, and workspace-level build scripts.
 
 ## Workspaces
 
-| Workspace                                | Description                                            |
-| ---------------------------------------- | ------------------------------------------------------ |
+| Workspace                              | Description                                            |
+| -------------------------------------- | ------------------------------------------------------ |
 | [\`@w/api\`](./workspaces/api/README.md) | HTTP API server with OpenAPI and Scalar documentation. |
 
 ## Local development
@@ -315,8 +315,8 @@ OpenAPI document rendered by Scalar.
 
 ## Routes
 
-| Method   | Path              | Description                                       |
-| -------- | ----------------- | ------------------------------------------------- |
+| Method | Path            | Description                                       |
+| ------ | --------------- | ------------------------------------------------- |
 | \`GET\`  | \`/\`             | Serves the Scalar API reference UI.               |
 | \`GET\`  | \`/openapi.json\` | Returns the OpenAPI 3.0 document for the API.     |
 | \`GET\`  | \`/api/test\`     | Returns a JSON test response: \`{ "test": "ok" }\`. |

@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/pause",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "description": "Shared pause utility for Vyriy projects",
   "type": "module",
   "agents": "./AGENTS.md",
