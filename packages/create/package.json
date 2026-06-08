@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/create",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "description": "Vyriy project creation CLI.",
   "type": "module",
   "engines": {
@@ -12,7 +12,7 @@
     "vyriy-create": "./bin/index.js"
   },
   "dependencies": {
-    "@vyriy/check": "0.6.5"
+    "@vyriy/check": "0.6.6"
   },
   "peerDependencies": {
     "@testing-library/dom": "^10.4.1",
