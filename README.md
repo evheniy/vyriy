@@ -77,16 +77,16 @@ The wizard can also merge CI/CD provider files, deployment provider files when a
 
 ### Configuration And Tooling
 
-| Package                      | Purpose                                                                                              |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `@vyriy/browserslist-config` | Shared Browserslist config for Vyriy projects.                                                       |
-| `@vyriy/eslint-config`       | Shared ESLint flat config for TypeScript, React, Storybook, Jest, imports, and Prettier integration. |
-| `@vyriy/jest-config`         | Shared Jest config for TypeScript test runs, SWC transforms, JSDOM, coverage, and JUnit reporting.   |
-| `@vyriy/prettier-config`     | Shared Prettier config with the multiline arrays plugin.                                             |
-| `@vyriy/stylelint-config`    | Shared Stylelint config for SCSS-friendly CSS linting and property order.                            |
-| `@vyriy/storybook-config`    | Shared Storybook config for React projects.                                                          |
-| `@vyriy/typescript-config`   | Shared TypeScript configs for base, build, config-file, and package output use cases.                |
-| `@vyriy/webpack-config`      | Shared Webpack config for browser-oriented builds.                                                   |
+| Package                      | Purpose                                                                                                    |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `@vyriy/browserslist-config` | Shared Browserslist config for Vyriy projects.                                                             |
+| `@vyriy/eslint-config`       | Shared ESLint flat config for TypeScript, React, Storybook, Jest, YAML, imports, and Prettier integration. |
+| `@vyriy/jest-config`         | Shared Jest config for TypeScript test runs, SWC transforms, JSDOM, coverage, and JUnit reporting.         |
+| `@vyriy/prettier-config`     | Shared Prettier config with the multiline arrays plugin.                                                   |
+| `@vyriy/stylelint-config`    | Shared Stylelint config for SCSS-friendly CSS linting and property order.                                  |
+| `@vyriy/storybook-config`    | Shared Storybook config for React projects.                                                                |
+| `@vyriy/typescript-config`   | Shared TypeScript configs for base, build, config-file, and package output use cases.                      |
+| `@vyriy/webpack-config`      | Shared Webpack config for browser-oriented builds.                                                         |
 
 Some config packages intentionally document executable tools in their install command because the consumer project should expose the CLI binary:
 
@@ -136,21 +136,13 @@ Some config packages intentionally document executable tools in their install co
 
 ## Using Packages
 
-Packages are private workspace packages. In practice this means:
-
-- use them inside this monorepo
-- publish them to a private registry when needed
-- consume them from another app only after publishing or local linking
-
-Most runtime packages can be installed directly after publishing:
+Most packages can be installed directly:
 
 ```bash
 npm install @vyriy/handler
 ```
 
-Internal package dependencies are declared as package `dependencies`, so installing a package pulls the other `@vyriy/*` packages it uses.
-
-Example runtime usage:
+Example usage:
 
 ```ts
 import { createLogger } from '@vyriy/logger';
