@@ -1,0 +1,42 @@
+{
+  "name": "@vyriy/cn",
+  "version": "0.6.4",
+  "description": "Class name utility for Vyriy projects",
+  "type": "module",
+  "agents": "./AGENTS.md",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/cn"
+  },
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./cn": {
+      "types": "./cn.d.ts",
+      "import": "./cn.js",
+      "default": "./cn.js"
+    },
+    "./cn.js": {
+      "types": "./cn.d.ts",
+      "import": "./cn.js",
+      "default": "./cn.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    }
+  }
+}

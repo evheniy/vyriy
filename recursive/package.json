@@ -1,0 +1,45 @@
+{
+  "name": "@vyriy/recursive",
+  "version": "0.6.4",
+  "description": "Recursive iteration utility for Vyriy projects",
+  "type": "module",
+  "dependencies": {
+    "@vyriy/logger": "0.6.4"
+  },
+  "agents": "./AGENTS.md",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/recursive"
+  },
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./recursive": {
+      "types": "./recursive.d.ts",
+      "import": "./recursive.js",
+      "default": "./recursive.js"
+    },
+    "./recursive.js": {
+      "types": "./recursive.d.ts",
+      "import": "./recursive.js",
+      "default": "./recursive.js"
+    }
+  }
+}

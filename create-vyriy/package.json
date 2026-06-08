@@ -1,0 +1,36 @@
+{
+  "name": "create-vyriy",
+  "version": "0.6.4",
+  "description": "Create Vyriy projects from reusable starter contracts.",
+  "type": "module",
+  "bin": "./bin/index.js",
+  "dependencies": {
+    "@vyriy/create": "0.6.4"
+  },
+  "agents": "./AGENTS.md",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/create-vyriy"
+  },
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    }
+  }
+}

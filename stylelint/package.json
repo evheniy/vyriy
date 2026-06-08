@@ -1,0 +1,44 @@
+{
+  "name": "@vyriy/stylelint-config",
+  "version": "0.6.4",
+  "description": "Shared Stylelint config for Vyriy projects",
+  "type": "module",
+  "dependencies": {
+    "postcss": "^8.5.15",
+    "postcss-scss": "^4.0.9",
+    "stylelint": "^17.13.0",
+    "stylelint-config-recess-order": "^7.7.0",
+    "stylelint-config-recommended": "^18.0.0",
+    "stylelint-config-recommended-scss": "^17.0.1",
+    "stylelint-config-standard": "^40.0.0",
+    "stylelint-config-standard-scss": "^17.0.0",
+    "stylelint-order": "^8.1.1",
+    "stylelint-scss": "^7.2.0"
+  },
+  "agents": "./AGENTS.md",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/stylelint"
+  },
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    }
+  }
+}

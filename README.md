@@ -1,4 +1,14 @@
-# Vyriy
+<div align="center">
+  <img src="vyriy-v-wings.png" alt="Vyriy" width="200" />
+  <h1>Vyriy</h1>
+  <p>Calm cloud-oriented React architecture and toolkit.</p>
+</div>
+
+<div align="center">
+  <img src="http://gitlab.local/root/vyriy/badges/main/pipeline.svg" alt="Pipeline status" />
+  <img src="http://gitlab.local/root/vyriy/badges/main/coverage.svg?job=jest" alt="Coverage report" />
+  <img src="http://gitlab.local/root/vyriy/-/badges/release.svg" alt="Latest release" />
+</div>
 
 ## Overview
 

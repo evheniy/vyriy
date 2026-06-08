@@ -1,0 +1,55 @@
+{
+  "name": "@vyriy/router",
+  "version": "0.6.4",
+  "description": "Router utility for Vyriy projects",
+  "type": "module",
+  "dependencies": {
+    "@types/aws-lambda": "^8.10.162"
+  },
+  "agents": "./AGENTS.md",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/router"
+  },
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./create": {
+      "types": "./create.d.ts",
+      "import": "./create.js",
+      "default": "./create.js"
+    },
+    "./create.js": {
+      "types": "./create.d.ts",
+      "import": "./create.js",
+      "default": "./create.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./router": {
+      "types": "./router.d.ts",
+      "import": "./router.js",
+      "default": "./router.js"
+    },
+    "./router.js": {
+      "types": "./router.d.ts",
+      "import": "./router.js",
+      "default": "./router.js"
+    }
+  }
+}

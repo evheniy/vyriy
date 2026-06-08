@@ -1,0 +1,126 @@
+{
+  "name": "@vyriy/hoc",
+  "version": "0.6.4",
+  "description": "React higher-order component utilities for Vyriy projects",
+  "type": "module",
+  "dependencies": {
+    "@types/react": "^19.2.17",
+    "react": "^19.2.7"
+  },
+  "agents": "./AGENTS.md",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/hoc"
+  },
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./builder": {
+      "types": "./builder.d.ts",
+      "import": "./builder.js",
+      "default": "./builder.js"
+    },
+    "./builder.js": {
+      "types": "./builder.d.ts",
+      "import": "./builder.js",
+      "default": "./builder.js"
+    },
+    "./compose": {
+      "types": "./compose.d.ts",
+      "import": "./compose.js",
+      "default": "./compose.js"
+    },
+    "./compose.js": {
+      "types": "./compose.d.ts",
+      "import": "./compose.js",
+      "default": "./compose.js"
+    },
+    "./hocs/activity": {
+      "types": "./hocs/activity.d.ts",
+      "import": "./hocs/activity.js",
+      "default": "./hocs/activity.js"
+    },
+    "./hocs/activity.js": {
+      "types": "./hocs/activity.d.ts",
+      "import": "./hocs/activity.js",
+      "default": "./hocs/activity.js"
+    },
+    "./hocs/profiler": {
+      "types": "./hocs/profiler.d.ts",
+      "import": "./hocs/profiler.js",
+      "default": "./hocs/profiler.js"
+    },
+    "./hocs/profiler.js": {
+      "types": "./hocs/profiler.d.ts",
+      "import": "./hocs/profiler.js",
+      "default": "./hocs/profiler.js"
+    },
+    "./hocs/strict-mode": {
+      "types": "./hocs/strict-mode.d.ts",
+      "import": "./hocs/strict-mode.js",
+      "default": "./hocs/strict-mode.js"
+    },
+    "./hocs/strict-mode.js": {
+      "types": "./hocs/strict-mode.d.ts",
+      "import": "./hocs/strict-mode.js",
+      "default": "./hocs/strict-mode.js"
+    },
+    "./hocs/suspense": {
+      "types": "./hocs/suspense.d.ts",
+      "import": "./hocs/suspense.js",
+      "default": "./hocs/suspense.js"
+    },
+    "./hocs/suspense.js": {
+      "types": "./hocs/suspense.d.ts",
+      "import": "./hocs/suspense.js",
+      "default": "./hocs/suspense.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./react": {
+      "types": "./react.d.ts",
+      "import": "./react.js",
+      "default": "./react.js"
+    },
+    "./react.js": {
+      "types": "./react.d.ts",
+      "import": "./react.js",
+      "default": "./react.js"
+    },
+    "./react.stories": {
+      "types": "./react.stories.d.ts",
+      "import": "./react.stories.js",
+      "default": "./react.stories.js"
+    },
+    "./react.stories.js": {
+      "types": "./react.stories.d.ts",
+      "import": "./react.stories.js",
+      "default": "./react.stories.js"
+    },
+    "./wrapper": {
+      "types": "./wrapper.d.ts",
+      "import": "./wrapper.js",
+      "default": "./wrapper.js"
+    },
+    "./wrapper.js": {
+      "types": "./wrapper.d.ts",
+      "import": "./wrapper.js",
+      "default": "./wrapper.js"
+    }
+  }
+}

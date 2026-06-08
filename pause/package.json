@@ -1,0 +1,42 @@
+{
+  "name": "@vyriy/pause",
+  "version": "0.6.4",
+  "description": "Shared pause utility for Vyriy projects",
+  "type": "module",
+  "agents": "./AGENTS.md",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/pause"
+  },
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./pause": {
+      "types": "./pause.d.ts",
+      "import": "./pause.js",
+      "default": "./pause.js"
+    },
+    "./pause.js": {
+      "types": "./pause.d.ts",
+      "import": "./pause.js",
+      "default": "./pause.js"
+    }
+  }
+}
