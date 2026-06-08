@@ -1,0 +1,69 @@
+{
+  "name": "@vyriy/cdk",
+  "version": "0.6.5",
+  "description": "Shared AWS CDK helpers for Vyriy projects",
+  "type": "module",
+  "dependencies": {
+    "@vyriy/env": "0.6.5",
+    "@vyriy/logger": "0.6.5",
+    "@vyriy/package": "0.6.5",
+    "@vyriy/path": "0.6.5",
+    "aws-cdk-lib": "^2.258.0"
+  },
+  "agents": "./AGENTS.md",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/cdk"
+  },
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./id": {
+      "types": "./id.d.ts",
+      "import": "./id.js",
+      "default": "./id.js"
+    },
+    "./id.js": {
+      "types": "./id.d.ts",
+      "import": "./id.js",
+      "default": "./id.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./output": {
+      "types": "./output.d.ts",
+      "import": "./output.js",
+      "default": "./output.js"
+    },
+    "./output.js": {
+      "types": "./output.d.ts",
+      "import": "./output.js",
+      "default": "./output.js"
+    },
+    "./stack": {
+      "types": "./stack.d.ts",
+      "import": "./stack.js",
+      "default": "./stack.js"
+    },
+    "./stack.js": {
+      "types": "./stack.d.ts",
+      "import": "./stack.js",
+      "default": "./stack.js"
+    }
+  }
+}

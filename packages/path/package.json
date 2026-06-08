@@ -1,0 +1,42 @@
+{
+  "name": "@vyriy/path",
+  "version": "0.6.5",
+  "description": "Shared path utilities for Vyriy projects",
+  "type": "module",
+  "agents": "./AGENTS.md",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/path"
+  },
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./path": {
+      "types": "./path.d.ts",
+      "import": "./path.js",
+      "default": "./path.js"
+    },
+    "./path.js": {
+      "types": "./path.d.ts",
+      "import": "./path.js",
+      "default": "./path.js"
+    }
+  }
+}

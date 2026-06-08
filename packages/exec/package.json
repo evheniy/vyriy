@@ -1,0 +1,45 @@
+{
+  "name": "@vyriy/exec",
+  "version": "0.6.5",
+  "description": "Command execution utility for Vyriy projects",
+  "type": "module",
+  "dependencies": {
+    "@vyriy/logger": "0.6.5"
+  },
+  "agents": "./AGENTS.md",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/exec"
+  },
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./exec": {
+      "types": "./exec.d.ts",
+      "import": "./exec.js",
+      "default": "./exec.js"
+    },
+    "./exec.js": {
+      "types": "./exec.d.ts",
+      "import": "./exec.js",
+      "default": "./exec.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    }
+  }
+}

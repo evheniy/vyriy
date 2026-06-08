@@ -1,0 +1,10 @@
+import type { ConfigParsers } from './types.js';
+export { auto } from './auto.js';
+export { boolean } from './boolean.js';
+export { csv } from './csv.js';
+export { parseDuration as duration } from './duration.js';
+export { int, number } from './number.js';
+export { json } from './json.js';
+export { string } from './string.js';
+export declare const parsers: ConfigParsers;
+export declare const Parser: ConfigParsers;

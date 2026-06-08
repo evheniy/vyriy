@@ -1,0 +1,132 @@
+{
+  "name": "@vyriy/env",
+  "version": "0.6.5",
+  "description": "Shared env utility for Vyriy projects",
+  "type": "module",
+  "agents": "./AGENTS.md",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/env"
+  },
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./aws": {
+      "types": "./aws.d.ts",
+      "import": "./aws.js",
+      "default": "./aws.js"
+    },
+    "./aws.js": {
+      "types": "./aws.d.ts",
+      "import": "./aws.js",
+      "default": "./aws.js"
+    },
+    "./cdk": {
+      "types": "./cdk.d.ts",
+      "import": "./cdk.js",
+      "default": "./cdk.js"
+    },
+    "./cdk.js": {
+      "types": "./cdk.d.ts",
+      "import": "./cdk.js",
+      "default": "./cdk.js"
+    },
+    "./ecs": {
+      "types": "./ecs.d.ts",
+      "import": "./ecs.js",
+      "default": "./ecs.js"
+    },
+    "./ecs.js": {
+      "types": "./ecs.d.ts",
+      "import": "./ecs.js",
+      "default": "./ecs.js"
+    },
+    "./env": {
+      "types": "./env.d.ts",
+      "import": "./env.js",
+      "default": "./env.js"
+    },
+    "./env.js": {
+      "types": "./env.d.ts",
+      "import": "./env.js",
+      "default": "./env.js"
+    },
+    "./gitlab": {
+      "types": "./gitlab.d.ts",
+      "import": "./gitlab.js",
+      "default": "./gitlab.js"
+    },
+    "./gitlab.js": {
+      "types": "./gitlab.d.ts",
+      "import": "./gitlab.js",
+      "default": "./gitlab.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./localstack": {
+      "types": "./localstack.d.ts",
+      "import": "./localstack.js",
+      "default": "./localstack.js"
+    },
+    "./localstack.js": {
+      "types": "./localstack.d.ts",
+      "import": "./localstack.js",
+      "default": "./localstack.js"
+    },
+    "./logger": {
+      "types": "./logger.d.ts",
+      "import": "./logger.js",
+      "default": "./logger.js"
+    },
+    "./logger.js": {
+      "types": "./logger.d.ts",
+      "import": "./logger.js",
+      "default": "./logger.js"
+    },
+    "./server": {
+      "types": "./server.d.ts",
+      "import": "./server.js",
+      "default": "./server.js"
+    },
+    "./server.js": {
+      "types": "./server.d.ts",
+      "import": "./server.js",
+      "default": "./server.js"
+    },
+    "./stage": {
+      "types": "./stage.d.ts",
+      "import": "./stage.js",
+      "default": "./stage.js"
+    },
+    "./stage.js": {
+      "types": "./stage.d.ts",
+      "import": "./stage.js",
+      "default": "./stage.js"
+    },
+    "./vpc": {
+      "types": "./vpc.d.ts",
+      "import": "./vpc.js",
+      "default": "./vpc.js"
+    },
+    "./vpc.js": {
+      "types": "./vpc.d.ts",
+      "import": "./vpc.js",
+      "default": "./vpc.js"
+    }
+  }
+}
