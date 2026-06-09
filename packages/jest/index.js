@@ -1,3 +1,6 @@
+import { createRequire } from 'node:module';
+const requireFromPackage = createRequire(import.meta.url);
+const resolveDependency = (request) => requireFromPackage.resolve(request);
 const config = {
     clearMocks: true,
     collectCoverage: true,
@@ -57,7 +60,7 @@ const config = {
     ],
     moduleNameMapper: {
         '^(\\.{1,2}/.*)\\.js$': '$1',
-        '\\.(css|less|scss|sass|svg)$': 'identity-obj-proxy',
+        '\\.(css|less|scss|sass|svg)$': resolveDependency('identity-obj-proxy'),
     },
     modulePathIgnorePatterns: [
         '/node_modules/',
@@ -69,7 +72,7 @@ const config = {
     reporters: [
         'default',
         [
-            'jest-junit',
+            resolveDependency('jest-junit'),
             {
                 outputDirectory: 'coverage',
                 outputName: 'junit.xml',
@@ -78,7 +81,7 @@ const config = {
     ],
     resetMocks: false,
     restoreMocks: true,
-    testEnvironment: 'jsdom',
+    testEnvironment: resolveDependency('jest-environment-jsdom'),
     testMatch: ['**/?(*.)+(spec|test).?([mc])[jt]s?(x)'],
     testPathIgnorePatterns: [
         '/node_modules/',
@@ -89,7 +92,7 @@ const config = {
     ],
     transform: {
         '^.+\\.[tj]sx?$': [
-            '@swc/jest',
+            resolveDependency('@swc/jest'),
             {
                 jsc: {
                     transform: {

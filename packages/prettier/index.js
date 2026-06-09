@@ -1,3 +1,6 @@
+import { createRequire } from 'node:module';
+const requireFromPackage = createRequire(import.meta.url);
+const resolveDependency = (request) => requireFromPackage.resolve(request);
 const config = {
     semi: true,
     singleQuote: true,
@@ -17,7 +20,7 @@ const config = {
         },
     ],
     plugins: [
-        'prettier-plugin-multiline-arrays',
+        resolveDependency('prettier-plugin-multiline-arrays'),
     ],
     multilineArraysWrapThreshold: 3,
 };

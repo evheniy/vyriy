@@ -1,4 +1,8 @@
+import { createRequire } from 'node:module';
+import { dirname } from 'node:path';
 import { style } from '@vyriy/webpack-config/rules.js';
+const requireFromPackage = createRequire(import.meta.url);
+const resolvePackageRoot = (request) => dirname(requireFromPackage.resolve(`${request}/package.json`));
 const STYLE_FIXTURES = [
     'style.css',
     'style.scss',
@@ -25,15 +29,18 @@ const isStyleRule = (rule) => {
 };
 const config = {
     addons: [
-        '@storybook/addon-webpack5-compiler-swc',
-        '@storybook/addon-a11y',
-        '@storybook/addon-docs',
-        '@storybook/addon-themes',
-        'storybook-addon-pseudo-states',
-        '@vueless/storybook-dark-mode',
-        'storybook-addon-tag-badges',
+        resolvePackageRoot('@storybook/addon-webpack5-compiler-swc'),
+        resolvePackageRoot('@storybook/addon-a11y'),
+        resolvePackageRoot('@storybook/addon-docs'),
+        resolvePackageRoot('@storybook/addon-themes'),
+        resolvePackageRoot('storybook-addon-pseudo-states'),
+        resolvePackageRoot('@vueless/storybook-dark-mode'),
+        resolvePackageRoot('storybook-addon-tag-badges'),
     ],
-    framework: '@storybook/react-webpack5',
+    framework: {
+        name: resolvePackageRoot('@storybook/react-webpack5'),
+        options: {},
+    },
     features: {
         sidebarOnboardingChecklist: false,
     },

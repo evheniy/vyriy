@@ -6,6 +6,7 @@ Shared Prettier config for Vyriy projects.
 
 This package provides the base Prettier setup used in Vyriy repositories, including the multiline arrays plugin and common formatting defaults.
 Arrays with more than three elements are formatted across multiple lines.
+The multiline arrays plugin is resolved from this shared config package, so consumer projects only need the config package and their local Prettier CLI.
 
 Prettier is responsible for formatting syntactically valid code. It does not replace TypeScript, ESLint, Stylelint, or tests; it is one small validation and formatting step in the shared Vyriy workflow.
 

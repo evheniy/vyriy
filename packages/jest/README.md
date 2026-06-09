@@ -62,6 +62,7 @@ Reports are written to `coverage` using `json`, `text`, `text-summary`, `lcov`, 
 ## CI Reports
 
 The config includes `jest-junit` alongside the default Jest reporter. This writes a JUnit report to `coverage/junit.xml`, which CI systems such as GitLab can publish as a test report artifact.
+Jest transformer, reporter, environment, and style proxy packages are resolved from this shared config package, so consumers only need the config package and their local Jest CLI.
 
 ## Install
 

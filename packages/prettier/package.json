@@ -1,10 +1,10 @@
 {
   "name": "@vyriy/prettier-config",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Shared Prettier config for Vyriy projects",
   "type": "module",
   "dependencies": {
-    "prettier": "^3.8.3",
+    "prettier": "^3.8.4",
     "prettier-plugin-multiline-arrays": "^4.1.9"
   },
   "agents": "./AGENTS.md",
