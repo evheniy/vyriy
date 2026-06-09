@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/hoc",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "React higher-order component utilities for Vyriy projects",
   "type": "module",
   "dependencies": {

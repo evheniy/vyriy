@@ -1,11 +1,11 @@
 {
   "name": "@vyriy/jest-config",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Shared Jest config for Vyriy projects",
   "type": "module",
   "dependencies": {
     "@jest/globals": "^30.4.1",
-    "@swc/core": "^1.15.40",
+    "@swc/core": "^1.15.41",
     "@swc/jest": "^0.2.39",
     "@types/identity-obj-proxy": "^3.0.2",
     "identity-obj-proxy": "^3.0.0",

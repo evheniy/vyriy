@@ -1,22 +1,22 @@
 {
   "name": "@vyriy/services",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Shared services package for Vyriy projects",
   "type": "module",
   "dependencies": {
-    "@aws-sdk/client-cloudfront": "^3.1064.0",
-    "@aws-sdk/client-dynamodb": "^3.1064.0",
-    "@aws-sdk/client-ecs": "^3.1064.0",
-    "@aws-sdk/client-lambda": "^3.1064.0",
-    "@aws-sdk/client-s3": "^3.1064.0",
-    "@aws-sdk/client-sns": "^3.1064.0",
-    "@aws-sdk/client-ssm": "^3.1064.0",
-    "@aws-sdk/lib-dynamodb": "^3.1064.0",
+    "@aws-sdk/client-cloudfront": "^3.1065.0",
+    "@aws-sdk/client-dynamodb": "^3.1065.0",
+    "@aws-sdk/client-ecs": "^3.1065.0",
+    "@aws-sdk/client-lambda": "^3.1065.0",
+    "@aws-sdk/client-s3": "^3.1065.0",
+    "@aws-sdk/client-sns": "^3.1065.0",
+    "@aws-sdk/client-ssm": "^3.1065.0",
+    "@aws-sdk/lib-dynamodb": "^3.1065.0",
     "@aws-sdk/util-dynamodb": "^3.996.4",
-    "@vyriy/env": "0.7.2",
-    "@vyriy/error": "0.7.2",
-    "@vyriy/logger": "0.7.2",
-    "@vyriy/pause": "0.7.2"
+    "@vyriy/env": "0.7.3",
+    "@vyriy/error": "0.7.3",
+    "@vyriy/logger": "0.7.3",
+    "@vyriy/pause": "0.7.3"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",
@@ -53,6 +53,11 @@
       "import": "./cloudfront/client.js",
       "default": "./cloudfront/client.js"
     },
+    "./cloudfront": {
+      "types": "./cloudfront/index.d.ts",
+      "import": "./cloudfront/index.js",
+      "default": "./cloudfront/index.js"
+    },
     "./cloudfront/index": {
       "types": "./cloudfront/index.d.ts",
       "import": "./cloudfront/index.js",
@@ -83,6 +88,11 @@
       "import": "./dynamodb/client.js",
       "default": "./dynamodb/client.js"
     },
+    "./dynamodb": {
+      "types": "./dynamodb/index.d.ts",
+      "import": "./dynamodb/index.js",
+      "default": "./dynamodb/index.js"
+    },
     "./dynamodb/index": {
       "types": "./dynamodb/index.d.ts",
       "import": "./dynamodb/index.js",
@@ -112,6 +122,11 @@
       "types": "./ecs/client.d.ts",
       "import": "./ecs/client.js",
       "default": "./ecs/client.js"
+    },
+    "./ecs": {
+      "types": "./ecs/index.d.ts",
+      "import": "./ecs/index.js",
+      "default": "./ecs/index.js"
     },
     "./ecs/index": {
       "types": "./ecs/index.d.ts",
@@ -153,6 +168,11 @@
       "import": "./lambda/client.js",
       "default": "./lambda/client.js"
     },
+    "./lambda": {
+      "types": "./lambda/index.d.ts",
+      "import": "./lambda/index.js",
+      "default": "./lambda/index.js"
+    },
     "./lambda/index": {
       "types": "./lambda/index.d.ts",
       "import": "./lambda/index.js",
@@ -182,6 +202,11 @@
       "types": "./s3/client.d.ts",
       "import": "./s3/client.js",
       "default": "./s3/client.js"
+    },
+    "./s3": {
+      "types": "./s3/index.d.ts",
+      "import": "./s3/index.js",
+      "default": "./s3/index.js"
     },
     "./s3/index": {
       "types": "./s3/index.d.ts",
@@ -213,6 +238,11 @@
       "import": "./sns/client.js",
       "default": "./sns/client.js"
     },
+    "./sns": {
+      "types": "./sns/index.d.ts",
+      "import": "./sns/index.js",
+      "default": "./sns/index.js"
+    },
     "./sns/index": {
       "types": "./sns/index.d.ts",
       "import": "./sns/index.js",
@@ -242,6 +272,11 @@
       "types": "./ssm/client.d.ts",
       "import": "./ssm/client.js",
       "default": "./ssm/client.js"
+    },
+    "./ssm": {
+      "types": "./ssm/index.d.ts",
+      "import": "./ssm/index.js",
+      "default": "./ssm/index.js"
     },
     "./ssm/index": {
       "types": "./ssm/index.d.ts",

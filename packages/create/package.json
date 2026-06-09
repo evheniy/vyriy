@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/create",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Vyriy project creation CLI.",
   "type": "module",
   "engines": {
@@ -12,7 +12,7 @@
     "vyriy-create": "./bin/index.js"
   },
   "dependencies": {
-    "@vyriy/check": "0.7.2"
+    "@vyriy/check": "0.7.3"
   },
   "peerDependencies": {
     "@testing-library/dom": "^10.4.1",
@@ -31,7 +31,7 @@
     "react-dom": "^19.2.7",
     "rimraf": "^6.1.3",
     "sass": "^1.100.0",
-    "storybook": "^10.4.2",
+    "storybook": "^10.4.3",
     "stylelint": "^17.13.0",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3",
@@ -151,6 +151,11 @@
       "import": "./index.js",
       "default": "./index.js"
     },
+    "./plan": {
+      "types": "./plan/index.d.ts",
+      "import": "./plan/index.js",
+      "default": "./plan/index.js"
+    },
     "./plan/index": {
       "types": "./plan/index.d.ts",
       "import": "./plan/index.js",
@@ -220,6 +225,11 @@
       "types": "./preset/gql.d.ts",
       "import": "./preset/gql.js",
       "default": "./preset/gql.js"
+    },
+    "./preset": {
+      "types": "./preset/index.d.ts",
+      "import": "./preset/index.js",
+      "default": "./preset/index.js"
     },
     "./preset/index": {
       "types": "./preset/index.d.ts",
@@ -300,6 +310,11 @@
       "types": "./prompt/conflict-strategy.d.ts",
       "import": "./prompt/conflict-strategy.js",
       "default": "./prompt/conflict-strategy.js"
+    },
+    "./prompt": {
+      "types": "./prompt/index.d.ts",
+      "import": "./prompt/index.js",
+      "default": "./prompt/index.js"
     },
     "./prompt/index": {
       "types": "./prompt/index.d.ts",

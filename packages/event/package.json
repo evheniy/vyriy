@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/event",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Shared event package for Vyriy projects",
   "type": "module",
   "agents": "./AGENTS.md",
@@ -37,6 +37,11 @@
       "types": "./analytics/event.d.ts",
       "import": "./analytics/event.js",
       "default": "./analytics/event.js"
+    },
+    "./analytics": {
+      "types": "./analytics/index.d.ts",
+      "import": "./analytics/index.js",
+      "default": "./analytics/index.js"
     },
     "./analytics/index": {
       "types": "./analytics/index.d.ts",
@@ -87,6 +92,11 @@
       "types": "./custom/event.d.ts",
       "import": "./custom/event.js",
       "default": "./custom/event.js"
+    },
+    "./custom": {
+      "types": "./custom/index.d.ts",
+      "import": "./custom/index.js",
+      "default": "./custom/index.js"
     },
     "./custom/index": {
       "types": "./custom/index.d.ts",

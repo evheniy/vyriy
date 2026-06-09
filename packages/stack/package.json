@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/stack",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "AWS CDK stack helpers for Vyriy infrastructure",
   "type": "module",
   "dependencies": {
@@ -22,6 +22,11 @@
       "import": "./index.js",
       "default": "./index.js"
     },
+    "./apigateway": {
+      "types": "./apigateway/index.d.ts",
+      "import": "./apigateway/index.js",
+      "default": "./apigateway/index.js"
+    },
     "./apigateway/index": {
       "types": "./apigateway/index.d.ts",
       "import": "./apigateway/index.js",
@@ -31,6 +36,11 @@
       "types": "./apigateway/index.d.ts",
       "import": "./apigateway/index.js",
       "default": "./apigateway/index.js"
+    },
+    "./certificatemanager": {
+      "types": "./certificatemanager/index.d.ts",
+      "import": "./certificatemanager/index.js",
+      "default": "./certificatemanager/index.js"
     },
     "./certificatemanager/index": {
       "types": "./certificatemanager/index.d.ts",
@@ -42,6 +52,11 @@
       "import": "./certificatemanager/index.js",
       "default": "./certificatemanager/index.js"
     },
+    "./cloudfront": {
+      "types": "./cloudfront/index.d.ts",
+      "import": "./cloudfront/index.js",
+      "default": "./cloudfront/index.js"
+    },
     "./cloudfront/index": {
       "types": "./cloudfront/index.d.ts",
       "import": "./cloudfront/index.js",
@@ -51,6 +66,11 @@
       "types": "./cloudfront/index.d.ts",
       "import": "./cloudfront/index.js",
       "default": "./cloudfront/index.js"
+    },
+    "./deployment": {
+      "types": "./deployment/index.d.ts",
+      "import": "./deployment/index.js",
+      "default": "./deployment/index.js"
     },
     "./deployment/index": {
       "types": "./deployment/index.d.ts",
@@ -62,6 +82,11 @@
       "import": "./deployment/index.js",
       "default": "./deployment/index.js"
     },
+    "./dynamodb": {
+      "types": "./dynamodb/index.d.ts",
+      "import": "./dynamodb/index.js",
+      "default": "./dynamodb/index.js"
+    },
     "./dynamodb/index": {
       "types": "./dynamodb/index.d.ts",
       "import": "./dynamodb/index.js",
@@ -71,6 +96,11 @@
       "types": "./dynamodb/index.d.ts",
       "import": "./dynamodb/index.js",
       "default": "./dynamodb/index.js"
+    },
+    "./ec2": {
+      "types": "./ec2/index.d.ts",
+      "import": "./ec2/index.js",
+      "default": "./ec2/index.js"
     },
     "./ec2/index": {
       "types": "./ec2/index.d.ts",
@@ -82,6 +112,11 @@
       "import": "./ec2/index.js",
       "default": "./ec2/index.js"
     },
+    "./ecr": {
+      "types": "./ecr/index.d.ts",
+      "import": "./ecr/index.js",
+      "default": "./ecr/index.js"
+    },
     "./ecr/index": {
       "types": "./ecr/index.d.ts",
       "import": "./ecr/index.js",
@@ -91,6 +126,11 @@
       "types": "./ecr/index.d.ts",
       "import": "./ecr/index.js",
       "default": "./ecr/index.js"
+    },
+    "./ecs": {
+      "types": "./ecs/index.d.ts",
+      "import": "./ecs/index.js",
+      "default": "./ecs/index.js"
     },
     "./ecs/index": {
       "types": "./ecs/index.d.ts",
@@ -112,6 +152,11 @@
       "import": "./index.js",
       "default": "./index.js"
     },
+    "./lambda": {
+      "types": "./lambda/index.d.ts",
+      "import": "./lambda/index.js",
+      "default": "./lambda/index.js"
+    },
     "./lambda/index": {
       "types": "./lambda/index.d.ts",
       "import": "./lambda/index.js",
@@ -121,6 +166,11 @@
       "types": "./lambda/index.d.ts",
       "import": "./lambda/index.js",
       "default": "./lambda/index.js"
+    },
+    "./route53": {
+      "types": "./route53/index.d.ts",
+      "import": "./route53/index.js",
+      "default": "./route53/index.js"
     },
     "./route53/index": {
       "types": "./route53/index.d.ts",
@@ -132,6 +182,11 @@
       "import": "./route53/index.js",
       "default": "./route53/index.js"
     },
+    "./s3": {
+      "types": "./s3/index.d.ts",
+      "import": "./s3/index.js",
+      "default": "./s3/index.js"
+    },
     "./s3/index": {
       "types": "./s3/index.d.ts",
       "import": "./s3/index.js",
@@ -141,6 +196,11 @@
       "types": "./s3/index.d.ts",
       "import": "./s3/index.js",
       "default": "./s3/index.js"
+    },
+    "./ses": {
+      "types": "./ses/index.d.ts",
+      "import": "./ses/index.js",
+      "default": "./ses/index.js"
     },
     "./ses/index": {
       "types": "./ses/index.d.ts",
@@ -152,6 +212,11 @@
       "import": "./ses/index.js",
       "default": "./ses/index.js"
     },
+    "./sns": {
+      "types": "./sns/index.d.ts",
+      "import": "./sns/index.js",
+      "default": "./sns/index.js"
+    },
     "./sns/index": {
       "types": "./sns/index.d.ts",
       "import": "./sns/index.js",
@@ -162,6 +227,11 @@
       "import": "./sns/index.js",
       "default": "./sns/index.js"
     },
+    "./sqs": {
+      "types": "./sqs/index.d.ts",
+      "import": "./sqs/index.js",
+      "default": "./sqs/index.js"
+    },
     "./sqs/index": {
       "types": "./sqs/index.d.ts",
       "import": "./sqs/index.js",
@@ -171,6 +241,11 @@
       "types": "./sqs/index.d.ts",
       "import": "./sqs/index.js",
       "default": "./sqs/index.js"
+    },
+    "./ssm": {
+      "types": "./ssm/index.d.ts",
+      "import": "./ssm/index.js",
+      "default": "./ssm/index.js"
     },
     "./ssm/index": {
       "types": "./ssm/index.d.ts",

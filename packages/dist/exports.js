@@ -74,6 +74,9 @@ export const createExports = (mainFile, javaScriptFiles) => {
         const packagePath = toPackagePath(javaScriptFile);
         const extensionlessPackagePath = packagePath.replace(/\.js$/, '');
         const target = createExportTarget(javaScriptFile);
+        if (javaScriptFile.endsWith('/index.js') && !exports[extensionlessPackagePath.replace(/\/index$/, '')]) {
+            exports[extensionlessPackagePath.replace(/\/index$/, '')] = target;
+        }
         exports[extensionlessPackagePath] = target;
         exports[packagePath] = target;
     }
