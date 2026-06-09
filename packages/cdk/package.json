@@ -1,14 +1,14 @@
 {
   "name": "@vyriy/cdk",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Shared AWS CDK helpers for Vyriy projects",
   "type": "module",
   "dependencies": {
-    "@vyriy/env": "0.7.0",
-    "@vyriy/logger": "0.7.0",
-    "@vyriy/package": "0.7.0",
-    "@vyriy/path": "0.7.0",
-    "aws-cdk-lib": "^2.258.0"
+    "@vyriy/env": "0.7.1",
+    "@vyriy/logger": "0.7.1",
+    "@vyriy/package": "0.7.1",
+    "@vyriy/path": "0.7.1",
+    "aws-cdk-lib": "^2.258.1"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",

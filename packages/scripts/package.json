@@ -1,17 +1,18 @@
 {
   "name": "@vyriy/scripts",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Shared scripts package for Vyriy projects",
   "type": "module",
   "dependencies": {
-    "@vyriy/cdk": "0.7.0",
-    "@vyriy/exec": "0.7.0",
-    "@vyriy/logger": "0.7.0",
-    "@vyriy/request": "0.7.0",
-    "@vyriy/retry": "0.7.0",
-    "@vyriy/script": "0.7.0",
-    "@vyriy/services": "0.7.0",
-    "@vyriy/smoke": "0.7.0"
+    "@vyriy/cdk": "0.7.1",
+    "@vyriy/exec": "0.7.1",
+    "@vyriy/logger": "0.7.1",
+    "@vyriy/recursive": "0.7.1",
+    "@vyriy/request": "0.7.1",
+    "@vyriy/retry": "0.7.1",
+    "@vyriy/script": "0.7.1",
+    "@vyriy/services": "0.7.1",
+    "@vyriy/smoke": "0.7.1"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",
@@ -58,15 +59,15 @@
       "import": "./docker.js",
       "default": "./docker.js"
     },
-    "./e2e": {
-      "types": "./e2e.d.ts",
-      "import": "./e2e.js",
-      "default": "./e2e.js"
+    "./healthcheck": {
+      "types": "./healthcheck.d.ts",
+      "import": "./healthcheck.js",
+      "default": "./healthcheck.js"
     },
-    "./e2e.js": {
-      "types": "./e2e.d.ts",
-      "import": "./e2e.js",
-      "default": "./e2e.js"
+    "./healthcheck.js": {
+      "types": "./healthcheck.d.ts",
+      "import": "./healthcheck.js",
+      "default": "./healthcheck.js"
     },
     "./index": {
       "types": "./index.d.ts",
@@ -98,15 +99,25 @@
       "import": "./lambda.js",
       "default": "./lambda.js"
     },
-    "./ui": {
-      "types": "./ui.d.ts",
-      "import": "./ui.js",
-      "default": "./ui.js"
+    "./mfe": {
+      "types": "./mfe.d.ts",
+      "import": "./mfe.js",
+      "default": "./mfe.js"
     },
-    "./ui.js": {
-      "types": "./ui.d.ts",
-      "import": "./ui.js",
-      "default": "./ui.js"
+    "./mfe.js": {
+      "types": "./mfe.d.ts",
+      "import": "./mfe.js",
+      "default": "./mfe.js"
+    },
+    "./site": {
+      "types": "./site.d.ts",
+      "import": "./site.js",
+      "default": "./site.js"
+    },
+    "./site.js": {
+      "types": "./site.d.ts",
+      "import": "./site.js",
+      "default": "./site.js"
     },
     "./webhooks": {
       "types": "./webhooks.d.ts",
