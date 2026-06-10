@@ -1,6 +1,6 @@
 {
   "name": "vyriy",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "description": "Interactive project master for calm cloud-ready applications.",
   "type": "module",
   "bin": "./bin/vyriy.js",
@@ -9,10 +9,10 @@
   },
   "packageManager": "yarn@4.16.0",
   "dependencies": {
-    "@vyriy/check": "0.7.3",
-    "@vyriy/create": "0.7.3",
-    "@vyriy/dist": "0.7.3",
-    "@vyriy/static": "0.7.3"
+    "@vyriy/check": "0.7.4",
+    "@vyriy/create": "0.7.4",
+    "@vyriy/dist": "0.7.4",
+    "@vyriy/static": "0.7.4"
   },
   "peerDependencies": {
     "@testing-library/dom": "^10.4.1",

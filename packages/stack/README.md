@@ -33,6 +33,7 @@ The `aws-cdk-lib` package is listed because CDK apps and bin entrypoints use CDK
 - `cf.createDistribution(scope, id, props)` creates a CloudFront distribution.
 - `route53.getHostedZone(scope, id, props)` looks up an existing Route 53 hosted zone.
 - `route53.createARecord(scope, id, props)` creates a Route 53 A record.
+- `route53.createMxRecord(scope, id, props)` creates a Route 53 MX record.
 - `route53.createCloudFrontTarget(distribution)` creates a Route 53 alias target for CloudFront.
 - `acm.createCertificate(scope, id, props)` creates an ACM certificate.
 - `ses.createEmailReceiving(scope, id, props)` creates an SES domain identity, receipt rule set, receipt rule, raw email bucket permissions, S3-to-Lambda notification, and optional SSM parameter read access.

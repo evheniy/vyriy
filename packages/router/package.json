@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/router",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "description": "Router utility for Vyriy projects",
   "type": "module",
   "dependencies": {

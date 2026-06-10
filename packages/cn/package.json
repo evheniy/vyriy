@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/cn",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "description": "Class name utility for Vyriy projects",
   "type": "module",
   "agents": "./AGENTS.md",
