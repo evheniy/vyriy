@@ -15,6 +15,7 @@ The package is AWS-first and serverless-oriented. Current helpers cover:
 - `dynamodb`: create tables and read/write/query/scan document items
 - `ecs`: start one Fargate task with environment overrides
 - `lambda`: invoke Lambda functions with JSON string payloads
+- `logs`: wait for marker strings in CloudWatch Logs
 - `s3`: upload, download, and check object existence
 - `sns`: publish messages to topics
 - `ssm`: read one or many Parameter Store values
@@ -43,7 +44,7 @@ Some clients are prepared for local AWS-compatible development:
   `forcePathStyle`.
 - `ecs` uses the configured region in local stage, but does not point to a
   LocalStack endpoint.
-- `cloudfront`, `lambda`, `sns`, and `ssm` currently use their normal AWS SDK
+- `cloudfront`, `lambda`, `logs`, `sns`, and `ssm` currently use their normal AWS SDK
   client configuration.
 
 Service clients are created lazily inside each helper call. Importing
@@ -74,6 +75,20 @@ import { upload } from '@vyriy/services/s3';
 const apiUrl = await getParameter('/app/api-url');
 
 await upload('assets-bucket', 'config/api-url.txt', apiUrl, 'text/plain');
+```
+
+Wait for a Lambda log marker and clean up the source S3 object:
+
+```ts
+import { logs, s3 } from '@vyriy/services';
+
+await s3.upload('email-bucket', 'messages/test.eml', rawEmail, 'message/rfc822; charset=utf-8');
+
+try {
+  await logs.waitForMarker('/aws/lambda/process-email', marker);
+} finally {
+  await s3.remove('email-bucket', 'messages/test.eml');
+}
 ```
 
 Client factories are also exported from service subpaths when direct AWS SDK

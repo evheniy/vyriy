@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/stack",
-  "version": "0.7.4",
+  "version": "0.7.5",
   "description": "AWS CDK stack helpers for Vyriy infrastructure",
   "type": "module",
   "dependencies": {

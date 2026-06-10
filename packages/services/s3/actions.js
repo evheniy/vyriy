@@ -1,4 +1,4 @@
-import { GetObjectCommand, HeadObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, GetObjectCommand, HeadObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { createLogger } from '@vyriy/logger';
 import { toError } from '@vyriy/error';
 import { createClient } from './client.js';
@@ -32,6 +32,25 @@ export const upload = async (bucketName, path, body, mimeType = 'application/jso
             Key: path,
             Body: body,
             ContentType: mimeType,
+            ...options,
+        }));
+    }
+    catch (e) {
+        createLogger().error(e);
+        throw toError(e);
+    }
+};
+export const remove = async (bucketName, path, options = {}) => {
+    try {
+        const client = createClient();
+        createLogger().log('DeleteObjectCommand:', {
+            Bucket: bucketName,
+            Key: path,
+            ...options,
+        });
+        await client.send(new DeleteObjectCommand({
+            Bucket: bucketName,
+            Key: path,
             ...options,
         }));
     }
