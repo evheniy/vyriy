@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/logger",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "description": "Shared logger utility for Vyriy projects",
   "type": "module",
   "agents": "./AGENTS.md",

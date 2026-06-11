@@ -1,10 +1,10 @@
 {
   "name": "@vyriy/exec",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "description": "Command execution utility for Vyriy projects",
   "type": "module",
   "dependencies": {
-    "@vyriy/logger": "0.7.5"
+    "@vyriy/logger": "0.7.6"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",

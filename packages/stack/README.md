@@ -220,6 +220,8 @@ This example wires a Lambda-backed REST API to an API Gateway custom domain:
 - map the API to a custom domain
 - create a Route 53 alias record for the API Gateway domain
 
+When `createLambda` receives `functionName`, its log group uses the classic `/aws/lambda/<function-name>` name.
+
 Edge API Gateway custom domains use edge-optimized CloudFront distributions, so keep the certificate in `us-east-1`.
 
 ```ts

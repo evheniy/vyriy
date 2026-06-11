@@ -17,6 +17,7 @@ export const createLambda = (scope, id, props) => {
             ...environment,
         },
         logGroup: new LogGroup(scope, `${id}LogGroup`, {
+            logGroupName: functionName === undefined ? undefined : `/aws/lambda/${functionName}`,
             retention: RetentionDays.ONE_WEEK,
             removalPolicy: RemovalPolicy.DESTROY,
         }),

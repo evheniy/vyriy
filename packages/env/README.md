@@ -49,6 +49,8 @@ Core:
 AWS / CDK / ECS:
 
 - `getRegion()`
+- `getAwsRegion()`
+- `getAwsDefaultRegion()`
 - `getAccessKeyId()`
 - `getSecretAccessKey()`
 - `getCdkAccount()`
