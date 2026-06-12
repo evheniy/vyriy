@@ -4,7 +4,7 @@ Composable AWS Lambda handler chains and wrappers for Vyriy projects.
 
 ## Purpose
 
-This package provides ready-made Lambda handler chains for common Vyriy workloads and a small set of reusable wrappers for logging, timeouts, smoke checks, development chaos injection, context setup, and error handling.
+This package provides ready-made Lambda handler chains for common Vyriy workloads and a small set of reusable wrappers for logging, timeouts, smoke checks, development chaos injection, context setup, and error handling. It also ships a native Node HTTP chain (`httpApi`) with matching `httpWith*` wrappers for handlers that work directly with `IncomingMessage` and `ServerResponse`.
 
 It is designed for projects that want a consistent handler pipeline without repeating the same boilerplate in every Lambda entrypoint.
 
@@ -98,6 +98,30 @@ export const main = awslambda.streamifyResponse(
 );
 ```
 
+For native Node HTTP handlers, use the HTTP chain. Handlers receive `(request, response)` and own the response lifecycle, which fits transports such as MCP Streamable HTTP:
+
+```ts
+import { httpApi } from '@vyriy/handler';
+
+export const handler = httpApi(async (request, response) => {
+  response
+    .writeHead(200, {
+      'content-type': 'application/json',
+    })
+    .end(JSON.stringify({ ok: true, url: request.url }));
+});
+```
+
+Run it locally or in a container with `httpServer` from `@vyriy/server`:
+
+```ts
+import { httpServer } from '@vyriy/server';
+
+import { handler } from './handler.js';
+
+httpServer(handler);
+```
+
 Use a prebuilt queue or event handler chain:
 
 ```ts
@@ -178,6 +202,8 @@ export const handler = eventBridge(async (event) => {
 });
 ```
 
+Each chain has its own composition and factory helpers: `compose`/`factory` for Lambda handlers, `streamCompose`/`streamFactory` for response streaming handlers, and `httpCompose`/`httpFactory` for native Node HTTP handlers.
+
 Compose a custom handler pipeline from individual helpers:
 
 ```ts
@@ -232,12 +258,34 @@ export const handler = compose(
 });
 ```
 
+Compose a custom native HTTP pipeline with `httpCompose(...)` and the `httpWith*` wrappers:
+
+```ts
+import { httpCompose, httpWithCors, httpWithError, httpWithHealthcheck, httpWithLogger } from '@vyriy/handler';
+
+export const handler = httpCompose(
+  httpWithError(),
+  httpWithLogger(),
+  httpWithHealthcheck(),
+  httpWithCors(),
+)(async (request, response) => {
+  response
+    .writeHead(200, {
+      'content-type': 'application/json',
+    })
+    .end(JSON.stringify({ ok: true }));
+});
+```
+
 ## Prebuilt Chains
 
 - `api`
   API Gateway chain with error handling, logging, timeout handling, context setup, smoke checks, healthcheck handling, default headers, and CORS preflight handling.
 - `streamApi`
   Response streaming API Gateway chain with the same wrapper behavior as `api`. Handlers receive `(event, responseStream, context)` and write directly to the Lambda response stream.
+
+- `httpApi`
+  Native Node HTTP chain with error handling, logging, healthcheck handling, default headers, and CORS preflight handling. Handlers receive `(request, response)` and write the response themselves. Unlike `api`, the chain sets no default `content-type` because native handlers own the response body format.
 
 - `dynamodb`
   DynamoDB Streams chain with logging, timeout handling, context setup, smoke checks, and rethrown errors.
@@ -424,17 +472,62 @@ export const handler = withSmoke()(async () => {
 
 `withSmoke()` is used by the API, DynamoDB Streams, S3, SES receipt, schedule, SNS, and SQS chains.
 
+### Native HTTP Wrappers
+
+The `httpWith*` wrappers decorate native Node HTTP handlers and are composed with `httpCompose(...)`:
+
+- `httpWithError(options?)`
+  Catches handler failures and runs an optional side-effect `errorHandler`. When the response is still open it writes a JSON `500`; when headers were already sent it only ends the response.
+
+- `httpWithLogger(options?)`
+  Logs the incoming request method and URL, then logs either the response status code or the thrown error. Accepts the same `logger` option as `withLogger`.
+
+- `httpWithHealthcheck(options?)`
+  Writes a JSON `200` response when the request path matches the configured `path` (default `/healthcheck`). Besides `path` and `action`, it accepts an optional JSON-serializable `body` for the healthcheck response.
+
+- `httpWithHeaders(options?)`
+  Sets configured headers on the response before delegating, so handler-defined headers win on key conflicts.
+
+- `httpWithCors()`
+  Short-circuits `OPTIONS` preflight requests with a `204` response and delegates all other requests.
+
+Custom native HTTP wrappers are created with `httpFactory(...)`:
+
+```ts
+import { httpCompose, httpFactory, httpWithError } from '@vyriy/handler';
+
+const httpWithRequestId = httpFactory<{ headerName?: string }>(async (handler, args, options = {}) => {
+  const [request] = args;
+  const requestId = request.headers[options.headerName ?? 'x-request-id'];
+
+  if (requestId) {
+    console.info('Request ID:', requestId);
+  }
+
+  await handler(...args);
+});
+
+export const handler = httpCompose(
+  httpWithError(),
+  httpWithRequestId(),
+)(async (request, response) => {
+  response.writeHead(200).end('ok');
+});
+```
+
 ## Types
 
 The package also exports shared handler types:
 
 ```ts
 import type { Context, Decorator, Handler, HandlerParams, Response } from '@vyriy/handler';
+import type { HttpDecorator, HttpHandler, HttpHandlerParams } from '@vyriy/handler';
 ```
 
 ## Notes
 
 - `api` includes API-specific wrappers such as healthcheck handling, default headers, and CORS preflight handling
+- `httpApi` skips timeout, context, smoke, and chaos wrappers because they rely on the Lambda context and event shape; it also sets no default `content-type`
 - `dynamodb`, `s3`, `ses`, `schedule`, `sns`, and `sqs` use `withError()` so failures are rethrown for event-source retry behavior
 - `ses` targets SES receipt rule Lambda events for incoming email; SES event publishing notifications can still be handled through the `sns` chain when delivered via SNS
 - `withSmoke()` delegates matching to `@vyriy/smoke` and returns its API Gateway-compatible response

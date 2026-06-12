@@ -1,5 +1,5 @@
 import { createLogger } from '@vyriy/logger';
-import { factory, getContext, getStreamContext, streamFactory } from '../factory.js';
+import { factory, getContext, getStreamContext, httpFactory, streamFactory } from '../factory.js';
 export const withLogger = factory(async (handler, args, options = {}) => {
     const { logger = createLogger() } = options;
     const [event] = args;
@@ -30,6 +30,32 @@ export const streamWithLogger = streamFactory(async (handler, args, options = {}
         logger.info('Result:', undefined);
     }
     catch (error) {
+        if (error instanceof Error) {
+            logger.error('Error:', error.message);
+        }
+        logger.error(error);
+        throw error;
+    }
+});
+export const httpWithLogger = httpFactory(async (handler, args, options = {}) => {
+    const { logger = createLogger() } = options;
+    const [request, response] = args;
+    logger.info('Request:', request.method, request.url);
+    const cleanup = () => {
+        response.off('close', logResult);
+        response.off('finish', logResult);
+    };
+    const logResult = () => {
+        cleanup();
+        logger.info('Result:', response.statusCode);
+    };
+    response.once('close', logResult);
+    response.once('finish', logResult);
+    try {
+        await handler(...args);
+    }
+    catch (error) {
+        cleanup();
         if (error instanceof Error) {
             logger.error('Error:', error.message);
         }

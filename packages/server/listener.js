@@ -23,3 +23,18 @@ export const streamListener = (handler) => async (request, response) => {
         error(response);
     }
 };
+export const httpListener = (handler) => async (request, response) => {
+    try {
+        await handler(request, response);
+    }
+    catch {
+        if (response.writableEnded) {
+            return;
+        }
+        if (response.headersSent) {
+            response.end();
+            return;
+        }
+        error(response);
+    }
+};

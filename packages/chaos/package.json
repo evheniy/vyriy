@@ -1,11 +1,11 @@
 {
   "name": "@vyriy/chaos",
-  "version": "0.7.7",
+  "version": "0.7.8",
   "description": "Random failure injection utility for Vyriy projects",
   "type": "module",
   "dependencies": {
-    "@vyriy/error": "0.7.7",
-    "@vyriy/timeout": "0.7.7"
+    "@vyriy/error": "0.7.8",
+    "@vyriy/timeout": "0.7.8"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",

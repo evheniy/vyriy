@@ -1,4 +1,5 @@
-import type { APIGatewayProxyEvent, Handler, ResponseStream, RouteResult, StreamHandler } from './types.js';
+import type { IncomingMessage, ServerResponse } from 'node:http';
+import type { APIGatewayProxyEvent, Handler, HttpHandler, ResponseStream, RouteResult, StreamHandler } from './types.js';
 declare class BaseRouter<CurrentHandler> {
     protected fallbackHandler?: CurrentHandler;
     protected readonly routes: Record<string, Record<string, CurrentHandler>>;
@@ -10,5 +11,10 @@ export declare class Router extends BaseRouter<Handler> {
 }
 export declare class StreamRouter extends BaseRouter<StreamHandler> {
     route(event: APIGatewayProxyEvent, responseStream: ResponseStream): Promise<void>;
+}
+export declare class HttpRouter extends BaseRouter<HttpHandler> {
+    private readonly allRoutes;
+    all(path: string, handler: HttpHandler): this;
+    route(request: IncomingMessage, response: ServerResponse): Promise<void>;
 }
 export {};

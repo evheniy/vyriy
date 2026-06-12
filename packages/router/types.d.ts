@@ -1,5 +1,8 @@
 import type { APIGatewayProxyEvent, APIGatewayProxyEventQueryStringParameters, APIGatewayProxyResult } from 'aws-lambda';
+import type { HttpHandler } from '@vyriy/handler';
+import type { IncomingMessage, ServerResponse } from 'node:http';
 export type { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+export type { HttpHandler } from '@vyriy/handler';
 type MaybePromise<Result> = Result | Promise<Result>;
 export type RouteResult = APIGatewayProxyResult;
 export type RouteHandlerResult = {
@@ -48,4 +51,15 @@ export type StreamRouterApi = {
     fallback(handler: StreamHandler): StreamRouterApi;
     patch(path: string, handler: StreamHandler): StreamRouterApi;
     route(event: APIGatewayProxyEvent, responseStream: ResponseStream): Promise<void>;
+};
+export type HttpRouterApi = {
+    all(path: string, handler: HttpHandler): HttpRouterApi;
+    get(path: string, handler: HttpHandler): HttpRouterApi;
+    handle(): HttpHandler;
+    post(path: string, handler: HttpHandler): HttpRouterApi;
+    put(path: string, handler: HttpHandler): HttpRouterApi;
+    delete(path: string, handler: HttpHandler): HttpRouterApi;
+    fallback(handler: HttpHandler): HttpRouterApi;
+    patch(path: string, handler: HttpHandler): HttpRouterApi;
+    route(request: IncomingMessage, response: ServerResponse): Promise<void>;
 };

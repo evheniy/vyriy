@@ -1,6 +1,6 @@
 # @vyriy/server
 
-Small HTTP server adapter for running Lambda-style API Gateway handlers.
+Small HTTP server adapter for running Lambda-style API Gateway handlers and native Node HTTP handlers.
 
 ## Install
 
@@ -79,6 +79,37 @@ streamServer(handler);
 ```
 
 Keep the AWS-specific `awslambda.streamifyResponse(handler)` wrapper in a separate Lambda entrypoint.
+
+Run a native Node HTTP handler with `httpServer(...)`. The handler receives the Node `IncomingMessage` and `ServerResponse` directly and owns the response lifecycle, which fits transports such as MCP Streamable HTTP:
+
+```ts
+import { httpServer } from '@vyriy/server';
+
+httpServer((request, response) => {
+  response
+    .writeHead(200, {
+      'content-type': 'application/json',
+    })
+    .end(JSON.stringify({ ok: true, url: request.url }));
+});
+```
+
+Use `httpApi(...)` when you want the handler package wrappers. It keeps the same `(request, response)` native handler shape.
+
+```ts
+import { httpApi } from '@vyriy/handler';
+import { httpServer } from '@vyriy/server';
+
+const handler = httpApi((request, response) => {
+  response
+    .writeHead(200, {
+      'content-type': 'application/json',
+    })
+    .end(JSON.stringify({ ok: true, url: request.url }));
+});
+
+httpServer(handler);
+```
 
 Static files are intentionally left to the Docker/web-server layer, for example Nginx, Caddy, or the platform serving assets in front of this Node process.
 

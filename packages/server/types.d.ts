@@ -1,7 +1,8 @@
 import type { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
-import type { ResponseStream } from '@vyriy/handler';
+import type { HttpHandler, ResponseStream } from '@vyriy/handler';
 import type { IncomingHttpHeaders, OutgoingHttpHeaders, Server as HttpServer } from 'node:http';
 export type { Context } from 'aws-lambda';
+export type { HttpHandler } from '@vyriy/handler';
 export type Headers = OutgoingHttpHeaders;
 export type LambdaEvent = APIGatewayProxyEvent;
 export type LambdaResult = APIGatewayProxyResult;
@@ -43,3 +44,4 @@ export type WriteResult<Response extends ResponseMessage = ResponseMessage> = (r
 export type WriteError<Response extends ResponseMessage = ResponseMessage> = (response: Response) => void;
 export type CreateServer = (handler: LambdaHandler) => Server;
 export type CreateStreamServer = (handler: LambdaStreamHandler) => Server;
+export type CreateHttpServer = (handler: HttpHandler) => Server;

@@ -1,4 +1,4 @@
-import type { ApiEvent, ApiResult, Decorator, HandlerParams, StreamDecorator, StreamHandlerParams } from '../types.js';
+import type { ApiEvent, ApiResult, Decorator, HandlerParams, HttpDecorator, HttpHandlerParams, StreamDecorator, StreamHandlerParams } from '../types.js';
 export type ErrorHandler<Params extends unknown[]> = (err: unknown, args: Params) => Promise<void> | void;
 export type ApiErrorHandler<Params extends unknown[], Result> = (err: unknown, args: Params) => Promise<Result> | Result;
 export type ErrorOptions<Params extends unknown[]> = {
@@ -10,3 +10,4 @@ export type ApiErrorOptions<Params extends unknown[], Result> = {
 export declare const withError: <Event, Result>(options?: ErrorOptions<HandlerParams<Event>>) => Decorator<Event, Result>;
 export declare const withApiError: (options?: ApiErrorOptions<HandlerParams<ApiEvent>, ApiResult>) => Decorator<ApiEvent, ApiResult>;
 export declare const streamWithApiError: (options?: ApiErrorOptions<StreamHandlerParams<ApiEvent>, ApiResult | void>) => StreamDecorator<ApiEvent>;
+export declare const httpWithError: (options?: ErrorOptions<HttpHandlerParams>) => HttpDecorator;
