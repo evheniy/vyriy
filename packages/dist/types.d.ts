@@ -22,6 +22,7 @@ export type PackageJson = {
     devDependencies?: unknown;
     engines?: unknown;
     exports?: Record<string, ExportTarget>;
+    homepage?: string;
     license?: string;
     main?: string;
     name?: string;

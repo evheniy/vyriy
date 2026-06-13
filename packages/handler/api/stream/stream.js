@@ -1,0 +1,13 @@
+import { compose } from './compose/index.js';
+import { API_HEADERS } from '../api.js';
+import { withChaos } from './wrappers/chaos.js';
+import { withContext } from './wrappers/context.js';
+import { withCors } from './wrappers/cors.js';
+import { withApiError } from './wrappers/error.js';
+import { withHeaders } from './wrappers/headers.js';
+import { withHealthcheck } from './wrappers/healthcheck.js';
+import { withLogger } from './wrappers/logger.js';
+import { withSmoke } from './wrappers/smoke.js';
+import { withTimeout } from './wrappers/timeout.js';
+export const createApi = (options = {}) => compose(withApiError(options.error), withLogger(options.logger), withTimeout(), withContext(), withSmoke(), withHealthcheck(options.healthcheck), withHeaders(options.headers ?? API_HEADERS), withCors(), withChaos(options.chaos));
+export const api = createApi();

@@ -1,0 +1,42 @@
+import { Router } from './router.js';
+export const createRouter = () => {
+    const instance = new Router();
+    const api = {
+        all(path, handler) {
+            instance.all(path, handler);
+            return api;
+        },
+        get(path, handler) {
+            instance.on('GET', path, handler);
+            return api;
+        },
+        post(path, handler) {
+            instance.on('POST', path, handler);
+            return api;
+        },
+        put(path, handler) {
+            instance.on('PUT', path, handler);
+            return api;
+        },
+        delete(path, handler) {
+            instance.on('DELETE', path, handler);
+            return api;
+        },
+        fallback(handler) {
+            instance.fallback(handler);
+            return api;
+        },
+        handle() {
+            return (request, response) => api.route(request, response);
+        },
+        patch(path, handler) {
+            instance.on('PATCH', path, handler);
+            return api;
+        },
+        route(request, response) {
+            return instance.route(request, response);
+        },
+    };
+    return api;
+};
+export const router = createRouter();

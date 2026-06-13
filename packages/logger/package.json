@@ -1,7 +1,8 @@
 {
   "name": "@vyriy/logger",
-  "version": "0.7.8",
+  "version": "0.8.0",
   "description": "Shared logger utility for Vyriy projects",
+  "homepage": "https://vyriy.dev/docs/logger/",
   "type": "module",
   "agents": "./AGENTS.md",
   "license": "MIT",

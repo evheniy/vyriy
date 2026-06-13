@@ -1,7 +1,8 @@
 {
   "name": "@vyriy/webpack-config",
-  "version": "0.7.8",
+  "version": "0.8.0",
   "description": "Shared Webpack config for Vyriy projects",
+  "homepage": "https://vyriy.dev/docs/webpack/",
   "type": "module",
   "exports": {
     ".": {
@@ -159,9 +160,9 @@
     "@babel/register": "^7.29.7",
     "@babel/runtime": "^7.29.7",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.2",
-    "@vyriy/env": "0.7.8",
-    "@vyriy/html": "0.7.8",
-    "@vyriy/path": "0.7.8",
+    "@vyriy/env": "0.8.0",
+    "@vyriy/html": "0.8.0",
+    "@vyriy/path": "0.8.0",
     "babel-loader": "^10.1.1",
     "css-loader": "^7.1.4",
     "cssnano": "^8.0.2",

@@ -245,6 +245,10 @@ consumer
 cdk.out
 cdk.context.json
 
+.claude
+.codex
+.agents
+
 !/**/.gitkeep
 `,
     '.npmrc': 'engine-strict=true\n',

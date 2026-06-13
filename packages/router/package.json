@@ -1,11 +1,12 @@
 {
   "name": "@vyriy/router",
-  "version": "0.7.8",
+  "version": "0.8.0",
   "description": "Router utility for Vyriy projects",
+  "homepage": "https://vyriy.dev/docs/router/",
   "type": "module",
   "dependencies": {
     "@types/aws-lambda": "^8.10.162",
-    "@vyriy/handler": "0.7.8"
+    "@vyriy/handler": "0.8.0"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",
@@ -22,6 +23,16 @@
       "import": "./index.js",
       "default": "./index.js"
     },
+    "./base": {
+      "types": "./base.d.ts",
+      "import": "./base.js",
+      "default": "./base.js"
+    },
+    "./base.js": {
+      "types": "./base.d.ts",
+      "import": "./base.js",
+      "default": "./base.js"
+    },
     "./create": {
       "types": "./create.d.ts",
       "import": "./create.js",
@@ -31,6 +42,41 @@
       "types": "./create.d.ts",
       "import": "./create.js",
       "default": "./create.js"
+    },
+    "./http/create": {
+      "types": "./http/create.d.ts",
+      "import": "./http/create.js",
+      "default": "./http/create.js"
+    },
+    "./http/create.js": {
+      "types": "./http/create.d.ts",
+      "import": "./http/create.js",
+      "default": "./http/create.js"
+    },
+    "./http": {
+      "types": "./http/index.d.ts",
+      "import": "./http/index.js",
+      "default": "./http/index.js"
+    },
+    "./http/index": {
+      "types": "./http/index.d.ts",
+      "import": "./http/index.js",
+      "default": "./http/index.js"
+    },
+    "./http/index.js": {
+      "types": "./http/index.d.ts",
+      "import": "./http/index.js",
+      "default": "./http/index.js"
+    },
+    "./http/router": {
+      "types": "./http/router.d.ts",
+      "import": "./http/router.js",
+      "default": "./http/router.js"
+    },
+    "./http/router.js": {
+      "types": "./http/router.d.ts",
+      "import": "./http/router.js",
+      "default": "./http/router.js"
     },
     "./index": {
       "types": "./index.d.ts",
@@ -51,6 +97,41 @@
       "types": "./router.d.ts",
       "import": "./router.js",
       "default": "./router.js"
+    },
+    "./stream/create": {
+      "types": "./stream/create.d.ts",
+      "import": "./stream/create.js",
+      "default": "./stream/create.js"
+    },
+    "./stream/create.js": {
+      "types": "./stream/create.d.ts",
+      "import": "./stream/create.js",
+      "default": "./stream/create.js"
+    },
+    "./stream": {
+      "types": "./stream/index.d.ts",
+      "import": "./stream/index.js",
+      "default": "./stream/index.js"
+    },
+    "./stream/index": {
+      "types": "./stream/index.d.ts",
+      "import": "./stream/index.js",
+      "default": "./stream/index.js"
+    },
+    "./stream/index.js": {
+      "types": "./stream/index.d.ts",
+      "import": "./stream/index.js",
+      "default": "./stream/index.js"
+    },
+    "./stream/router": {
+      "types": "./stream/router.d.ts",
+      "import": "./stream/router.js",
+      "default": "./stream/router.js"
+    },
+    "./stream/router.js": {
+      "types": "./stream/router.d.ts",
+      "import": "./stream/router.js",
+      "default": "./stream/router.js"
     }
   }
 }

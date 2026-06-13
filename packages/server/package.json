@@ -1,14 +1,15 @@
 {
   "name": "@vyriy/server",
-  "version": "0.7.8",
+  "version": "0.8.0",
   "description": "Small HTTP server adapter for Lambda-style Vyriy handlers",
+  "homepage": "https://vyriy.dev/docs/server/",
   "type": "module",
   "dependencies": {
     "@types/aws-lambda": "^8.10.162",
-    "@vyriy/env": "0.7.8",
-    "@vyriy/error": "0.7.8",
-    "@vyriy/handler": "0.7.8",
-    "@vyriy/logger": "0.7.8"
+    "@vyriy/env": "0.8.0",
+    "@vyriy/error": "0.8.0",
+    "@vyriy/handler": "0.8.0",
+    "@vyriy/logger": "0.8.0"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",
@@ -34,6 +35,41 @@
       "types": "./body.d.ts",
       "import": "./body.js",
       "default": "./body.js"
+    },
+    "./http": {
+      "types": "./http/index.d.ts",
+      "import": "./http/index.js",
+      "default": "./http/index.js"
+    },
+    "./http/index": {
+      "types": "./http/index.d.ts",
+      "import": "./http/index.js",
+      "default": "./http/index.js"
+    },
+    "./http/index.js": {
+      "types": "./http/index.d.ts",
+      "import": "./http/index.js",
+      "default": "./http/index.js"
+    },
+    "./http/listener": {
+      "types": "./http/listener.d.ts",
+      "import": "./http/listener.js",
+      "default": "./http/listener.js"
+    },
+    "./http/listener.js": {
+      "types": "./http/listener.d.ts",
+      "import": "./http/listener.js",
+      "default": "./http/listener.js"
+    },
+    "./http/server": {
+      "types": "./http/server.d.ts",
+      "import": "./http/server.js",
+      "default": "./http/server.js"
+    },
+    "./http/server.js": {
+      "types": "./http/server.d.ts",
+      "import": "./http/server.js",
+      "default": "./http/server.js"
     },
     "./index": {
       "types": "./index.d.ts",
@@ -114,6 +150,41 @@
       "types": "./shutdown.d.ts",
       "import": "./shutdown.js",
       "default": "./shutdown.js"
+    },
+    "./stream": {
+      "types": "./stream/index.d.ts",
+      "import": "./stream/index.js",
+      "default": "./stream/index.js"
+    },
+    "./stream/index": {
+      "types": "./stream/index.d.ts",
+      "import": "./stream/index.js",
+      "default": "./stream/index.js"
+    },
+    "./stream/index.js": {
+      "types": "./stream/index.d.ts",
+      "import": "./stream/index.js",
+      "default": "./stream/index.js"
+    },
+    "./stream/listener": {
+      "types": "./stream/listener.d.ts",
+      "import": "./stream/listener.js",
+      "default": "./stream/listener.js"
+    },
+    "./stream/listener.js": {
+      "types": "./stream/listener.d.ts",
+      "import": "./stream/listener.js",
+      "default": "./stream/listener.js"
+    },
+    "./stream/server": {
+      "types": "./stream/server.d.ts",
+      "import": "./stream/server.js",
+      "default": "./stream/server.js"
+    },
+    "./stream/server.js": {
+      "types": "./stream/server.d.ts",
+      "import": "./stream/server.js",
+      "default": "./stream/server.js"
     }
   }
 }

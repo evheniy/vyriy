@@ -1,13 +1,10 @@
 import type { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
-import type { HttpHandler, ResponseStream } from '@vyriy/handler';
 import type { IncomingHttpHeaders, OutgoingHttpHeaders, Server as HttpServer } from 'node:http';
 export type { Context } from 'aws-lambda';
-export type { HttpHandler } from '@vyriy/handler';
 export type Headers = OutgoingHttpHeaders;
 export type LambdaEvent = APIGatewayProxyEvent;
 export type LambdaResult = APIGatewayProxyResult;
 export type LambdaHandler = (event: LambdaEvent, context: Context) => Promise<LambdaResult>;
-export type LambdaStreamHandler = (event: LambdaEvent, responseStream: ResponseStream, context: Context) => Promise<LambdaResult | void>;
 export type RequestMessage = {
     headers: IncomingHttpHeaders;
     method?: string;
@@ -23,6 +20,7 @@ export type ResponseMessage = {
         (chunk: string | Buffer | Uint8Array): ResponseMessage;
     };
     writableEnded?: boolean;
+    headersSent?: boolean;
     setContentType?: (contentType: string) => ResponseMessage;
     setHeader?(name: string, value: number | string | readonly string[]): ResponseMessage;
     write(chunk: string | Buffer | Uint8Array): boolean;
@@ -43,5 +41,3 @@ export type NormalizeHeaders = (headers: IncomingHttpHeaders) => Record<string, 
 export type WriteResult<Response extends ResponseMessage = ResponseMessage> = (response: Response, result: LambdaResult | void) => Promise<void> | void;
 export type WriteError<Response extends ResponseMessage = ResponseMessage> = (response: Response) => void;
 export type CreateServer = (handler: LambdaHandler) => Server;
-export type CreateStreamServer = (handler: LambdaStreamHandler) => Server;
-export type CreateHttpServer = (handler: HttpHandler) => Server;

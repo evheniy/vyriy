@@ -63,10 +63,12 @@ export const handler = router.handle();
 
 ## Stream Router
 
-Use `createStreamRouter()` when handlers write directly to a Lambda response stream. The stream is passed as the second handler argument, and stream handlers do not return a response object.
+Use the streaming router when handlers write directly to a Lambda response stream. The stream is passed as the second handler argument, and stream handlers do not return a response object.
+
+Import it from the `@vyriy/router/stream` subpath (clean `createRouter`/`router` names), or use the aggregated `createStreamRouter` alias from the root entry.
 
 ```ts
-import { createStreamRouter } from '@vyriy/router';
+import { createRouter as createStreamRouter } from '@vyriy/router/stream';
 
 const streamRouter = createStreamRouter();
 
@@ -96,8 +98,10 @@ Use `createHttpRouter()` when handlers work directly with native Node `IncomingM
 
 In addition to the method helpers, the HTTP router supports `all(path, handler)` for routes that accept any HTTP method. Method-specific routes take precedence over `all` routes on the same path.
 
+Import it from the `@vyriy/router/http` subpath (clean `createRouter`/`router` names), or use the aggregated `createHttpRouter` alias from the root entry.
+
 ```ts
-import { createHttpRouter } from '@vyriy/router';
+import { createRouter as createHttpRouter } from '@vyriy/router/http';
 
 const httpRouter = createHttpRouter();
 
@@ -212,12 +216,26 @@ export const handler = api(router.handle());
 
 ## Exports
 
-The package exposes both the root entry and the direct module entry:
+The classic Lambda router lives at the root entry, while the streaming and native HTTP
+variants each have their own subpath with clean, unprefixed names:
+
+```ts
+import { createRouter, router } from '@vyriy/router';
+import { createRouter, router } from '@vyriy/router/http';
+import { createRouter, router } from '@vyriy/router/stream';
+```
+
+The root entry also re-exports every variant under prefixed names, so a single import keeps
+working:
 
 ```ts
 import { createHttpRouter, createRouter, createStreamRouter } from '@vyriy/router';
-import { HttpRouter, Router, StreamRouter } from '@vyriy/router/router';
+import { HttpRouter, Router, StreamRouter } from '@vyriy/router';
 ```
+
+The low-level `Router` classes are exported from each entry: `Router` from `@vyriy/router`,
+`@vyriy/router/http`, and `@vyriy/router/stream`, plus the aggregated `HttpRouter` and
+`StreamRouter` names from the root entry.
 
 ## API
 
@@ -240,7 +258,7 @@ import { HttpRouter, Router, StreamRouter } from '@vyriy/router/router';
 
 Route handlers may omit `statusCode`; the router normalizes missing status codes to `200` before returning from `router.route(event)`.
 
-The low-level `Router`, `StreamRouter`, and `HttpRouter` classes are also available from `@vyriy/router/router`:
+The low-level `Router`, `StreamRouter`, and `HttpRouter` classes are also available from `@vyriy/router` (each variant additionally exports its class as `Router` from its own subpath):
 
 - `router.on(method, path, handler)`
 - `router.fallback(handler)`

@@ -1,113 +1,38 @@
-import { HttpRouter, Router, StreamRouter } from './router.js';
+import { Router } from './router.js';
 export const createRouter = () => {
-    const router = new Router();
+    const instance = new Router();
     const api = {
         get(path, handler) {
-            router.on('GET', path, handler);
+            instance.on('GET', path, handler);
             return api;
         },
         post(path, handler) {
-            router.on('POST', path, handler);
+            instance.on('POST', path, handler);
             return api;
         },
         put(path, handler) {
-            router.on('PUT', path, handler);
+            instance.on('PUT', path, handler);
             return api;
         },
         delete(path, handler) {
-            router.on('DELETE', path, handler);
+            instance.on('DELETE', path, handler);
             return api;
         },
         fallback(handler) {
-            router.fallback(handler);
+            instance.fallback(handler);
             return api;
         },
         handle() {
             return (event) => api.route(event);
         },
         patch(path, handler) {
-            router.on('PATCH', path, handler);
+            instance.on('PATCH', path, handler);
             return api;
         },
         route(event) {
-            return router.route(event);
+            return instance.route(event);
         },
     };
     return api;
 };
-export const createStreamRouter = () => {
-    const router = new StreamRouter();
-    const api = {
-        get(path, handler) {
-            router.on('GET', path, handler);
-            return api;
-        },
-        post(path, handler) {
-            router.on('POST', path, handler);
-            return api;
-        },
-        put(path, handler) {
-            router.on('PUT', path, handler);
-            return api;
-        },
-        delete(path, handler) {
-            router.on('DELETE', path, handler);
-            return api;
-        },
-        fallback(handler) {
-            router.fallback(handler);
-            return api;
-        },
-        handle() {
-            return (event, responseStream) => api.route(event, responseStream);
-        },
-        patch(path, handler) {
-            router.on('PATCH', path, handler);
-            return api;
-        },
-        route(event, responseStream) {
-            return router.route(event, responseStream);
-        },
-    };
-    return api;
-};
-export const createHttpRouter = () => {
-    const router = new HttpRouter();
-    const api = {
-        all(path, handler) {
-            router.all(path, handler);
-            return api;
-        },
-        get(path, handler) {
-            router.on('GET', path, handler);
-            return api;
-        },
-        post(path, handler) {
-            router.on('POST', path, handler);
-            return api;
-        },
-        put(path, handler) {
-            router.on('PUT', path, handler);
-            return api;
-        },
-        delete(path, handler) {
-            router.on('DELETE', path, handler);
-            return api;
-        },
-        fallback(handler) {
-            router.fallback(handler);
-            return api;
-        },
-        handle() {
-            return (request, response) => api.route(request, response);
-        },
-        patch(path, handler) {
-            router.on('PATCH', path, handler);
-            return api;
-        },
-        route(request, response) {
-            return router.route(request, response);
-        },
-    };
-    return api;
-};
+export const router = createRouter();

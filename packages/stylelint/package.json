@@ -1,7 +1,8 @@
 {
   "name": "@vyriy/stylelint-config",
-  "version": "0.7.8",
+  "version": "0.8.0",
   "description": "Shared Stylelint config for Vyriy projects",
+  "homepage": "https://vyriy.dev/docs/stylelint/",
   "type": "module",
   "dependencies": {
     "postcss": "^8.5.15",

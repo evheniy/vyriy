@@ -114,3 +114,21 @@ httpServer(handler);
 Static files are intentionally left to the Docker/web-server layer, for example Nginx, Caddy, or the platform serving assets in front of this Node process.
 
 The server listens on `PORT` from `@vyriy/env`. The default port is `3000`.
+
+## Exports
+
+The classic Lambda server lives at the root entry, while the streaming and native HTTP
+variants each have their own subpath with a clean, unprefixed `server` name:
+
+```ts
+import { server } from '@vyriy/server';
+import { server } from '@vyriy/server/http';
+import { server } from '@vyriy/server/stream';
+```
+
+The root entry also re-exports every variant under prefixed names, so a single import keeps
+working:
+
+```ts
+import { httpServer, server, streamServer } from '@vyriy/server';
+```
