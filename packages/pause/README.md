@@ -1,5 +1,9 @@
 # @vyriy/pause
 
+Part of [Vyriy](https://vyriy.dev) - a calm architecture toolkit for TypeScript, React, SSR, SSG, APIs, and cloud-ready apps.
+
+Full documentation: https://vyriy.dev/docs/pause/
+
 Shared pause utility for Vyriy projects.
 
 ## Purpose

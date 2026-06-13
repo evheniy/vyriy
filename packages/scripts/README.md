@@ -1,5 +1,9 @@
 # @vyriy/scripts
 
+Part of [Vyriy](https://vyriy.dev) - a calm architecture toolkit for TypeScript, React, SSR, SSG, APIs, and cloud-ready apps.
+
+Full documentation: https://vyriy.dev/docs/scripts/
+
 Shared script factories for Vyriy projects.
 
 ## Purpose

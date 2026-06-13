@@ -1,5 +1,9 @@
 # @vyriy/create
 
+Part of [Vyriy](https://vyriy.dev) - a calm architecture toolkit for TypeScript, React, SSR, SSG, APIs, and cloud-ready apps.
+
+Full documentation: https://vyriy.dev/docs/create/
+
 Vyriy project creation CLI and programmatic scaffold API.
 
 ## CLI

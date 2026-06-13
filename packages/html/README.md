@@ -1,5 +1,9 @@
 # HTML
 
+Part of [Vyriy](https://vyriy.dev) - a calm architecture toolkit for TypeScript, React, SSR, SSG, APIs, and cloud-ready apps.
+
+Full documentation: https://vyriy.dev/docs/html/
+
 This utility builds a complete HTML document string from a small set of optional sections.
 
 ## Install

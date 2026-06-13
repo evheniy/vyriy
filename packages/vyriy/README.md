@@ -1,5 +1,9 @@
 # vyriy
 
+Part of [Vyriy](https://vyriy.dev) - a calm architecture toolkit for TypeScript, React, SSR, SSG, APIs, and cloud-ready apps.
+
+Full documentation: https://vyriy.dev/docs/vyriy/
+
 Interactive project master for Vyriy projects.
 
 ## Purpose
@@ -30,6 +34,7 @@ vyriy create .         Initialise a new Vyriy project in the current directory
 vyriy dist             Prepare dist package metadata without publishing to npm
 vyriy static [dir]     Serve a static directory (defaults to .)
 vyriy check            Check local environment (Node.js and Yarn versions)
+vyriy config [tool]    Generate thin local config files
 vyriy --help, -h       Show help
 vyriy --version, -v    Show version
 ```
@@ -75,6 +80,46 @@ Validates Node.js and Yarn versions against the engine requirements declared in
 vyriy check
 vyriy check --help
 vyriy check --version
+```
+
+### `config`
+
+Vyriy can generate thin local config files that connect your project to Vyriy
+standards.
+
+```bash
+vyriy config init
+```
+
+Or configure tools one by one:
+
+```bash
+vyriy config typescript
+vyriy config eslint
+vyriy config prettier
+vyriy config jest
+vyriy config storybook
+vyriy config stylelint
+```
+
+Generated files stay intentionally small. For TypeScript, Vyriy writes a local
+`tsconfig.json` that extends `@vyriy/typescript-config` and includes common
+project paths such as `.storybook`, `packages`, `workspaces`, and root
+TypeScript files.
+
+Existing files are skipped by default:
+
+```bash
+vyriy config typescript --force
+vyriy config init --dry-run
+```
+
+The command does not install dependencies. If required Vyriy config packages are
+missing from `package.json`, it prints a suggested install command:
+
+```bash
+yarn add -D @vyriy/typescript-config @vyriy/eslint-config
+npm install --save-dev @vyriy/typescript-config @vyriy/eslint-config
 ```
 
 ### `dist`

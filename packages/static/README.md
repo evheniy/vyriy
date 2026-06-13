@@ -1,5 +1,9 @@
 # @vyriy/static
 
+Part of [Vyriy](https://vyriy.dev) - a calm architecture toolkit for TypeScript, React, SSR, SSG, APIs, and cloud-ready apps.
+
+Full documentation: https://vyriy.dev/docs/static/
+
 Static file and SPA serving CLI with reusable Lambda-style handlers and router helpers.
 
 ## CLI

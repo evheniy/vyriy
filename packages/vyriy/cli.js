@@ -8,6 +8,7 @@ Usage:
   vyriy dist             Prepare dist package metadata without publishing to npm
   vyriy static [dir]     Serve a static directory (defaults to .)
   vyriy check            Check local environment
+  vyriy config [tool]    Generate thin local config files
   vyriy --help, -h       Show help
   vyriy --version, -v    Show version
 
@@ -26,6 +27,17 @@ Static options:
   vyriy static dist --spa                   Enable SPA fallback mode
   vyriy static dist --fallback index.html   SPA fallback file
 
+Config options:
+  vyriy config init                 Select configs to create
+  vyriy config typescript           Create tsconfig.json
+  vyriy config eslint               Create eslint.config.js
+  vyriy config prettier             Create prettier.config.js
+  vyriy config jest                 Create jest.config.js
+  vyriy config storybook            Create .storybook config files
+  vyriy config stylelint            Create stylelint.config.js
+  vyriy config init --force         Overwrite existing config files
+  vyriy config init --dry-run       Print config files without writing them
+
 Examples:
   vyriy create app
   vyriy create app --dry-run
@@ -37,7 +49,9 @@ Examples:
   vyriy static dist --cache static
   vyriy static dist --spa --fallback index.html --cache static
   vyriy static dist
-  vyriy check`;
+  vyriy check
+  vyriy config init
+  vyriy config typescript`;
 export const cli = async (args = []) => {
     const command = parseArgs(args);
     switch (command.type) {
@@ -67,6 +81,11 @@ export const cli = async (args = []) => {
         case 'create': {
             const { runCreateCli } = await import('@vyriy/create');
             await runCreateCli(command.args, 'vyriy create', false);
+            break;
+        }
+        case 'config': {
+            const { runConfigCli } = await import('./config-cli.js');
+            await runConfigCli(command.args);
             break;
         }
         default:

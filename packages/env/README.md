@@ -1,5 +1,9 @@
 # @vyriy/env
 
+Part of [Vyriy](https://vyriy.dev) - a calm architecture toolkit for TypeScript, React, SSR, SSG, APIs, and cloud-ready apps.
+
+Full documentation: https://vyriy.dev/docs/env/
+
 Shared environment variable helpers for Vyriy projects.
 
 ## Purpose

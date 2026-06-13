@@ -1,5 +1,9 @@
 # @vyriy/render
 
+Part of [Vyriy](https://vyriy.dev) - a calm architecture toolkit for TypeScript, React, SSR, SSG, APIs, and cloud-ready apps.
+
+Full documentation: https://vyriy.dev/docs/render/
+
 Small explicit React rendering adapters for browser DOM rendering, hydration, custom elements, SSR, streaming SSR, and static generation.
 
 `@vyriy/render` is not a framework. It wraps official React rendering APIs into small predictable helpers that are easy to use in Vyriy-style applications, MFEs, SSR pages, SSG pipelines, and custom elements.

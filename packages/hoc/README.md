@@ -1,5 +1,9 @@
 # @vyriy/hoc
 
+Part of [Vyriy](https://vyriy.dev) - a calm architecture toolkit for TypeScript, React, SSR, SSG, APIs, and cloud-ready apps.
+
+Full documentation: https://vyriy.dev/docs/hoc/
+
 React higher-order component utilities for Vyriy projects.
 
 ## Purpose

@@ -1,6 +1,10 @@
 export const parseArgs = (args) => {
     const [command = '', ...commandArgs] = args;
-    if (command === 'check' || command === 'create' || command === 'dist' || command === 'static') {
+    if (command === 'check' ||
+        command === 'config' ||
+        command === 'create' ||
+        command === 'dist' ||
+        command === 'static') {
         return { type: command, args: commandArgs };
     }
     if (args.includes('--help') || args.includes('-h')) {

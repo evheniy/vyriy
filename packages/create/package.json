@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/create",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Vyriy project creation CLI.",
   "homepage": "https://vyriy.dev/docs/create/",
   "type": "module",
@@ -13,7 +13,7 @@
     "vyriy-create": "./bin/index.js"
   },
   "dependencies": {
-    "@vyriy/check": "0.8.1"
+    "@vyriy/check": "0.8.2"
   },
   "peerDependencies": {
     "@storybook/addon-docs": "^10.4.4",

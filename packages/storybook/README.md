@@ -1,5 +1,9 @@
 # @vyriy/storybook-config
 
+Part of [Vyriy](https://vyriy.dev) - a calm architecture toolkit for TypeScript, React, SSR, SSG, APIs, and cloud-ready apps.
+
+Full documentation: https://vyriy.dev/docs/storybook/
+
 Shared Storybook config for Vyriy projects.
 
 ## Purpose

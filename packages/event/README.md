@@ -1,5 +1,9 @@
 # @vyriy/event
 
+Part of [Vyriy](https://vyriy.dev) - a calm architecture toolkit for TypeScript, React, SSR, SSG, APIs, and cloud-ready apps.
+
+Full documentation: https://vyriy.dev/docs/event/
+
 Shared helpers for building and dispatching `CustomEvent` in Vyriy microfrontends.
 
 ## Purpose
