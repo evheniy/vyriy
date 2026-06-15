@@ -1,0 +1,121 @@
+{
+  "name": "@vyriy/tooling",
+  "version": "0.8.3",
+  "description": "Vyriy tooling config generator CLI.",
+  "homepage": "https://vyriy.dev/docs/tooling/",
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "packageManager": "yarn@4.16.0",
+  "bin": {
+    "vt": "./bin/index.js",
+    "vyriy-tooling": "./bin/index.js"
+  },
+  "agents": "./AGENTS.md",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/tooling"
+  },
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./config-files": {
+      "types": "./config-files.d.ts",
+      "import": "./config-files.js",
+      "default": "./config-files.js"
+    },
+    "./config-files.js": {
+      "types": "./config-files.d.ts",
+      "import": "./config-files.js",
+      "default": "./config-files.js"
+    },
+    "./config-targets": {
+      "types": "./config-targets.d.ts",
+      "import": "./config-targets.js",
+      "default": "./config-targets.js"
+    },
+    "./config-targets.js": {
+      "types": "./config-targets.d.ts",
+      "import": "./config-targets.js",
+      "default": "./config-targets.js"
+    },
+    "./file-exists": {
+      "types": "./file-exists.d.ts",
+      "import": "./file-exists.js",
+      "default": "./file-exists.js"
+    },
+    "./file-exists.js": {
+      "types": "./file-exists.d.ts",
+      "import": "./file-exists.js",
+      "default": "./file-exists.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./package-dependencies": {
+      "types": "./package-dependencies.d.ts",
+      "import": "./package-dependencies.js",
+      "default": "./package-dependencies.js"
+    },
+    "./package-dependencies.js": {
+      "types": "./package-dependencies.d.ts",
+      "import": "./package-dependencies.js",
+      "default": "./package-dependencies.js"
+    },
+    "./parse-config-args": {
+      "types": "./parse-config-args.d.ts",
+      "import": "./parse-config-args.js",
+      "default": "./parse-config-args.js"
+    },
+    "./parse-config-args.js": {
+      "types": "./parse-config-args.d.ts",
+      "import": "./parse-config-args.js",
+      "default": "./parse-config-args.js"
+    },
+    "./select-configs": {
+      "types": "./select-configs.d.ts",
+      "import": "./select-configs.js",
+      "default": "./select-configs.js"
+    },
+    "./select-configs.js": {
+      "types": "./select-configs.d.ts",
+      "import": "./select-configs.js",
+      "default": "./select-configs.js"
+    },
+    "./tooling": {
+      "types": "./tooling.d.ts",
+      "import": "./tooling.js",
+      "default": "./tooling.js"
+    },
+    "./tooling.js": {
+      "types": "./tooling.d.ts",
+      "import": "./tooling.js",
+      "default": "./tooling.js"
+    },
+    "./write-config-files": {
+      "types": "./write-config-files.d.ts",
+      "import": "./write-config-files.js",
+      "default": "./write-config-files.js"
+    },
+    "./write-config-files.js": {
+      "types": "./write-config-files.d.ts",
+      "import": "./write-config-files.js",
+      "default": "./write-config-files.js"
+    }
+  }
+}

@@ -8,7 +8,7 @@ Usage:
   vyriy dist             Prepare dist package metadata without publishing to npm
   vyriy static [dir]     Serve a static directory (defaults to .)
   vyriy check            Check local environment
-  vyriy config [tool]    Generate thin local config files
+  vyriy tooling [tool]   Generate thin local tooling config files
   vyriy --help, -h       Show help
   vyriy --version, -v    Show version
 
@@ -27,16 +27,17 @@ Static options:
   vyriy static dist --spa                   Enable SPA fallback mode
   vyriy static dist --fallback index.html   SPA fallback file
 
-Config options:
-  vyriy config init                 Select configs to create
-  vyriy config typescript           Create tsconfig.json
-  vyriy config eslint               Create eslint.config.js
-  vyriy config prettier             Create prettier.config.js
-  vyriy config jest                 Create jest.config.js
-  vyriy config storybook            Create .storybook config files
-  vyriy config stylelint            Create stylelint.config.js
-  vyriy config init --force         Overwrite existing config files
-  vyriy config init --dry-run       Print config files without writing them
+Tooling options:
+  vyriy tooling init                 Select configs to create
+  vyriy tooling typescript           Create tsconfig.json
+  vyriy tooling eslint               Create eslint.config.js
+  vyriy tooling prettier             Create prettier.config.js
+  vyriy tooling jest                 Create jest.config.js
+  vyriy tooling storybook            Create .storybook config files
+  vyriy tooling stylelint            Create stylelint.config.js
+  vyriy tooling init --force         Overwrite existing config files
+  vyriy tooling init --dry-run       Print config files without writing them
+  vyriy tooling --version            Show tooling generator version
 
 Examples:
   vyriy create app
@@ -50,8 +51,8 @@ Examples:
   vyriy static dist --spa --fallback index.html --cache static
   vyriy static dist
   vyriy check
-  vyriy config init
-  vyriy config typescript`;
+  vyriy tooling init
+  vyriy tooling typescript`;
 export const cli = async (args = []) => {
     const command = parseArgs(args);
     switch (command.type) {
@@ -83,9 +84,9 @@ export const cli = async (args = []) => {
             await runCreateCli(command.args, 'vyriy create', false);
             break;
         }
-        case 'config': {
-            const { runConfigCli } = await import('./config-cli.js');
-            await runConfigCli(command.args);
+        case 'tooling': {
+            const { runToolingCli } = await import('@vyriy/tooling');
+            await runToolingCli(command.args, 'vyriy tooling', false);
             break;
         }
         default:

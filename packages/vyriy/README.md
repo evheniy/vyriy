@@ -34,7 +34,7 @@ vyriy create .         Initialise a new Vyriy project in the current directory
 vyriy dist             Prepare dist package metadata without publishing to npm
 vyriy static [dir]     Serve a static directory (defaults to .)
 vyriy check            Check local environment (Node.js and Yarn versions)
-vyriy config [tool]    Generate thin local config files
+vyriy tooling [tool]   Generate thin local tooling config files
 vyriy --help, -h       Show help
 vyriy --version, -v    Show version
 ```
@@ -82,24 +82,24 @@ vyriy check --help
 vyriy check --version
 ```
 
-### `config`
+### `tooling`
 
 Vyriy can generate thin local config files that connect your project to Vyriy
 standards.
 
 ```bash
-vyriy config init
+vyriy tooling init
 ```
 
 Or configure tools one by one:
 
 ```bash
-vyriy config typescript
-vyriy config eslint
-vyriy config prettier
-vyriy config jest
-vyriy config storybook
-vyriy config stylelint
+vyriy tooling typescript
+vyriy tooling eslint
+vyriy tooling prettier
+vyriy tooling jest
+vyriy tooling storybook
+vyriy tooling stylelint
 ```
 
 Generated files stay intentionally small. For TypeScript, Vyriy writes a local
@@ -110,8 +110,10 @@ TypeScript files.
 Existing files are skipped by default:
 
 ```bash
-vyriy config typescript --force
-vyriy config init --dry-run
+vyriy tooling typescript --force
+vyriy tooling init --dry-run
+vyriy tooling --help
+vyriy tooling --version
 ```
 
 The command does not install dependencies. If required Vyriy config packages are

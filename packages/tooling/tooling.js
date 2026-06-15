@@ -4,20 +4,36 @@ import { findMissingPackages } from './package-dependencies.js';
 import { parseConfigArgs } from './parse-config-args.js';
 import { selectConfigs } from './select-configs.js';
 import { writeConfigFiles } from './write-config-files.js';
-const helpText = `Usage:
-  vyriy config init
-  vyriy config typescript
-  vyriy config eslint
-  vyriy config prettier
-  vyriy config jest
-  vyriy config storybook
-  vyriy config stylelint
+import packageJson from './package.json' with { type: 'json' };
+const unique = (values) => [...new Set(values)];
+export const toolingVersion = packageJson.version;
+export const createToolingHelpText = (command = 'vyriy-tooling', alias = 'vt') => {
+    const aliasText = alias ? `  ${alias} init                  Alias for ${command}\n` : '';
+    const aliasExampleText = alias ? `\n  ${alias} init\n  ${alias} typescript --dry-run` : '';
+    return `Vyriy Tooling
+
+Usage:
+  ${command} init
+  ${command} typescript
+  ${command} eslint
+  ${command} prettier
+  ${command} jest
+  ${command} storybook
+  ${command} stylelint
+${aliasText}\
+  ${command} --help, -h          Show tooling help
+  ${command} --version, -v       Show version
 
 Options:
-  --force    Overwrite existing config files
-  --dry-run  Print files that would be created without writing them
-  --help     Show config help`;
-const unique = (values) => [...new Set(values)];
+  --force                     Overwrite existing config files
+  --dry-run                   Print files that would be created without writing them
+
+Examples:
+  ${command} init
+  ${command} typescript
+  ${command} storybook --force
+  ${command} prettier --dry-run${aliasExampleText}`;
+};
 const collectFiles = (names) => {
     return names.flatMap((name) => [...configTargets[name].files]);
 };
@@ -36,16 +52,21 @@ const printMissingPackages = (missingPackages) => {
     console.log('');
     console.log(`yarn add -D ${missingPackages.join(' ')}`);
 };
-export const runConfigCli = async (args = [], cwd = process.cwd()) => {
+export const runToolingCli = async (args = [], commandName = 'vyriy-tooling', alias = 'vt', cwd = process.cwd()) => {
     const command = parseConfigArgs(args);
-    if (command.help) {
-        console.log(helpText);
+    if (command.type === 'help') {
+        console.log(createToolingHelpText(commandName, alias));
+        process.exitCode = 0;
+        return;
+    }
+    if (command.type === 'version') {
+        console.log(toolingVersion);
         process.exitCode = 0;
         return;
     }
     if (command.type === 'unknown') {
-        console.error('Unknown config command.');
-        console.log(helpText);
+        console.error('Unknown tooling command.');
+        console.log(createToolingHelpText(commandName, alias));
         process.exitCode = 1;
         return;
     }

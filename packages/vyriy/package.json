@@ -1,6 +1,6 @@
 {
   "name": "vyriy",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "Interactive project master for calm cloud-ready applications.",
   "homepage": "https://vyriy.dev/docs/vyriy/",
   "type": "module",
@@ -10,10 +10,11 @@
   },
   "packageManager": "yarn@4.16.0",
   "dependencies": {
-    "@vyriy/check": "0.8.2",
-    "@vyriy/create": "0.8.2",
-    "@vyriy/dist": "0.8.2",
-    "@vyriy/static": "0.8.2"
+    "@vyriy/check": "0.8.3",
+    "@vyriy/create": "0.8.3",
+    "@vyriy/dist": "0.8.3",
+    "@vyriy/static": "0.8.3",
+    "@vyriy/tooling": "0.8.3"
   },
   "peerDependencies": {
     "@testing-library/dom": "^10.4.1",
@@ -33,7 +34,7 @@
     "rimraf": "^6.1.3",
     "sass": "^1.101.0",
     "serve": "^14.2.6",
-    "storybook": "^10.4.4",
+    "storybook": "^10.4.5",
     "stylelint": "^17.13.0",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3",
@@ -146,36 +147,6 @@
       "import": "./cli.js",
       "default": "./cli.js"
     },
-    "./config-cli": {
-      "types": "./config-cli.d.ts",
-      "import": "./config-cli.js",
-      "default": "./config-cli.js"
-    },
-    "./config-cli.js": {
-      "types": "./config-cli.d.ts",
-      "import": "./config-cli.js",
-      "default": "./config-cli.js"
-    },
-    "./config-targets": {
-      "types": "./config-targets.d.ts",
-      "import": "./config-targets.js",
-      "default": "./config-targets.js"
-    },
-    "./config-targets.js": {
-      "types": "./config-targets.d.ts",
-      "import": "./config-targets.js",
-      "default": "./config-targets.js"
-    },
-    "./file-exists": {
-      "types": "./file-exists.d.ts",
-      "import": "./file-exists.js",
-      "default": "./file-exists.js"
-    },
-    "./file-exists.js": {
-      "types": "./file-exists.d.ts",
-      "import": "./file-exists.js",
-      "default": "./file-exists.js"
-    },
     "./index": {
       "types": "./index.d.ts",
       "import": "./index.js",
@@ -185,46 +156,6 @@
       "types": "./index.d.ts",
       "import": "./index.js",
       "default": "./index.js"
-    },
-    "./package-dependencies": {
-      "types": "./package-dependencies.d.ts",
-      "import": "./package-dependencies.js",
-      "default": "./package-dependencies.js"
-    },
-    "./package-dependencies.js": {
-      "types": "./package-dependencies.d.ts",
-      "import": "./package-dependencies.js",
-      "default": "./package-dependencies.js"
-    },
-    "./parse-config-args": {
-      "types": "./parse-config-args.d.ts",
-      "import": "./parse-config-args.js",
-      "default": "./parse-config-args.js"
-    },
-    "./parse-config-args.js": {
-      "types": "./parse-config-args.d.ts",
-      "import": "./parse-config-args.js",
-      "default": "./parse-config-args.js"
-    },
-    "./select-configs": {
-      "types": "./select-configs.d.ts",
-      "import": "./select-configs.js",
-      "default": "./select-configs.js"
-    },
-    "./select-configs.js": {
-      "types": "./select-configs.d.ts",
-      "import": "./select-configs.js",
-      "default": "./select-configs.js"
-    },
-    "./write-config-files": {
-      "types": "./write-config-files.d.ts",
-      "import": "./write-config-files.js",
-      "default": "./write-config-files.js"
-    },
-    "./write-config-files.js": {
-      "types": "./write-config-files.d.ts",
-      "import": "./write-config-files.js",
-      "default": "./write-config-files.js"
     }
   }
 }

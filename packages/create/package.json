@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/create",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "Vyriy project creation CLI.",
   "homepage": "https://vyriy.dev/docs/create/",
   "type": "module",
@@ -13,11 +13,12 @@
     "vyriy-create": "./bin/index.js"
   },
   "dependencies": {
-    "@vyriy/check": "0.8.2"
+    "@vyriy/check": "0.8.3",
+    "@vyriy/tooling": "0.8.3"
   },
   "peerDependencies": {
-    "@storybook/addon-docs": "^10.4.4",
-    "@storybook/react-webpack5": "^10.4.4",
+    "@storybook/addon-docs": "^10.4.5",
+    "@storybook/react-webpack5": "^10.4.5",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.2",
     "@types/jest": "^30.0.0",
@@ -34,7 +35,7 @@
     "react-dom": "^19.2.7",
     "rimraf": "^6.1.3",
     "sass": "^1.101.0",
-    "storybook": "^10.4.4",
+    "storybook": "^10.4.5",
     "stylelint": "^17.13.0",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3",
@@ -309,6 +310,16 @@
       "types": "./preset/ssr.d.ts",
       "import": "./preset/ssr.js",
       "default": "./preset/ssr.js"
+    },
+    "./preset/tooling": {
+      "types": "./preset/tooling.d.ts",
+      "import": "./preset/tooling.js",
+      "default": "./preset/tooling.js"
+    },
+    "./preset/tooling.js": {
+      "types": "./preset/tooling.d.ts",
+      "import": "./preset/tooling.js",
+      "default": "./preset/tooling.js"
     },
     "./prompt/conflict-strategy": {
       "types": "./prompt/conflict-strategy.d.ts",

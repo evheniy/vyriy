@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import packageJson from '../package.json' with { type: 'json' };
+import { styleToolingFiles } from './tooling.js';
 const presetDir = dirname(fileURLToPath(import.meta.url));
 const agentsPath = [
     resolve(presetDir, '../../../AGENTS.md'),
@@ -153,35 +154,9 @@ cdk.context.json
     '.husky/post-merge': '#!/bin/sh\n\nyarn\n',
     '.husky/pre-commit': '#!/bin/sh\n\nyarn check\n',
     '.husky/pre-push': '#!/bin/sh\n\nyarn check\n',
-    '.storybook/main.ts': `import config from '@vyriy/storybook-config';
-import { path } from '@vyriy/path';
-
-export default {
-  ...config,
-  stories: [
-    path('**/*.mdx'),
-    path('**/*.stories.@(js|jsx|mjs|ts|tsx)'),
-  ],
-};
-`,
-    '.storybook/preview.tsx': "export { default } from '@vyriy/storybook-config/preview';\n",
     'yarn.lock': '',
-    'tsconfig.json': JSON.stringify({
-        extends: '@vyriy/typescript-config/index.json',
-        include: [
-            '.storybook/**/*.ts',
-            '.storybook/**/*.tsx',
-            'packages/**/*.ts',
-            'packages/**/*.tsx',
-            'workspaces/**/*.ts',
-            'workspaces/**/*.tsx',
-            '*.ts',
-        ],
-    }, null, 2) + '\n',
-    'prettier.config.ts': "export { default } from '@vyriy/prettier-config';\n",
+    ...styleToolingFiles,
     '.prettierignore': 'node_modules\ndist\ncoverage\nstorybook-static\nconsumer\n',
-    'eslint.config.ts': "export { default } from '@vyriy/eslint-config';\n",
-    'jest.config.ts': "export { default } from '@vyriy/jest-config';\n",
     'package.json': JSON.stringify({
         name: options.name,
         version: '0.0.0',
@@ -266,7 +241,6 @@ export default {
             allowImportingTsExtensions: false,
         },
     }, null, 2) + '\n',
-    'stylelint.config.ts': "export { default } from '@vyriy/stylelint-config';\n",
     'packages/components/button/button.scss': `.button {
   border: 1px solid transparent;
   border-radius: 6px;

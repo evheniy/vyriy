@@ -1,6 +1,8 @@
 const typescriptContent = `${JSON.stringify({
     extends: '@vyriy/typescript-config/index.json',
     include: [
+        '.bin/**/*.ts',
+        '.bin/**/*.tsx',
         '.storybook/**/*.ts',
         '.storybook/**/*.tsx',
         'packages/**/*.ts',

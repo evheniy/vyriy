@@ -6,21 +6,28 @@ export const parseConfigArgs = (args) => {
     const dryRun = args.includes('--dry-run');
     const force = args.includes('--force');
     const help = args.includes('--help') || args.includes('-h');
+    const version = args.includes('--version') || args.includes('-v');
     const type = args.find((arg) => !arg.startsWith('-')) ?? 'init';
     if (help) {
         return {
             dryRun,
             force,
-            help,
             names: [],
-            type: 'init',
+            type: 'help',
+        };
+    }
+    if (version) {
+        return {
+            dryRun,
+            force,
+            names: [],
+            type: 'version',
         };
     }
     if (type === 'init') {
         return {
             dryRun,
             force,
-            help,
             names: defaultConfigNames,
             type,
         };
@@ -29,7 +36,6 @@ export const parseConfigArgs = (args) => {
         return {
             dryRun,
             force,
-            help,
             names: [type],
             type,
         };
@@ -37,7 +43,6 @@ export const parseConfigArgs = (args) => {
     return {
         dryRun,
         force,
-        help,
         names: [],
         type: 'unknown',
     };

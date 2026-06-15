@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import packageJson from '../package.json' with { type: 'json' };
+import { styleToolingFiles } from './tooling.js';
 const presetDir = dirname(fileURLToPath(import.meta.url));
 const agentsPath = [
     resolve(presetDir, '../../../AGENTS.md'),
@@ -10,7 +11,6 @@ const agentsPath = [
 const agentsContent = agentsPath ? readFileSync(agentsPath, 'utf8') : '';
 const projectFiles = {
     '.browserslistrc': '[development]\nextends @vyriy/browserslist-config\n\n[ssr]\nextends @vyriy/browserslist-config\n\n[production]\nextends @vyriy/browserslist-config\n\n[modern]\nextends @vyriy/browserslist-config\n',
-    '.storybook/preview.tsx': "import '../packages/components/styles.scss';\n\nexport { default } from '@vyriy/storybook-config/preview';\n",
     'packages/env/doc.mdx': "import { Meta, Markdown } from '@storybook/addon-docs/blocks';\nimport ReadMe from './README.md?raw';\n\n<Meta title=\"Packages/Env\" />\n\n<Markdown>{ReadMe}</Markdown>\n",
     'packages/env/index.ts': "export * from './env.js';\n",
     'packages/env/package.json': '{\n  "name": "@p/env",\n  "type": "module",\n  "private": true\n}\n',
@@ -58,7 +58,6 @@ Override these variables before running a workspace script when a different orig
 - The public entry point re-exports from \`env.ts\`.
 - The getters are thin wrappers around \`@vyriy/env\` and keep environment access explicit at call sites.
 `,
-    'stylelint.config.ts': "export { default } from '@vyriy/stylelint-config';\n",
     'workspaces/api/bin/build.sh': '#!/usr/bin/env sh\n\nset -e\n\nscriptdir="$PWD/workspaces/api";\n\n. "$PWD/workspaces/env.sh"\n\nNODE_ENV=production \\\nnpx webpack --config $scriptdir/webpack.config.ts\n\ncp $scriptdir/package.json dist/api/package.json\nnpm pkg delete "type" --prefix dist/api\nnpm pkg delete "private" --prefix dist/api\n',
     'workspaces/api/bin/start.sh': `#!/usr/bin/env sh
 
@@ -349,35 +348,9 @@ cdk.context.json
     '.husky/post-merge': '#!/bin/sh\n\nyarn\n',
     '.husky/pre-commit': '#!/bin/sh\n\nyarn check\n',
     '.husky/pre-push': '#!/bin/sh\n\nyarn check\n',
-    '.storybook/main.ts': `import config from '@vyriy/storybook-config';
-import { path } from '@vyriy/path';
-
-export default {
-  ...config,
-  stories: [
-    path('**/*.mdx'),
-    path('**/*.stories.@(js|jsx|mjs|ts|tsx)'),
-  ],
-};
-`,
-    '.storybook/preview.tsx': "export { default } from '@vyriy/storybook-config/preview';\n",
     'yarn.lock': '',
-    'tsconfig.json': JSON.stringify({
-        extends: '@vyriy/typescript-config/index.json',
-        include: [
-            '.storybook/**/*.ts',
-            '.storybook/**/*.tsx',
-            'packages/**/*.ts',
-            'packages/**/*.tsx',
-            'workspaces/**/*.ts',
-            'workspaces/**/*.tsx',
-            '*.ts',
-        ],
-    }, null, 2) + '\n',
-    'prettier.config.ts': "export { default } from '@vyriy/prettier-config';\n",
+    ...styleToolingFiles,
     '.prettierignore': 'node_modules\ndist\ncoverage\nstorybook-static\nconsumer\n',
-    'eslint.config.ts': "export { default } from '@vyriy/eslint-config';\n",
-    'jest.config.ts': "export { default } from '@vyriy/jest-config';\n",
     'packages/components/avatar/avatar.stories.tsx': "import type { Meta, StoryObj } from '@storybook/react-webpack5';\n\nimport { Avatar } from './avatar.js';\nimport avatar from '../../../workspaces/static/public/avatar.svg';\n\nconst meta = {\n  title: 'Components/Avatar',\n  component: Avatar,\n  parameters: { docs: { page: null } },\n  args: { name: 'Ada Lovelace', size: 'md' },\n} satisfies Meta<typeof Avatar>;\n\nexport default meta;\n\ntype Story = StoryObj<typeof meta>;\n\nexport const Default: Story = {};\n\nexport const Image: Story = {\n  args: {\n    src: avatar,\n    alt: 'Profile portrait',\n  },\n};\n\nexport const Large: Story = { args: { size: 'lg' } };\n",
     'packages/components/avatar/avatar.test.tsx': "import { describe, it, expect } from '@jest/globals';\nimport { render, screen } from '@testing-library/react';\n\nimport { Avatar } from './avatar.js';\n\ndescribe('Avatar', () => {\n  it('renders an image when src exists', () => {\n    render(<Avatar src=\"/avatar.png\" name=\"Ada Lovelace\" />);\n\n    expect(screen.getByRole('img', { name: 'Ada Lovelace' })).toBeDefined();\n  });\n\n  it('uses a generic image alt when name and alt are not provided', () => {\n    render(<Avatar src=\"/avatar.png\" />);\n\n    expect(screen.getByRole('img', { name: 'Profile avatar' })).toBeDefined();\n  });\n\n  it('renders initials fallback without exposing decorative text', () => {\n    render(<Avatar name=\"Ada Lovelace\" data-testid=\"avatar-root\" />);\n\n    expect(screen.getByText('AL')).toBeDefined();\n    expect(screen.getByText('AL').getAttribute('aria-hidden')).toBe('true');\n    expect(screen.getByTestId('avatar-root')).toBeDefined();\n  });\n\n  it('renders a stable fallback when name is not provided', () => {\n    render(<Avatar />);\n\n    expect(screen.getByText('?')).toBeDefined();\n  });\n\n  it('renders a stable fallback when name has no initials', () => {\n    render(<Avatar name=\"   \" />);\n\n    expect(screen.getByText('?')).toBeDefined();\n  });\n});\n",
     'packages/components/avatar/avatar.tsx': "import { cn } from '@vyriy/cn';\n\nimport type { AvatarType } from './types.js';\n\nconst getInitials = (name?: string) => {\n  if (!name) {\n    return '?';\n  }\n\n  const initials = name\n    .trim()\n    .split(/\\s+/)\n    .filter(Boolean)\n    .slice(0, 2)\n    .map((part) => part[0]?.toUpperCase())\n    .join('');\n\n  return initials || '?';\n};\n\n/** Renders either a profile image or deterministic initials fallback. */\nexport const Avatar: AvatarType = ({ src, alt, name, size = 'md', className, ...props }) => {\n  return (\n    <div className={cn('avatar', `avatar--${size}`, className)} {...props}>\n      {src ? (\n        <img className=\"avatar__image\" alt={alt ?? name ?? 'Profile avatar'} src={src} />\n      ) : (\n        <span className=\"avatar__initials\" aria-hidden=\"true\">\n          {getInitials(name)}\n        </span>\n      )}\n    </div>\n  );\n};\n",

@@ -1,11 +1,11 @@
 {
   "name": "@vyriy/recursive",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "Recursive iteration utility for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/recursive/",
   "type": "module",
   "dependencies": {
-    "@vyriy/logger": "0.8.2"
+    "@vyriy/logger": "0.8.3"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",
