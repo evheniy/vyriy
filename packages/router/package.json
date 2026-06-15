@@ -1,12 +1,12 @@
 {
   "name": "@vyriy/router",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "Router utility for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/router/",
   "type": "module",
   "dependencies": {
     "@types/aws-lambda": "^8.10.162",
-    "@vyriy/handler": "0.8.3"
+    "@vyriy/handler": "0.8.4"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",

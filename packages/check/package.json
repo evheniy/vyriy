@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/check",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "Vyriy project check CLI.",
   "homepage": "https://vyriy.dev/docs/check/",
   "type": "module",
