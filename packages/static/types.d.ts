@@ -39,13 +39,13 @@ export type StaticServerOptions = (UseStaticOptions | UseSpaOptions) & {
 };
 export type StaticHandler = Handler<ApiEvent, ApiResult>;
 export type StaticServer = (options?: StaticServerOptions) => Promise<number>;
-export type StaticRouterApi = Omit<RouterApi, 'delete' | 'fallback' | 'get' | 'patch' | 'post' | 'put'> & {
+export type StaticRouterApi = Omit<RouterApi, 'all' | 'delete' | 'fallback' | 'get' | 'patch' | 'post' | 'put'> & {
     static(path: string, directory: string, options?: UseStaticOptions): StaticRouterApi;
     spa(path: string, directory: string, options?: UseSpaOptions): StaticRouterApi;
     fallbackStatic(directory: string, options?: UseStaticOptions): StaticRouterApi;
     fallbackSpa(directory: string, options?: UseSpaOptions): StaticRouterApi;
 } & {
-    [Method in Extract<keyof RouterApi, 'delete' | 'get' | 'patch' | 'post' | 'put'>]: (...args: Parameters<RouterApi[Method]>) => StaticRouterApi;
+    [Method in Extract<keyof RouterApi, 'all' | 'delete' | 'get' | 'patch' | 'post' | 'put'>]: (...args: Parameters<RouterApi[Method]>) => StaticRouterApi;
 } & {
     fallback(handler: RouterHandler): StaticRouterApi;
 };

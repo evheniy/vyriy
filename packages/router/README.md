@@ -16,11 +16,15 @@ This package provides a small router for Lambda handlers and native Node HTTP se
 
 It is intentionally kept small:
 
-- matches by HTTP method and exact path
+- matches by HTTP method and exact path through an O(1) hash lookup
+- matches `:param` segments (for example `/api/tenants/:tenantId`) and exposes the captured values
+- matches any HTTP method on a path through `all(path, handler)`
 - passes API Gateway event data into handlers (or raw Node request/response for the HTTP router)
 - returns a Lambda-friendly response shape (the stream and HTTP routers write the response instead)
 
-It does not try to be a path parser or dispatcher. If you later need regular expressions, wildcard matching, route params extraction, or more advanced dispatch rules, that logic should live in a separate package or layer.
+Matching stays fast: exact static paths are resolved first through the hash lookup, and `:param` routes are only scanned when that lookup misses, so static traffic never pays for parameter matching. Resolution runs from the most specific match to the most general: exact path, dynamic path, `all` path, fallback. Parameter matching is segment-based (no regular expressions), and static segments win over `:param` segments from left to right.
+
+It still does not try to be a general dispatcher. If you need regular expressions, wildcards, or more advanced dispatch rules, that logic should live in a separate package or layer.
 
 ## Install
 
@@ -63,6 +67,57 @@ router.fallback(async ({ event }) => ({
 }));
 
 export const handler = router.handle();
+```
+
+## Route Parameters
+
+Any segment that starts with `:` is a named parameter. Captured values are merged
+into `pathParameters` (alongside any values API Gateway already provided), and
+captured values win on key conflicts:
+
+```ts
+router.get('/api/tenants/:tenantId/runs/:runId', async ({ pathParameters }) => ({
+  body: JSON.stringify({
+    tenantId: pathParameters?.tenantId,
+    runId: pathParameters?.runId,
+  }),
+}));
+```
+
+Values are URL-decoded (`/users/john%20doe` yields `john doe`). When two dynamic
+routes could match the same path, the one whose static segment appears earlier
+from left to right wins, so `/a/b/:y` is preferred over `/a/:x/c` for `/a/b/c`.
+Registering two routes that resolve to the same pattern (such as `/a/:x` and
+`/a/:y`), reusing a parameter name, or using an empty `:` name throws at
+registration time.
+
+The native HTTP router exposes captured values on `request.params` instead, since
+its handlers receive the raw request and response:
+
+```ts
+import type { RequestWithParams } from '@vyriy/router/http';
+
+httpRouter.get('/api/tenants/:tenantId', (request, response) => {
+  const { tenantId } = (request as RequestWithParams).params ?? {};
+
+  response.writeHead(200).end(JSON.stringify({ tenantId }));
+});
+```
+
+## All Methods
+
+Every variant supports `all(path, handler)` for routes that accept any HTTP
+method, which suits transports that multiplex methods on one path (such as MCP
+Streamable HTTP). Method-specific routes take precedence over `all` routes on the
+same path, and `all` paths may use `:param` segments too:
+
+```ts
+router.all('/webhook/:provider', async ({ pathParameters, event }) => ({
+  body: JSON.stringify({
+    provider: pathParameters?.provider,
+    method: event.httpMethod,
+  }),
+}));
 ```
 
 ## Stream Router
@@ -246,6 +301,8 @@ The low-level `Router` classes are exported from each entry: `Router` from `@vyr
 - `createRouter()` returns a chainable router API.
 - `createStreamRouter()` returns a chainable response streaming router API.
 - `createHttpRouter()` returns a chainable native HTTP router API.
+- Paths may contain `:param` segments on every method helper, `all`, and `on`.
+- `router.all(path, handler)` registers a handler for any HTTP method on a path.
 - `router.get(path, handler)` registers a `GET` handler.
 - `router.post(path, handler)` registers a `POST` handler.
 - `router.put(path, handler)` registers a `PUT` handler.
@@ -254,6 +311,7 @@ The low-level `Router` classes are exported from each entry: `Router` from `@vyr
 - `router.fallback(handler)` registers a handler for unmatched requests.
 - `router.handle()` returns `(event) => router.route(event)` for API Gateway wrappers.
 - `router.route(event)` resolves the matching route and returns an API Gateway response.
+- `streamRouter.all(path, handler)` registers a stream handler for any HTTP method on a path.
 - `streamRouter.handle()` returns `(event, responseStream) => streamRouter.route(event, responseStream)` for stream wrappers.
 - `streamRouter.route(event, responseStream)` resolves the matching route and writes to the stream.
 - `httpRouter.all(path, handler)` registers a handler for any HTTP method on an exact path.
@@ -265,9 +323,11 @@ Route handlers may omit `statusCode`; the router normalizes missing status codes
 The low-level `Router`, `StreamRouter`, and `HttpRouter` classes are also available from `@vyriy/router` (each variant additionally exports its class as `Router` from its own subpath):
 
 - `router.on(method, path, handler)`
+- `router.all(path, handler)`
 - `router.fallback(handler)`
 - `router.route(event)`
 - `streamRouter.on(method, path, handler)`
+- `streamRouter.all(path, handler)`
 - `streamRouter.fallback(handler)`
 - `streamRouter.route(event, responseStream)`
 - `httpRouter.on(method, path, handler)`

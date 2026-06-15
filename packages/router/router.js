@@ -1,5 +1,5 @@
 import { STATUS_CODES } from 'node:http';
-import { BaseRouter } from './base.js';
+import { BaseRouter, mergeParams } from './base.js';
 const normalizeResult = (result) => ({
     statusCode: result.statusCode ?? 200,
     body: result.body,
@@ -10,26 +10,16 @@ const normalizeResult = (result) => ({
 export class Router extends BaseRouter {
     async route(event) {
         const { httpMethod, path, queryStringParameters, body, headers, pathParameters } = event;
-        const exactHandler = this.routes[httpMethod]?.[path];
-        if (exactHandler) {
-            const result = await exactHandler({
+        const matched = this.match(httpMethod, path);
+        if (matched) {
+            const result = await matched.handler({
                 query: queryStringParameters ?? undefined,
                 body: body ?? undefined,
                 headers,
-                pathParameters: pathParameters ?? undefined,
+                pathParameters: mergeParams(pathParameters, matched.params),
                 event,
             });
             return normalizeResult(result);
-        }
-        if (this.fallbackHandler) {
-            const fallbackResult = await this.fallbackHandler({
-                query: queryStringParameters ?? undefined,
-                body: body ?? undefined,
-                headers,
-                pathParameters: pathParameters ?? undefined,
-                event,
-            });
-            return normalizeResult(fallbackResult);
         }
         return {
             statusCode: 404,

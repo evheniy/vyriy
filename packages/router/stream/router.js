@@ -1,25 +1,15 @@
 import { STATUS_CODES } from 'node:http';
-import { BaseRouter } from '../base.js';
+import { BaseRouter, mergeParams } from '../base.js';
 export class Router extends BaseRouter {
     async route(event, responseStream) {
         const { httpMethod, path, queryStringParameters, body, headers, pathParameters } = event;
-        const exactHandler = this.routes[httpMethod]?.[path];
-        if (exactHandler) {
-            await exactHandler({
+        const matched = this.match(httpMethod, path);
+        if (matched) {
+            await matched.handler({
                 query: queryStringParameters ?? undefined,
                 body: body ?? undefined,
                 headers,
-                pathParameters: pathParameters ?? undefined,
-                event,
-            }, responseStream);
-            return;
-        }
-        if (this.fallbackHandler) {
-            await this.fallbackHandler({
-                query: queryStringParameters ?? undefined,
-                body: body ?? undefined,
-                headers,
-                pathParameters: pathParameters ?? undefined,
+                pathParameters: mergeParams(pathParameters, matched.params),
                 event,
             }, responseStream);
             return;

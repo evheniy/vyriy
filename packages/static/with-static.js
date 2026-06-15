@@ -41,6 +41,10 @@ export const withStatic = (router) => {
         mounts.sort((left, right) => right.route.length - left.route.length);
     };
     const api = {
+        all(path, handler) {
+            router.all(path, handler);
+            return api;
+        },
         delete(path, handler) {
             router.delete(path, handler);
             return api;

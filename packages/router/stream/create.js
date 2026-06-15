@@ -2,6 +2,10 @@ import { Router } from './router.js';
 export const createRouter = () => {
     const instance = new Router();
     const api = {
+        all(path, handler) {
+            instance.all(path, handler);
+            return api;
+        },
         get(path, handler) {
             instance.on('GET', path, handler);
             return api;

@@ -13,6 +13,7 @@ export type ResponseStream = {
 export type Handler = (params: HandlerParams, responseStream: ResponseStream) => MaybePromise<void>;
 export type RouterHandler = (event: APIGatewayProxyEvent, responseStream: ResponseStream) => Promise<void>;
 export type RouterApi = {
+    all(path: string, handler: Handler): RouterApi;
     get(path: string, handler: Handler): RouterApi;
     handle(): RouterHandler;
     post(path: string, handler: Handler): RouterApi;
