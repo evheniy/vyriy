@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/render",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "description": "React rendering adapters for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/render/",
   "type": "module",

@@ -15,5 +15,5 @@ export const API_HEADERS = {
     'content-type': 'application/json',
     'x-robots-tag': 'noindex, nofollow',
 };
-export const createApi = (options = {}) => compose(withApiError(options.error), withLogger(options.logger), withTimeout(), withContext(), withSmoke(), withHealthcheck(options.healthcheck), withHeaders(options.headers ?? API_HEADERS), withCors(), withChaos(options.chaos));
+export const createApi = (options = {}) => compose(withApiError(options.error), withLogger(options.logger), withTimeout(), withContext(), withSmoke(), withHeaders(options.headers ?? API_HEADERS), withHealthcheck(options.healthcheck), withCors(), withChaos(options.chaos));
 export const api = createApi();

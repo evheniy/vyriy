@@ -1,24 +1,24 @@
 {
   "name": "@vyriy/create",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "description": "Vyriy project creation CLI.",
   "homepage": "https://vyriy.dev/docs/create/",
   "type": "module",
   "engines": {
     "node": ">=24.0.0"
   },
-  "packageManager": "yarn@4.16.0",
+  "packageManager": "yarn@4.17.0",
   "bin": {
     "vc": "./bin/index.js",
     "vyriy-create": "./bin/index.js"
   },
   "dependencies": {
-    "@vyriy/check": "0.8.5",
-    "@vyriy/tooling": "0.8.5"
+    "@vyriy/check": "0.8.6",
+    "@vyriy/tooling": "0.8.6"
   },
   "peerDependencies": {
-    "@storybook/addon-docs": "^10.4.5",
-    "@storybook/react-webpack5": "^10.4.5",
+    "@storybook/addon-docs": "^10.4.6",
+    "@storybook/react-webpack5": "^10.4.6",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.2",
     "@types/jest": "^30.0.0",
@@ -35,7 +35,7 @@
     "react-dom": "^19.2.7",
     "rimraf": "^6.1.3",
     "sass": "^1.101.0",
-    "storybook": "^10.4.5",
+    "storybook": "^10.4.6",
     "stylelint": "^17.13.0",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3",

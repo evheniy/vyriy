@@ -10,5 +10,5 @@ const API_HEADERS = {
     'access-control-allow-headers': 'Content-Type, Authorization, X-Requested-With, X-Api-Key, Accept, User-Agent, X-CSRF-Token',
     'x-robots-tag': 'noindex, nofollow',
 };
-export const createApi = (options = {}) => compose(withError(options.error), withLogger(options.logger), withHealthcheck(options.healthcheck), withHeaders(options.headers ?? API_HEADERS), withCors());
+export const createApi = (options = {}) => compose(withError(options.error), withLogger(options.logger), withHeaders(options.headers ?? API_HEADERS), withHealthcheck(options.healthcheck), withCors());
 export const api = createApi();

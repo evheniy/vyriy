@@ -1,13 +1,13 @@
 {
   "name": "@vyriy/tooling",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "description": "Vyriy tooling config generator CLI.",
   "homepage": "https://vyriy.dev/docs/tooling/",
   "type": "module",
   "engines": {
     "node": ">=24.0.0"
   },
-  "packageManager": "yarn@4.16.0",
+  "packageManager": "yarn@4.17.0",
   "bin": {
     "vt": "./bin/index.js",
     "vyriy-tooling": "./bin/index.js"
