@@ -43,7 +43,6 @@ const preview = {
         darkMode: {
             classTarget: 'html',
             stylePreview: true,
-            current: 'light',
             dark: { ...themes.dark },
             light: { ...themes.light },
         },

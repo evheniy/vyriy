@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/prettier-config",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "description": "Shared Prettier config for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/prettier/",
   "type": "module",
