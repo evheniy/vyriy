@@ -1,0 +1,136 @@
+{
+  "name": "@vyriy/ssg",
+  "version": "0.8.8",
+  "description": "Static Markdown site generator for Vyriy projects.",
+  "homepage": "https://vyriy.dev/docs/ssg/",
+  "type": "module",
+  "bin": {
+    "ssg": "./bin/index.js",
+    "vyriy-ssg": "./bin/index.js"
+  },
+  "dependencies": {
+    "@types/react": "^19.2.17",
+    "@vyriy/render": "0.8.8",
+    "minisearch": "^7.2.0",
+    "react": "^19.2.7",
+    "react-markdown": "^10.1.0",
+    "rehype-highlight": "^7.0.2",
+    "remark-gfm": "^4.0.1"
+  },
+  "agents": "./AGENTS.md",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evheniy/vyriy",
+    "directory": "packages/ssg"
+  },
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./cli": {
+      "types": "./cli.d.ts",
+      "import": "./cli.js",
+      "default": "./cli.js"
+    },
+    "./cli.js": {
+      "types": "./cli.d.ts",
+      "import": "./cli.js",
+      "default": "./cli.js"
+    },
+    "./content": {
+      "types": "./content.d.ts",
+      "import": "./content.js",
+      "default": "./content.js"
+    },
+    "./content.js": {
+      "types": "./content.d.ts",
+      "import": "./content.js",
+      "default": "./content.js"
+    },
+    "./html": {
+      "types": "./html.d.ts",
+      "import": "./html.js",
+      "default": "./html.js"
+    },
+    "./html.js": {
+      "types": "./html.d.ts",
+      "import": "./html.js",
+      "default": "./html.js"
+    },
+    "./index": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./markdown": {
+      "types": "./markdown.d.ts",
+      "import": "./markdown.js",
+      "default": "./markdown.js"
+    },
+    "./markdown.js": {
+      "types": "./markdown.d.ts",
+      "import": "./markdown.js",
+      "default": "./markdown.js"
+    },
+    "./parse-page": {
+      "types": "./parse-page.d.ts",
+      "import": "./parse-page.js",
+      "default": "./parse-page.js"
+    },
+    "./parse-page.js": {
+      "types": "./parse-page.d.ts",
+      "import": "./parse-page.js",
+      "default": "./parse-page.js"
+    },
+    "./plain": {
+      "types": "./plain.d.ts",
+      "import": "./plain.js",
+      "default": "./plain.js"
+    },
+    "./plain.js": {
+      "types": "./plain.d.ts",
+      "import": "./plain.js",
+      "default": "./plain.js"
+    },
+    "./robots": {
+      "types": "./robots.d.ts",
+      "import": "./robots.js",
+      "default": "./robots.js"
+    },
+    "./robots.js": {
+      "types": "./robots.d.ts",
+      "import": "./robots.js",
+      "default": "./robots.js"
+    },
+    "./sitemap": {
+      "types": "./sitemap.d.ts",
+      "import": "./sitemap.js",
+      "default": "./sitemap.js"
+    },
+    "./sitemap.js": {
+      "types": "./sitemap.d.ts",
+      "import": "./sitemap.js",
+      "default": "./sitemap.js"
+    },
+    "./ssg": {
+      "types": "./ssg.d.ts",
+      "import": "./ssg.js",
+      "default": "./ssg.js"
+    },
+    "./ssg.js": {
+      "types": "./ssg.d.ts",
+      "import": "./ssg.js",
+      "default": "./ssg.js"
+    }
+  }
+}

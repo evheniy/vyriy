@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/jest-config",
-  "version": "0.8.7",
+  "version": "0.8.8",
   "description": "Shared Jest config for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/jest/",
   "type": "module",

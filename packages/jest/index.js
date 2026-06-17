@@ -1,6 +1,40 @@
 import { createRequire } from 'node:module';
 const requireFromPackage = createRequire(import.meta.url);
 const resolveDependency = (request) => requireFromPackage.resolve(request);
+const transformEsmPackages = [
+    '@vyriy',
+    'bail',
+    'ccount',
+    'character-entities',
+    'comma-separated-tokens',
+    'decode-named-character-reference',
+    'devlop',
+    'escape-string-regexp',
+    'estree-util-[^/]+',
+    'hast-util-[^/]+',
+    'html-url-attributes',
+    'is-plain-obj',
+    'lowlight',
+    'longest-streak',
+    'markdown-table',
+    'mdast-util-[^/]+',
+    'micromark',
+    'micromark-[^/]+',
+    'property-information',
+    'react-markdown',
+    'rehype-highlight',
+    'remark-[^/]+',
+    'remark-gfm',
+    'space-separated-tokens',
+    'trim-lines',
+    'trough',
+    'unified',
+    'unist-util-[^/]+',
+    'vfile',
+    'vfile-[^/]+',
+    'web-namespaces',
+    'zwitch',
+].join('|');
 const config = {
     clearMocks: true,
     collectCoverage: true,
@@ -105,7 +139,7 @@ const config = {
         ],
     },
     transformIgnorePatterns: [
-        '/node_modules/(?!@vyriy/)',
+        `/node_modules/(?!(${transformEsmPackages})/)`,
     ],
 };
 export default config;
