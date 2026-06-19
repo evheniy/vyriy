@@ -29,14 +29,12 @@ export const ssg = (options) => ({
             storybook: 'cross-env STORYBOOK_DISABLE_TELEMETRY=1 storybook dev -p 6006 --disable-telemetry',
             check: 'run-s lint build test',
             fix: "run-s 'fix:*'",
-            start: "run-p 'start:*'",
             lint: "run-s 'lint:*'",
             build: "run-s 'build:*'",
             test: "run-s 'test:*'",
             'fix:prettier': 'prettier . --write',
             'fix:eslint': 'eslint . --fix',
             'fix:stylelint': 'stylelint "**/*.{css,scss}" --fix',
-            'start:ssg': 'sh workspaces/ssg/bin/start.sh',
             'lint:ts': 'tsc',
             'lint:prettier': 'prettier . --check',
             'lint:eslint': 'eslint .',
@@ -65,76 +63,56 @@ export const ssg = (options) => ({
             '@vyriy/webpack-config': `^${packageJson.version}`,
             tsx: packageJson.peerDependencies.tsx,
             'webpack-cli': packageJson.peerDependencies['webpack-cli'],
-            '@vyriy/script': `^${packageJson.version}`,
-            react: packageJson.peerDependencies.react,
-            'react-dom': packageJson.peerDependencies['react-dom'],
-            '@types/react': packageJson.peerDependencies['@types/react'],
-            '@types/react-dom': packageJson.peerDependencies['@types/react-dom'],
             '@vyriy/stylelint-config': `^${packageJson.version}`,
             stylelint: packageJson.peerDependencies.stylelint,
-            '@vyriy/cn': `^${packageJson.version}`,
-            '@vyriy/html': `^${packageJson.version}`,
             sass: packageJson.peerDependencies.sass,
-            '@vyriy/render': `^${packageJson.version}`,
+            '@vyriy/ssg': `^${packageJson.version}`,
         },
     }, null, 2) + '\n',
     'README.md': `# SSG
 
-Calm cloud-ready static site generation application.
+Markdown-first static site generated with \`@vyriy/ssg\`.
 
-This repository is a Yarn workspace monorepo with a small SSG application and
-shared packages for reusable UI and service boundaries. The current rendering
-path fetches content from a replaceable CMS adapter, renders it through a
-server-safe React component, and writes a static HTML page.
+The repository keeps content under \`site/*\`, styling under
+\`packages/components/styles.scss\`, and the build entry point in
+\`workspaces/ssg\`.
 
-## Workspace Layout
+## Structure
 
 \`\`\`text
 packages/
-  components/   Shared SSR-friendly React components.
-  services/     Replaceable server-safe service adapters.
+  components/   Site stylesheet and style documentation.
+site/
+  home/         Home page Markdown.
+  consulting/   Standalone consulting page Markdown.
+  docs/         Documentation landing page and docs entries.
+  blog/         Blog entries.
+  examples/     Example entries.
+  public/       Static assets copied into dist.
 workspaces/
-  ssg/          Static site generation workspace.
+  ssg/          Thin build workspace around @vyriy/ssg.
 \`\`\`
 
-## Rendering Flow
+## Build Flow
 
-The SSG workspace renders a single static page:
-
-1. \`@p/services/cms\` returns page content.
-2. \`@p/components\` renders the content with the \`Page\` component.
-3. \`@w/ssg\` writes the generated document to \`dist/ssg/static/index.html\`.
-
-The generated HTML includes compiled component styles from
-\`packages/components/page/styles.scss\`.
+1. \`workspaces/ssg\` is bundled into \`dist/index.js\`.
+2. \`packages/components/styles.scss\` is compiled into \`dist/styles.css\`.
+3. \`@vyriy/ssg\` reads Markdown from \`site\` and writes static output to \`dist\`.
+4. The generated site includes HTML pages, search data, sitemap, robots.txt, and copied public assets.
 
 ## Development
 
-Install dependencies with Yarn 4 and Node.js 24 or newer:
+Install dependencies:
 
 \`\`\`bash
 yarn install
 \`\`\`
 
-Start the static generation workspace:
-
-\`\`\`bash
-yarn start:ssg
-\`\`\`
-
-Build the production SSG artifact:
+Build the static site:
 
 \`\`\`bash
 yarn build:ssg
 \`\`\`
-
-Run Storybook documentation:
-
-\`\`\`bash
-yarn storybook
-\`\`\`
-
-## Validation
 
 Run all checks:
 
@@ -142,27 +120,34 @@ Run all checks:
 yarn check
 \`\`\`
 
-Run checks separately:
+Focused validation:
 
 \`\`\`bash
-yarn lint
-yarn build
-yarn test
+yarn jest workspaces/ssg --runInBand --coverage=false
+yarn lint:stylelint
 \`\`\`
 
-Focused Jest validation can target the main packages and workspace:
+## Content
 
-\`\`\`bash
-yarn jest workspaces/ssg packages/components packages/services --runInBand --coverage=false
+Each content page is a \`README.md\` file with optional frontmatter:
+
+\`\`\`md
+---
+title: Calm page
+description: A short page description.
+published: true
+tags:
+  - ssg
+---
+
+# Calm page
+
+Page content.
 \`\`\`
 
-## Documentation
-
-- \`workspaces/ssg/README.md\` documents the SSG pipeline and output.
-- \`packages/components/README.md\` documents shared React components.
-- \`packages/services/README.md\` documents service adapters.
-
-The matching \`doc.mdx\` files render these README files in Storybook.
+By default \`@vyriy/ssg\` builds \`home\`, \`consulting\`, \`docs\`, \`blog\`,
+\`examples\`, search pages, related content metadata, \`sitemap.xml\`, and
+\`robots.txt\`.
 
 ## Project Guidance
 
@@ -170,7 +155,6 @@ These articles describe the development approach behind this preset and provide 
 
 - [Calm Development Environment: Node.js, Corepack, Yarn and Static Preview](https://vyriy.dev/blog/calm-development-setup/) - how to keep the local development environment predictable and easy to reproduce.
 - [Calm App Structure for the Vyriy Ecosystem](https://vyriy.dev/blog/vyriy-calm-app-structure/) - a practical project structure for Vyriy applications: shared configs, small packages, thin workspaces, Storybook docs, tests, and deployable entry points.
-- [One Handler, Many Runtimes](https://vyriy.dev/examples/one-handler-many-runtimes/) - how @vyriy/handler, @vyriy/router, and @vyriy/server compose a calm Lambda-compatible API that can run locally, in Docker, Fargate-style HTTP runtimes, and AWS Lambda.
 - [Storybook as Project Documentation](https://vyriy.dev/blog/storybook-as-project-documentation/) - how to use Storybook as living project documentation and a component playground.
 `,
     'doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
@@ -253,7 +237,6 @@ cdk.context.json
     'yarn.lock': '',
     ...styleToolingFiles,
     '.prettierignore': 'node_modules\ndist\ncoverage\nstorybook-static\nconsumer\n',
-    'assets.d.ts': "declare module '*.scss';\n",
     'packages/components/doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
 import ReadMe from './README.md?raw';
 
@@ -263,90 +246,20 @@ import ReadMe from './README.md?raw';
 `,
     'packages/components/README.md': `# Components
 
-Shared React components for SSR-friendly application surfaces.
+Site presentation package.
 
-The package keeps reusable UI small and framework-neutral. Components should render without browser globals, accept typed props, and stay easy to compose from server-rendered workspaces.
+The starter keeps only shared stylesheet ownership here. \`@vyriy/ssg\` owns the
+default static rendering system, while this package owns project-specific visual
+tokens and small CSS adjustments.
 
-## Exports
+## Files
 
-### \`Page\`
+- \`styles.scss\` - compiled into \`dist/styles.css\` before the static site is generated.
 
-Renders page body content inside the standard page content container.
-
-\`\`\`tsx
-import { Page, type PageProps } from '@p/components';
-
-const props: PageProps = {
-  content: 'This is a rendered page.',
-};
-
-export const App = () => <Page {...props} />;
-\`\`\`
-
-Rendered markup:
-
-\`\`\`html
-<div class="content">This is a rendered page.</div>
-\`\`\`
-
-## Styling
-
-\`Page\` uses the \`content\` class. The host workspace owns the actual CSS so the component can stay reusable across SSR and SSG outputs.
-
-## Development
-
-Add new public components as focused files with matching tests, then re-export them from the package entry point.
-
-Focused validation:
+## Validation
 
 \`\`\`bash
-yarn jest packages/components --runInBand --coverage=false
-\`\`\`
-`,
-    'packages/services/doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
-import ReadMe from './README.md?raw';
-
-<Meta title="Packages/Services" />
-
-<Markdown>{ReadMe}</Markdown>
-`,
-    'packages/services/README.md': `# Services
-
-Shared service adapters for application workspaces.
-
-The package is the place for replaceable integrations such as CMS access, API clients, and other server-safe service boundaries. Keep adapters typed, deterministic in tests, and free from direct UI concerns.
-
-## Exports
-
-### \`cms\`
-
-CMS content adapter used by application workspaces before rendering the page.
-
-\`\`\`ts
-import { cms } from '@p/services/cms';
-
-const content = await cms.getContent();
-\`\`\`
-
-\`getContent()\` currently returns sample content:
-
-\`\`\`ts
-{
-  title: 'Sample Content',
-  body: 'This is a sample content fetched from the CMS.',
-}
-\`\`\`
-
-The returned shape is intended for server rendering: \`title\` is used for document metadata, and \`body\` is passed to the page component.
-
-## Development
-
-Keep service modules behind small public methods so real providers can replace placeholders without coupling callers to a specific CMS, network client, or runtime host.
-
-Focused validation:
-
-\`\`\`bash
-yarn jest packages/services --runInBand --coverage=false
+yarn lint:stylelint
 \`\`\`
 `,
     'packages/components/package.json': JSON.stringify({
@@ -354,112 +267,40 @@ yarn jest packages/services --runInBand --coverage=false
         private: true,
         type: 'module',
     }, null, 2) + '\n',
-    'packages/components/index.ts': "export * from './page/index.js';\n",
-    'packages/components/index.test.tsx': `import { describe, expect, it } from '@jest/globals';
-
-import { Page } from './index.js';
-import { Page as PageImplementation } from './page/index.js';
-
-describe('packages/components/page', () => {
-  it('re-exports the page component', () => {
-    expect(Page).toBe(PageImplementation);
-  });
-});
-`,
-    'packages/components/page/index.ts': `export * from './page.js';
-export type * from './types.js';
-`,
-    'packages/components/page/index.test.ts': `import { describe, expect, it } from '@jest/globals';
-
-import { Page } from './index.js';
-import { Page as PageImplementation } from './page.js';
-
-describe('packages/components/page', () => {
-  it('re-exports the page component', () => {
-    expect(Page).toBe(PageImplementation);
-  });
-});
-`,
-    'packages/components/page/types.ts': `import { FC } from 'react';
-
-export type PageProps = {
-  content: string;
-};
-
-export type PageType = FC<PageProps>;
-`,
-    'packages/components/page/page.tsx': `import type { PageType } from './types.js';
-
-export const Page: PageType = ({ content }) => <div className="content">{content}</div>;
-`,
-    'packages/components/page/styles.scss': `.content {
-  display: block;
+    'packages/components/styles.scss': `:root {
+  --color-bg: #ffffff;
+  --color-text: #28323c;
+  --color-heading: #3d5165;
+  --color-link: #365f8c;
+  --color-border: #dbe1e5;
+  --font-sans: system-ui, -apple-system, blinkmacsystemfont, 'Segoe UI', sans-serif;
 }
-`,
-    'packages/components/page/page.test.tsx': `import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it } from '@jest/globals';
 
-import { Page } from './page.js';
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
 
-describe('packages/components/page/page', () => {
-  it('renders content inside the page content container', () => {
-    expect(renderToStaticMarkup(<Page content="Page body" />)).toBe('<div class="content">Page body</div>');
-  });
-});
-`,
-    'packages/services/package.json': JSON.stringify({
-        name: '@p/services',
-        private: true,
-        type: 'module',
-    }, null, 2) + '\n',
-    'packages/services/cms/index.ts': `export const cms = {
-  getContent: async () => {
-    // Placeholder for fetching content from a CMS
-    return Promise.resolve({
-      title: 'Sample Content',
-      body: 'This is a sample content fetched from the CMS.',
-    });
-  },
-};
-`,
-    'packages/services/cms/index.test.ts': `import { describe, expect, it } from '@jest/globals';
-
-import { cms } from './index.js';
-
-describe('packages/services/cms', () => {
-  it('returns content for rendering a page', async () => {
-    await expect(cms.getContent()).resolves.toEqual({
-      title: 'Sample Content',
-      body: 'This is a sample content fetched from the CMS.',
-    });
-  });
-});
+a {
+  color: var(--color-link);
+}
 `,
     'workspaces/ssg/bin/build.sh': `#!/usr/bin/env sh
 
-set -e
+set -eu
 
-scriptdir="$PWD/workspaces/ssg";
-distdir="$PWD/dist/ssg";
+NODE_ENV=production npx webpack --config "$PWD/workspaces/ssg/webpack.config.ts"
 
-NODE_ENV=production npx webpack --config $scriptdir/webpack.config.ts
+yarn exec sass packages/components/styles.scss dist/styles.css --no-source-map --style=compressed
 
-yarn exec sass packages/components/page/styles.scss "$distdir/styles.css" --no-source-map --style=compressed
-cp $scriptdir/package.json "$distdir/package.json"
-npm pkg delete "type" --prefix "$distdir"
-npm pkg delete "private" --prefix "$distdir"
-`,
-    'workspaces/ssg/bin/start.sh': `#!/usr/bin/env sh
+cp "$PWD/workspaces/ssg/package.json" dist/package.json
+npm pkg delete type --prefix dist
 
-set -e
+node dist/index.js
 
-scriptdir="$PWD/workspaces/ssg";
-distdir="$PWD/dist/ssg";
-
-mkdir -p "$distdir"
-yarn exec sass packages/components/page/styles.scss "$distdir/styles.css" --no-source-map
-
-PROJECT_CWD="$distdir" NODE_ENV=production LOG_LEVEL=info "$PWD/node_modules/.bin/tsx" $scriptdir/index.tsx
+rm dist/index.js
+rm dist/package.json
 `,
     'workspaces/ssg/doc.mdx': `import { Meta, Markdown } from '@storybook/addon-docs/blocks';
 import ReadMe from './README.md?raw';
@@ -470,84 +311,36 @@ import ReadMe from './README.md?raw';
 `,
     'workspaces/ssg/README.md': `# @w/ssg
 
-Static site generation workspace for the application.
+Static site build workspace.
 
-The workspace renders CMS content into a static HTML file using shared service
-and component packages. It is intentionally small: content comes from the
-replaceable \`cms\` service adapter, UI comes from the shared \`Page\` component,
-and page styles are compiled from the component package.
+The workspace is intentionally thin. It calls \`buildStaticSite\` from
+\`@vyriy/ssg\`, passes the compiled stylesheet content, and lets the reusable
+generator build the static site from Markdown content under \`site\`.
 
-## Output
-
-Running the workspace creates:
-
-\`\`\`text
-dist/ssg/static/index.html
-\`\`\`
-
-The generated document includes:
-
-- document metadata from \`cms.getContent().title\`
-- inline CSS compiled from \`packages/components/page/styles.scss\`
-- server-rendered page markup from \`@p/components\`
-- page body content from \`cms.getContent().body\`
-
-## Rendering Flow
-
-\`\`\`tsx
-import { cms } from '@p/services/cms';
-import { Page } from '@p/components';
-
-const content = await cms.getContent();
-
-renderToString(<Page content={content.body} />);
-\`\`\`
-
-\`index.tsx\` reads \`styles.css\` from the workspace runtime directory, creates the
-\`static\` output folder, and writes a minified \`index.html\` file.
-
-## Development
-
-Start the SSG workspace directly:
-
-\`\`\`bash
-yarn start:ssg
-\`\`\`
-
-Build the bundled production artifact:
+## Build
 
 \`\`\`bash
 yarn build:ssg
 \`\`\`
 
-Run the focused test for this workspace:
-
-\`\`\`bash
-yarn jest workspaces/ssg --runInBand --coverage=false
-\`\`\`
-
-## Package Boundaries
-
-- \`@p/services/cms\` owns content loading and should remain replaceable.
-- \`@p/components\` owns reusable SSR-friendly React components.
-- \`@w/ssg\` owns the static rendering pipeline and output layout.
-
-Keep the workspace free from direct CMS, browser, or deployment-host coupling so
-the same rendering path can be reused by different static deployment targets.
+The build writes output into \`dist\`.
 `,
-    'workspaces/ssg/webpack.config.ts': `import { path } from '@vyriy/path';
+    'workspaces/ssg/webpack.config.ts': `import 'webpack';
+
+import { path } from '@vyriy/path';
 import { ssr, external } from '@vyriy/webpack-config';
 
 export default ssr(
   '@w/ssg',
   {
-    path: path('dist', 'ssg'),
+    path: path('dist'),
     filename: 'index.js',
     library: { type: 'commonjs2' },
+    clean: false,
   },
   (config) => ({
     ...config,
-    externals: [external({ allowlist: [/^@p/, /^@w/, /^@vyriy/] })],
+    externals: [external({ allowlist: [/^@w/] })],
   }),
 );
 `,
@@ -556,94 +349,134 @@ export default ssr(
         type: 'module',
         private: true,
     }, null, 2) + '\n',
-    'workspaces/ssg/index.tsx': `import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+    'workspaces/ssg/index.ts': `import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
-import { script } from '@vyriy/script';
-import { html, minify } from '@vyriy/html';
-import { path } from '@vyriy/path';
-import { html as renderHtml } from '@vyriy/render/html';
+import { buildStaticSite } from '@vyriy/ssg';
 
-import { cms } from '@p/services/cms';
-import { Page } from '@p/components';
+export const buildWorkspaceStaticSite = async () =>
+  buildStaticSite({
+    siteName: 'Site',
+    siteUrl: process.env.SITE_URL,
+    stylesheetContent: await readFile(join(process.cwd(), 'dist/styles.css'), 'utf8'),
+  });
 
-void script(async () => {
-  const content = await cms.getContent();
-
-  mkdirSync(path('static'), { recursive: true });
-
-  writeFileSync(
-    path('static', 'index.html'),
-    minify(
-      html({
-        htmlAttributes: 'lang="en"',
-        title: \`<title>\${content.title}</title>\`,
-        meta: '<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />',
-        style: \`<style>\${readFileSync(path('styles.css'), 'utf8').trim()}</style>\`,
-        body: renderHtml(<Page content={content.body} />),
-      }),
-    ),
-  );
-});
+void buildWorkspaceStaticSite();
 `,
-    'workspaces/ssg/index.test.tsx': `import { describe, expect, it, jest } from '@jest/globals';
+    'workspaces/ssg/index.test.ts': `import { join } from 'node:path';
 
-const getContentMock = jest.fn(() =>
-  Promise.resolve({
-    title: 'Sample Content',
-    body: 'This is a sample content fetched from the CMS.',
-  }),
+import { describe, expect, it, jest } from '@jest/globals';
+
+const mockReadFile = jest.fn<(path: string, encoding: string) => Promise<string>>(() =>
+  Promise.resolve('body { color: #28323c; }'),
 );
-let scriptPromise: Promise<void> | undefined;
-const scriptMock = jest.fn((handler: () => Promise<void>) => {
-  scriptPromise = handler();
+const mockBuildStaticSite = jest.fn<
+  (options: { readonly siteName: string; readonly siteUrl?: string; readonly stylesheetContent: string }) => Promise<void>
+>(() => Promise.resolve());
 
-  return scriptPromise;
-});
-const nodeFs = jest.requireActual<typeof import('node:fs')>('node:fs');
-const mkdirSyncMock = jest.fn();
-const readFileSyncMock = jest.fn<(path: string | URL, encoding: 'utf8') => string>(
-  () => '.content { display: block; }',
-);
-const writeFileSyncMock = jest.fn();
-
-jest.mock('node:fs', () => ({
-  ...nodeFs,
-  mkdirSync: mkdirSyncMock,
-  readFileSync: readFileSyncMock,
-  writeFileSync: writeFileSyncMock,
+jest.mock('node:fs/promises', () => ({
+  readFile: mockReadFile,
 }));
 
-jest.mock('@vyriy/script', () => ({
-  script: scriptMock,
+jest.mock('@vyriy/ssg', () => ({
+  buildStaticSite: mockBuildStaticSite,
 }));
 
-jest.mock('@p/services/cms', () => ({
-  cms: {
-    getContent: getContentMock,
-  },
-}));
+describe('@w/ssg entry point', () => {
+  it('builds the static site with the compiled stylesheet content', async () => {
+    const cwd = jest.spyOn(process, 'cwd').mockReturnValue('/project');
+    const siteUrl = process.env.SITE_URL;
+    process.env.SITE_URL = 'https://example.com';
 
-describe('workspaces/ssg/index.tsx', () => {
-  it('generates a static index HTML file', async () => {
-    await import('./index.js');
-    await scriptPromise;
+    try {
+      await import('./index.js');
+      await Promise.resolve();
 
-    expect(scriptMock).toHaveBeenCalledTimes(1);
-    expect(readFileSyncMock).toHaveBeenCalledWith(expect.stringContaining('styles.css'), 'utf8');
-    expect(getContentMock).toHaveBeenCalledTimes(1);
-    expect(mkdirSyncMock).toHaveBeenCalledWith(expect.stringContaining('static'), {
-      recursive: true,
-    });
-    expect(writeFileSyncMock).toHaveBeenCalledWith(
-      expect.stringContaining('static/index.html'),
-      expect.stringContaining('<title>Sample Content</title>'),
-    );
-
-    const generatedHtml = writeFileSyncMock.mock.calls[0]?.[1] as string;
-
-    expect(generatedHtml).toContain('<style>.content { display: block; }</style>');
-    expect(generatedHtml).toContain('This is a sample content fetched from the CMS.');
+      expect(mockReadFile).toHaveBeenCalledWith(join('/project', 'dist/styles.css'), 'utf8');
+      expect(mockBuildStaticSite).toHaveBeenCalledWith({
+        siteName: 'Site',
+        siteUrl: 'https://example.com',
+        stylesheetContent: 'body { color: #28323c; }',
+      });
+    } finally {
+      cwd.mockRestore();
+      if (siteUrl === undefined) {
+        delete process.env.SITE_URL;
+      } else {
+        process.env.SITE_URL = siteUrl;
+      }
+    }
   });
 });
 `,
+    'site/home/README.md': `---
+title: Site
+description: A calm static site generated with @vyriy/ssg.
+---
+
+# Site
+
+This is a Markdown-first static site generated with \`@vyriy/ssg\`.
+
+Edit content under \`site/*/README.md\`, then run:
+
+\`\`\`bash
+yarn build:ssg
+\`\`\`
+`,
+    'site/consulting/README.md': `---
+title: Consulting
+description: A standalone page generated from Markdown.
+published: true
+---
+
+# Consulting
+
+This standalone page is optional, but it shows how \`@vyriy/ssg\` can generate
+top-level content pages alongside indexed sections.
+`,
+    'site/docs/README.md': `---
+title: Documentation
+description: Documentation landing page for the generated static site.
+published: true
+tags:
+  - docs
+---
+
+# Documentation
+
+Add documentation entries under \`site/docs/<slug>/README.md\`.
+`,
+    'site/blog/hello-world/README.md': `---
+title: Hello static site
+description: First published blog entry for the generated SSG preset.
+date: 2026-06-19
+published: true
+homePage: true
+homePageOrder: 1
+tags:
+  - ssg
+  - vyriy
+---
+
+# Hello static site
+
+This starter blog entry proves that the generated site can build indexed content
+sections from Markdown.
+`,
+    'site/examples/hello-world/README.md': `---
+title: Hello example
+description: First example entry for the generated SSG preset.
+date: 2026-06-19
+published: true
+tags:
+  - example
+  - ssg
+---
+
+# Hello example
+
+Examples live under \`site/examples/<slug>/README.md\`.
+`,
+    'site/public/.gitkeep': '',
 });

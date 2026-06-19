@@ -14,6 +14,11 @@ export declare const presets: {
         description: string;
         preset: import("./types.js").Preset;
     };
+    mcp: {
+        name: string;
+        description: string;
+        preset: import("./types.js").Preset;
+    };
     ssr: {
         name: string;
         description: string;

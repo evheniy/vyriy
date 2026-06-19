@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/smoke",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "description": "Smoke request matcher for short-circuiting handlers in Vyriy projects",
   "homepage": "https://vyriy.dev/docs/smoke/",
   "type": "module",

@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/browserslist-config",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "description": "Shared Browserslist config for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/browserslist/",
   "type": "module",

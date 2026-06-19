@@ -26,6 +26,8 @@ vyriy-create --help
 vyriy-create --version
 ```
 
+Available presets include `base`, `library`, `api`, `mcp`, `ssr`, `ssg`, `spa`, `rest`, `gql`, `mfe`, and `fullstack`.
+
 ## API
 
 Install as a project dependency:

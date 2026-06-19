@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/error",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "description": "Shared error utilities for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/error/",
   "type": "module",

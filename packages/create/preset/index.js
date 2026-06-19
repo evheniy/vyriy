@@ -1,6 +1,7 @@
 import { base } from './base.js';
 import { library } from './library.js';
 import { api } from './api.js';
+import { mcp } from './mcp.js';
 import { ssr } from './ssr.js';
 import { ssg } from './ssg.js';
 import { spa } from './spa.js';
@@ -23,6 +24,11 @@ export const presets = {
         name: 'API',
         description: 'Preset to generate simple API',
         preset: api,
+    },
+    mcp: {
+        name: 'MCP',
+        description: 'Preset to generate simple MCP server',
+        preset: mcp,
     },
     ssr: {
         name: 'SSR',
