@@ -45,7 +45,7 @@ export const mcp = ({ name, description }) => ({
             postinstall: 'husky',
         },
         dependencies: {
-            '@modelcontextprotocol/sdk': '^1.29.0',
+            '@modelcontextprotocol/sdk': packageJson.peerDependencies['@modelcontextprotocol/sdk'],
             '@vyriy/typescript-config': `^${packageJson.version}`,
             typescript: packageJson.peerDependencies.typescript,
             '@vyriy/prettier-config': `^${packageJson.version}`,
@@ -68,7 +68,7 @@ export const mcp = ({ name, description }) => ({
             '@vyriy/handler': `^${packageJson.version}`,
             '@vyriy/router': `^${packageJson.version}`,
             '@vyriy/server': `^${packageJson.version}`,
-            zod: '^4.4.3',
+            zod: packageJson.peerDependencies.zod,
         },
     }, null, 2) + '\n',
     'README.md': `# MCP
@@ -298,8 +298,8 @@ export default ssr(
         private: true,
         type: 'module',
         dependencies: {
-            '@modelcontextprotocol/sdk': '^1.29.0',
-            zod: '^4.4.3',
+            '@modelcontextprotocol/sdk': packageJson.peerDependencies['@modelcontextprotocol/sdk'],
+            zod: packageJson.peerDependencies.zod,
         },
     }, null, 2) + '\n',
     'workspaces/mcp/types.ts': `import type { z } from 'zod';

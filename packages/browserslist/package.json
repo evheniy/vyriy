@@ -1,11 +1,11 @@
 {
   "name": "@vyriy/browserslist-config",
-  "version": "0.8.9",
+  "version": "0.8.10",
   "description": "Shared Browserslist config for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/browserslist/",
   "type": "module",
   "dependencies": {
-    "browserslist": "^4.28.2"
+    "browserslist": "^4.28.4"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",

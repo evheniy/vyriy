@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/create",
-  "version": "0.8.9",
+  "version": "0.8.10",
   "description": "Vyriy project creation CLI.",
   "homepage": "https://vyriy.dev/docs/create/",
   "type": "module",
@@ -13,10 +13,11 @@
     "vyriy-create": "./bin/index.js"
   },
   "dependencies": {
-    "@vyriy/check": "0.8.9",
-    "@vyriy/tooling": "0.8.9"
+    "@vyriy/check": "0.8.10",
+    "@vyriy/tooling": "0.8.10"
   },
   "peerDependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "@storybook/addon-docs": "^10.4.6",
     "@storybook/react-webpack5": "^10.4.6",
     "@testing-library/dom": "^10.4.1",
@@ -27,8 +28,10 @@
     "cross-env": "^10.1.0",
     "eslint": "^10.5.0",
     "graphql": "^16.14.2",
+    "html-entities": "^2.6.0",
     "husky": "^9.1.7",
     "jest": "^30.4.2",
+    "npm-check-updates": "^22.2.7",
     "npm-run-all2": "^9.0.2",
     "prettier": "^3.8.4",
     "react": "^19.2.7",
@@ -40,9 +43,13 @@
     "tsx": "^4.22.4",
     "typescript": "^6.0.3",
     "webpack": "^5.107.2",
-    "webpack-cli": "^7.0.3"
+    "webpack-cli": "^7.0.3",
+    "zod": "^4.4.3"
   },
   "peerDependenciesMeta": {
+    "@modelcontextprotocol/sdk": {
+      "optional": true
+    },
     "@storybook/addon-docs": {
       "optional": true
     },
@@ -73,10 +80,16 @@
     "graphql": {
       "optional": true
     },
+    "html-entities": {
+      "optional": true
+    },
     "husky": {
       "optional": true
     },
     "jest": {
+      "optional": true
+    },
+    "npm-check-updates": {
       "optional": true
     },
     "npm-run-all2": {
@@ -113,6 +126,9 @@
       "optional": true
     },
     "webpack-cli": {
+      "optional": true
+    },
+    "zod": {
       "optional": true
     }
   },
