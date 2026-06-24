@@ -4,8 +4,6 @@
 
 **Website:** [vyriy.dev](https://vyriy.dev/)
 
-**Documentation:** [https://vyriy.dev/storybook/](https://vyriy.dev/storybook/)
-
 Vyriy is a Yarn workspaces monorepo with a project CLI and small publishable packages for:
 
 - fast project scaffolding from calm presets
@@ -69,7 +67,7 @@ Available presets cover the common project shapes:
 - `spa` for single-page applications
 - `ssg` for static generation projects
 - `ssr` for server-rendered projects
-- `api`, `rest`, and `gql` for service and API workloads
+- `api`, `rest`, `gql`, and `mcp` for service, API, and MCP server workloads
 - `mfe` for microfrontend applications
 - `fullstack` for fullstack React applications with SSR
 

@@ -173,6 +173,7 @@ Registered presets:
 | `base`      | Preset to create minimal monorepo with configs    |
 | `library`   | Preset to create js/react library                 |
 | `api`       | Preset to create simple API                       |
+| `mcp`       | Preset to create simple MCP server                |
 | `ssr`       | Preset to create Server Side Rendering (SSR) API  |
 | `ssg`       | Preset to create Static site generation (SSG)     |
 | `spa`       | Preset to create Single-page application (SPA)    |
