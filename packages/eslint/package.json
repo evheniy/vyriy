@@ -1,11 +1,11 @@
 {
   "name": "@vyriy/eslint-config",
-  "version": "0.8.11",
+  "version": "0.8.12",
   "description": "Shared ESLint config for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/eslint/",
   "type": "module",
   "dependencies": {
-    "@eslint-react/eslint-plugin": "^5.9.2",
+    "@eslint-react/eslint-plugin": "^5.9.3",
     "@eslint/js": "^10.0.1",
     "@typescript-eslint/eslint-plugin": "^8.62.0",
     "@typescript-eslint/parser": "^8.62.0",

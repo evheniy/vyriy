@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/env",
-  "version": "0.8.11",
+  "version": "0.8.12",
   "description": "Shared env utility for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/env/",
   "type": "module",

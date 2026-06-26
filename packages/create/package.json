@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/create",
-  "version": "0.8.11",
+  "version": "0.8.12",
   "description": "Vyriy project creation CLI.",
   "homepage": "https://vyriy.dev/docs/create/",
   "type": "module",
@@ -13,8 +13,8 @@
     "vyriy-create": "./bin/index.js"
   },
   "dependencies": {
-    "@vyriy/check": "0.8.11",
-    "@vyriy/tooling": "0.8.11"
+    "@vyriy/check": "0.8.12",
+    "@vyriy/tooling": "0.8.12"
   },
   "peerDependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
@@ -39,10 +39,10 @@
     "rimraf": "^6.1.3",
     "sass": "^1.101.0",
     "storybook": "^10.4.6",
-    "stylelint": "^17.13.0",
+    "stylelint": "^17.14.0",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3",
-    "webpack": "^5.107.2",
+    "webpack": "^5.108.0",
     "webpack-cli": "^7.0.3",
     "zod": "^4.4.3"
   },
