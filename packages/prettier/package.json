@@ -1,12 +1,12 @@
 {
   "name": "@vyriy/prettier-config",
-  "version": "0.8.12",
+  "version": "0.8.13",
   "description": "Shared Prettier config for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/prettier/",
   "type": "module",
   "dependencies": {
-    "prettier": "^3.8.4",
-    "prettier-plugin-multiline-arrays": "^4.1.9"
+    "prettier": "^3.9.4",
+    "prettier-plugin-multiline-arrays": "^4.1.10"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",

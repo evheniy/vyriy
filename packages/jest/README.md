@@ -70,6 +70,8 @@ Jest transformer, reporter, environment, and style proxy packages are resolved f
 
 The transform ignore rules keep normal dependencies ignored but allow Vyriy packages and the ESM Markdown/unified ecosystem used by SSG and docs packages to pass through SWC.
 
+JSDOM uses Node export conditions in this shared config so server-oriented packages, including the AWS SDK, resolve their Node builds during tests. A small setup file also provides Node's `TextEncoder` and `TextDecoder` globals for dependencies that expect them at import time.
+
 ## Install
 
 With npm:
