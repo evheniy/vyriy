@@ -1,9 +1,7 @@
 import { createRequire } from 'node:module';
-import { extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const requireFromPackage = createRequire(import.meta.url);
 const resolveDependency = (request) => requireFromPackage.resolve(request);
-const packageModuleExtension = extname(fileURLToPath(import.meta.url));
 const resolvePackageFile = (path) => fileURLToPath(new URL(path, import.meta.url));
 const transformEsmPackages = [
     '@vyriy',
@@ -119,7 +117,7 @@ const config = {
     ],
     resetMocks: false,
     restoreMocks: true,
-    setupFiles: [resolvePackageFile(`./setup${packageModuleExtension}`)],
+    setupFiles: [resolvePackageFile('./setup.cjs')],
     testEnvironment: resolveDependency('jest-environment-jsdom'),
     testEnvironmentOptions: {
         customExportConditions: [

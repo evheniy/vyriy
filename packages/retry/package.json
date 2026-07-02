@@ -1,12 +1,12 @@
 {
   "name": "@vyriy/retry",
-  "version": "0.8.13",
+  "version": "0.8.14",
   "description": "Retry utility for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/retry/",
   "type": "module",
   "dependencies": {
-    "@vyriy/logger": "0.8.13",
-    "@vyriy/pause": "0.8.13"
+    "@vyriy/logger": "0.8.14",
+    "@vyriy/pause": "0.8.14"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",

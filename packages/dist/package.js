@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { copyAgents, copyLicense, copyReadme } from './assets.js';
+import { copyAgents, copyCommonJsAssets, copyLicense, copyReadme } from './assets.js';
 import { makePackageBinsExecutable, removePackageBinDeclarationFiles } from './bin.js';
 import { AGENTS_FILE, PACKAGES_DIR } from './constants.js';
 import { removeEmptyJavaScriptFiles } from './cleanup.js';
@@ -33,6 +33,7 @@ export const distPackage = async (packageJsonPath, rootPackageJson) => {
     const javaScriptFiles = await getJavaScriptFiles(packageDirectory);
     await copyLicense(packageDirectory);
     await copyReadme(packageDirectory);
+    await copyCommonJsAssets(packageDirectory);
     const hasAgents = await copyAgents(packageDirectory, rootPackageJson);
     delete packageJson.private;
     if (hasAgents && rootPackageJson.agents) {

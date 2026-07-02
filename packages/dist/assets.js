@@ -1,4 +1,4 @@
-import { copyFile } from 'node:fs/promises';
+import { copyFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { AGENTS_FILE, LICENSE_FILE, PACKAGES_DIR, README_FILE } from './constants.js';
 import { hasFile } from './file.js';
@@ -7,6 +7,16 @@ export const copyReadme = async (packageDirectory) => {
     const sourceReadmePath = path.join(PACKAGES_DIR, packageName, README_FILE);
     if (await hasFile(sourceReadmePath)) {
         await copyFile(sourceReadmePath, path.join(packageDirectory, README_FILE));
+    }
+};
+export const copyCommonJsAssets = async (packageDirectory) => {
+    const packageName = path.basename(packageDirectory);
+    const sourceDirectory = path.join(PACKAGES_DIR, packageName);
+    const entries = await readdir(sourceDirectory, { withFileTypes: true });
+    for (const entry of entries) {
+        if (entry.isFile() && entry.name.endsWith('.cjs')) {
+            await copyFile(path.join(sourceDirectory, entry.name), path.join(packageDirectory, entry.name));
+        }
     }
 };
 export const resolveSourceAgentsPath = async (packageAgentsPath, sharedAgentsPath, rootAgentsPath) => {

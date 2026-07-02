@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/jest-config",
-  "version": "0.8.13",
+  "version": "0.8.14",
   "description": "Shared Jest config for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/jest/",
   "type": "module",
@@ -38,16 +38,6 @@
       "types": "./index.d.ts",
       "import": "./index.js",
       "default": "./index.js"
-    },
-    "./setup": {
-      "types": "./setup.d.ts",
-      "import": "./setup.js",
-      "default": "./setup.js"
-    },
-    "./setup.js": {
-      "types": "./setup.d.ts",
-      "import": "./setup.js",
-      "default": "./setup.js"
     }
   }
 }
