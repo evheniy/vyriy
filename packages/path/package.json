@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/path",
-  "version": "0.8.14",
+  "version": "0.8.15",
   "description": "Shared path utilities for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/path/",
   "type": "module",
