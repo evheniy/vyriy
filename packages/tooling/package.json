@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/tooling",
-  "version": "0.8.15",
+  "version": "0.9.0",
   "description": "Vyriy tooling config generator CLI.",
   "homepage": "https://vyriy.dev/docs/tooling/",
   "type": "module",

@@ -1,2 +1,2 @@
-import type { TransformOptions } from '@babel/core';
-export declare const babel: (isSsr?: boolean, isProduction?: boolean) => TransformOptions;
+import type { InputOptions } from '@babel/core';
+export declare const babel: (isSsr?: boolean, isProduction?: boolean) => InputOptions;
