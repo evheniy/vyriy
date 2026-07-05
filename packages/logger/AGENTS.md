@@ -14,6 +14,7 @@ Always read the root `AGENTS.md` first for current project direction, then use t
 - Avoid hidden framework, CMS, browser, filesystem, network, or cloud assumptions unless they are the package contract.
 - Add packages only when they reduce real complexity, clarify boundaries, or improve reuse.
 - Prefer the option that is simpler to explain, easier to evolve, and calmer to maintain.
+- Grow package functionality in small, calm, reviewable steps that are easy to test and continue.
 
 ## Standard Package Shape
 
@@ -94,9 +95,11 @@ Tests should protect public behavior and meaningful regression risk.
 - Add a real test immediately for new packages. If behavior is not finalized, add a valid placeholder test with a clear public API expectation.
 - Prefer behavior-focused tests over private implementation lock-in.
 - Keep tests deterministic and avoid real network, timers, browser, filesystem, or cloud dependencies unless that dependency is the behavior under test.
+- Mock external dependencies from `node_modules` in unit tests so package behavior stays deterministic and local.
 - When mocking modules, install mocks before loading the module under test.
 - Use `@jest/globals` in Jest tests.
-- Use `--coverage=false` for focused behavioral regression runs when global coverage thresholds would obscure the result.
+- Keep coverage enabled for normal validation. The shared Jest config in `packages/jest/index.ts` requires 100% global coverage for branches, functions, lines, and statements.
+- For small changes, run Jest against the changed tests or changed package with coverage enabled. For larger package changes, public API changes, or cross-package changes, run the full Jest suite with coverage.
 
 Typical package test naming:
 
@@ -127,10 +130,10 @@ Preferred validation commands:
 yarn tsc --pretty false
 yarn eslint <changed files or package>
 yarn prettier --check <changed files or package>
-yarn jest <changed tests or package> --runInBand --coverage=false
+yarn jest <changed tests or package> --runInBand
 ```
 
-Also run `yarn build:dist` for package export, manifest, build-shape, or generated-dist behavior changes. After larger package or library changes, prefer building the affected library/package as an additional confidence check.
+Also run `yarn build:dist` for package export, manifest, build-shape, or generated-dist behavior changes. After larger package or library changes, run the full Jest suite with coverage and prefer building the affected library/package as an additional confidence check.
 
 If a required validation command cannot be run, state why and report the remaining risk.
 
