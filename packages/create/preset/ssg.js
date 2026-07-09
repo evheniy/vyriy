@@ -9,6 +9,7 @@ const agentsPath = [
     resolve(presetDir, '../../../../AGENTS.md'),
 ].find(existsSync) ?? '';
 const agentsContent = agentsPath ? readFileSync(agentsPath, 'utf8') : '';
+const readSsgPublicAsset = (file) => readFileSync(resolve(presetDir, '../assets/ssg-public', file));
 export const ssg = (options) => ({
     'package.json': JSON.stringify({
         name: options.name,
@@ -32,6 +33,7 @@ export const ssg = (options) => ({
             lint: "run-s 'lint:*'",
             build: "run-s 'build:*'",
             test: "run-s 'test:*'",
+            start: "run-p 'start:*'",
             'fix:prettier': 'prettier . --write',
             'fix:eslint': 'eslint . --fix',
             'fix:stylelint': 'stylelint "**/*.{css,scss}" --fix',
@@ -41,6 +43,7 @@ export const ssg = (options) => ({
             'lint:stylelint': 'stylelint "**/*.{css,scss}"',
             'build:ssg': 'rimraf dist && sh workspaces/ssg/bin/build.sh',
             'build:storybook': 'cross-env STORYBOOK_DISABLE_TELEMETRY=1 storybook build --quiet --disable-telemetry',
+            'start:ssg': 'npx vs -p 3000 dist --cache static',
             'test:jest': 'jest',
             postinstall: 'husky',
         },
@@ -61,12 +64,14 @@ export const ssg = (options) => ({
             'cross-env': packageJson.peerDependencies['cross-env'],
             rimraf: packageJson.peerDependencies.rimraf,
             '@vyriy/webpack-config': `^${packageJson.version}`,
+            webpack: packageJson.peerDependencies.webpack,
             tsx: packageJson.peerDependencies.tsx,
             'webpack-cli': packageJson.peerDependencies['webpack-cli'],
             '@vyriy/stylelint-config': `^${packageJson.version}`,
             stylelint: packageJson.peerDependencies.stylelint,
             sass: packageJson.peerDependencies.sass,
             '@vyriy/ssg': `^${packageJson.version}`,
+            '@vyriy/static': `^${packageJson.version}`,
         },
     }, null, 2) + '\n',
     'README.md': `# SSG
@@ -112,6 +117,12 @@ Build the static site:
 
 \`\`\`bash
 yarn build:ssg
+\`\`\`
+
+Preview the built site with the Vyriy static server:
+
+\`\`\`bash
+yarn start:ssg
 \`\`\`
 
 Run all checks:
@@ -267,25 +278,508 @@ yarn lint:stylelint
         private: true,
         type: 'module',
     }, null, 2) + '\n',
-    'packages/components/styles.scss': `:root {
+    'packages/components/styles.scss': `*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
   --color-bg: #ffffff;
+  --color-surface: #f6f7f7;
+  --color-surface-muted: #eef1f2;
   --color-text: #28323c;
+  --color-muted: #687580;
   --color-heading: #3d5165;
-  --color-link: #365f8c;
+  --color-primary: #3d5165;
+  --color-primary-hover: #334557;
+  --color-accent: #365f8c;
+  --color-chrome-bg: var(--color-primary);
+  --color-chrome-text: #ffffff;
   --color-border: #dbe1e5;
+  --color-border-strong: #c6d0d8;
+  --color-link: var(--color-primary);
+  --color-link-hover: #263848;
+  --color-focus: #6f8293;
   --font-sans: system-ui, -apple-system, blinkmacsystemfont, 'Segoe UI', sans-serif;
+  --font-mono: 'SFMono-Regular', consolas, 'Liberation Mono', monospace;
+}
+
+html {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  text-size-adjust: none;
 }
 
 body {
+  min-width: 20rem;
+  min-height: 100vh;
+  margin: 0;
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
 }
 
+img,
+picture,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
 a {
   color: var(--color-link);
 }
+
+a:hover {
+  color: var(--color-link-hover);
+}
+
+.vyriy-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.vyriy-layout__main {
+  flex: 1;
+  padding-block: 2rem 3rem;
+}
+
+.vyriy-header,
+.vyriy-footer {
+  background: var(--color-chrome-bg);
+  color: var(--color-chrome-text);
+}
+
+.vyriy-header {
+  position: relative;
+  border-block-end: 1px solid rgb(255 255 255 / 14%);
+}
+
+.vyriy-header__inner,
+.vyriy-footer__inner {
+  box-sizing: border-box;
+  width: min(100% - 2rem, 76rem);
+  margin-inline: auto;
+}
+
+.vyriy-header__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+  padding-block: 1rem;
+}
+
+.vyriy-header__brand {
+  display: inline-flex;
+  gap: 0.6rem;
+  align-items: center;
+  color: #ffffff;
+  font-size: 2rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.vyriy-header__logo {
+  width: 4.5rem;
+  height: auto;
+  object-fit: contain;
+}
+
+.vyriy-header__actions {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.vyriy-header__search-checkbox,
+.vyriy-header__search-label,
+.vyriy-navigation__checkbox,
+.vyriy-navigation__toggle-text,
+.vyriy-search-form__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.vyriy-header__search-toggle,
+.vyriy-navigation__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  min-height: 3.25rem;
+  color: #dedbd8;
+  cursor: pointer;
+}
+
+.vyriy-header__search-icon {
+  position: relative;
+  display: block;
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 0.18rem solid currentcolor;
+  border-radius: 999rem;
+}
+
+.vyriy-header__search-icon::after {
+  position: absolute;
+  inset-block-start: 0.95rem;
+  inset-inline-start: 0.95rem;
+  display: block;
+  width: 0.65rem;
+  height: 0.18rem;
+  background: currentcolor;
+  border-radius: 999rem;
+  content: '';
+  transform: rotate(45deg);
+  transform-origin: 0 50%;
+}
+
+.vyriy-search-form {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  width: 100%;
+}
+
+.vyriy-search-form__input {
+  box-sizing: border-box;
+  min-width: 0;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.25rem;
+  background: #ffffff;
+  color: var(--color-text);
+}
+
+.vyriy-header__search.vyriy-search-form {
+  position: absolute;
+  inset-block-start: 100%;
+  inset-inline: 0;
+  z-index: 2;
+  max-height: 0;
+  padding: 0 1rem;
+  overflow: hidden;
+  background: var(--color-chrome-bg);
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.vyriy-header__search-checkbox:checked ~ .vyriy-header__search {
+  max-height: 5rem;
+  padding-block: 0.75rem;
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.vyriy-navigation__toggle-icon {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: 2rem;
+}
+
+.vyriy-navigation__toggle-line {
+  display: block;
+  height: 0.18rem;
+  border-radius: 999rem;
+  background: currentcolor;
+}
+
+.vyriy-navigation__list {
+  display: none;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.vyriy-navigation__checkbox:checked ~ .vyriy-navigation__list {
+  display: flex;
+}
+
+.vyriy-navigation__link {
+  display: block;
+  padding-block: 0.35rem;
+  color: #dedbd8;
+  font-size: 1.2rem;
+  text-decoration: none;
+}
+
+.vyriy-navigation__link:hover,
+.vyriy-header__brand:hover,
+.vyriy-header__search-toggle:hover,
+.vyriy-navigation__toggle:hover {
+  color: #ffffff;
+}
+
+.vyriy-page,
+.vyriy-catalog {
+  width: min(100% - 2rem, 56rem);
+  margin-inline: auto;
+}
+
+.vyriy-page__content,
+.vyriy-catalog__content {
+  max-width: 56rem;
+  color: var(--color-text);
+  line-height: 1.7;
+}
+
+.vyriy-page__content > :first-child {
+  margin-block-start: 0;
+}
+
+.vyriy-page__content h1 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 2rem;
+  line-height: 1.08;
+}
+
+.vyriy-page__content h2,
+.vyriy-page__content h3 {
+  padding-block-start: 1.5rem;
+  border-block-start: 1px solid var(--color-border);
+  margin: 2rem 0 1rem;
+  color: var(--color-heading);
+  line-height: 1.25;
+}
+
+.vyriy-page__content p,
+.vyriy-page__content ul,
+.vyriy-page__content pre {
+  margin: 1rem 0 0;
+}
+
+.vyriy-page__content code {
+  padding: 0.1rem 0.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-surface);
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+.vyriy-page__content pre {
+  overflow-x: auto;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-surface);
+  line-height: 1.55;
+}
+
+.vyriy-page__content pre code {
+  display: block;
+  min-width: max-content;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.vyriy-card,
+.vyriy-search-page__result {
+  border-block-end: 1px solid var(--color-border);
+}
+
+.vyriy-card__link,
+.vyriy-search-page__result-link {
+  display: block;
+  padding-block: 1.25rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.vyriy-card__title,
+.vyriy-search-page__result-title {
+  margin: 0;
+  color: var(--color-heading);
+  font-size: 1.25rem;
+  line-height: 1.35;
+}
+
+.vyriy-card__description,
+.vyriy-search-page__result-description {
+  max-width: 42rem;
+  margin: 0.5rem 0 0.75rem;
+  color: var(--color-muted);
+  line-height: 1.65;
+}
+
+.vyriy-card__tags,
+.vyriy-search-page__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.vyriy-card__tag,
+.vyriy-page__tag,
+.vyriy-search-page__tag {
+  max-width: 100%;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-link);
+  font-size: 0.875rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.vyriy-page__featured,
+.vyriy-page__related {
+  padding-block-start: 1.5rem;
+  border-block-start: 1px solid var(--color-border);
+  margin-block-start: 2rem;
+}
+
+.vyriy-page__featured-list,
+.vyriy-page__related-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.vyriy-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  margin-block-start: 2rem;
+}
+
+.vyriy-pagination__pages {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.vyriy-pagination__control,
+.vyriy-pagination__page,
+.vyriy-search-form__button,
+.vyriy-search-page__more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid var(--color-primary);
+  border-radius: 0.25rem;
+  background: var(--color-primary);
+  color: #ffffff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.vyriy-pagination__page[aria-current='page'] {
+  background: var(--color-primary-hover);
+}
+
+.vyriy-footer {
+  border-block-start: 1px solid rgb(255 255 255 / 14%);
+}
+
+.vyriy-footer__inner {
+  padding-block: 1rem;
+  text-align: center;
+}
+
+.vyriy-footer__text {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.125rem;
+}
+
+@media (min-width: 48rem) {
+  .vyriy-header__inner {
+    display: flex;
+    min-height: 4rem;
+    padding-block: 0;
+    justify-content: space-between;
+  }
+
+  .vyriy-header__search-shell {
+    position: relative;
+  }
+
+  .vyriy-header__search.vyriy-search-form {
+    inset-block-start: 50%;
+    inset-inline: auto calc(100% + 0.35rem);
+    width: min(21rem, 36vw);
+    max-height: none;
+    padding: 0;
+    background: transparent;
+    transform: translateY(-50%);
+  }
+
+  .vyriy-header__search-checkbox:checked ~ .vyriy-header__search {
+    max-height: none;
+    padding-block: 0;
+  }
+
+  .vyriy-navigation__toggle {
+    display: none;
+  }
+
+  .vyriy-navigation__list {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 0.5rem 1rem;
+    align-items: center;
+  }
+
+  .vyriy-navigation__link {
+    padding-block: 0;
+  }
+
+  .vyriy-page__featured-list,
+  .vyriy-page__related-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 `,
+    'site/public/favicon.ico': readSsgPublicAsset('favicon.ico'),
+    'site/public/favicon-16x16.png': readSsgPublicAsset('favicon-16x16.png'),
+    'site/public/favicon-32x32.png': readSsgPublicAsset('favicon-32x32.png'),
+    'site/public/apple-touch-icon.png': readSsgPublicAsset('apple-touch-icon.png'),
+    'site/public/assets/vyriy-v-wings.png': readSsgPublicAsset('assets/vyriy-v-wings.png'),
+    'site/public/assets/vyriy-calm-architecture.png': readSsgPublicAsset('assets/vyriy-calm-architecture.png'),
     'workspaces/ssg/bin/build.sh': `#!/usr/bin/env sh
 
 set -eu
@@ -329,6 +823,14 @@ yarn build:ssg
 \`\`\`
 
 The build writes output into \`dist\`.
+
+## Preview
+
+\`\`\`bash
+yarn start:ssg
+\`\`\`
+
+This serves \`dist\` with \`vs\`, the CLI provided by \`@vyriy/static\`.
 `,
     'workspaces/ssg/webpack.config.ts': `import 'webpack';
 

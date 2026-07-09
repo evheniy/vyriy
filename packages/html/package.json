@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/html",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "HTML document utility for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/html/",
   "type": "module",

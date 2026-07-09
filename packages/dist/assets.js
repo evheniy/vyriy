@@ -1,4 +1,4 @@
-import { copyFile, readdir } from 'node:fs/promises';
+import { copyFile, mkdir, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { AGENTS_FILE, LICENSE_FILE, PACKAGES_DIR, README_FILE } from './constants.js';
 import { hasFile } from './file.js';
@@ -16,6 +16,33 @@ export const copyCommonJsAssets = async (packageDirectory) => {
     for (const entry of entries) {
         if (entry.isFile() && entry.name.endsWith('.cjs')) {
             await copyFile(path.join(sourceDirectory, entry.name), path.join(packageDirectory, entry.name));
+        }
+    }
+};
+const copyDirectory = async (sourceDirectory, targetDirectory) => {
+    const entries = await readdir(sourceDirectory, { withFileTypes: true });
+    await mkdir(targetDirectory, { recursive: true });
+    await Promise.all(entries.map(async (entry) => {
+        const sourcePath = path.join(sourceDirectory, entry.name);
+        const targetPath = path.join(targetDirectory, entry.name);
+        if (entry.isDirectory()) {
+            await copyDirectory(sourcePath, targetPath);
+            return;
+        }
+        if (entry.isFile()) {
+            await copyFile(sourcePath, targetPath);
+        }
+    }));
+};
+export const copyPackageAssets = async (packageDirectory) => {
+    const packageName = path.basename(packageDirectory);
+    const sourceAssetsPath = path.join(PACKAGES_DIR, packageName, 'assets');
+    try {
+        await copyDirectory(sourceAssetsPath, path.join(packageDirectory, 'assets'));
+    }
+    catch (error) {
+        if (error.code !== 'ENOENT') {
+            throw error;
         }
     }
 };
