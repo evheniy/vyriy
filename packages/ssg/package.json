@@ -1,16 +1,13 @@
 {
   "name": "@vyriy/ssg",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Static Markdown site generator for Vyriy projects.",
   "homepage": "https://vyriy.dev/docs/ssg/",
   "type": "module",
-  "bin": {
-    "ssg": "./bin/index.js",
-    "vyriy-ssg": "./bin/index.js"
-  },
   "dependencies": {
     "@types/react": "^19.2.17",
-    "@vyriy/render": "0.9.1",
+    "@vyriy/html": "0.9.2",
+    "@vyriy/render": "0.9.2",
     "minisearch": "^7.2.0",
     "react": "^19.2.7",
     "react-markdown": "^10.1.0",
@@ -32,35 +29,45 @@
       "import": "./index.js",
       "default": "./index.js"
     },
-    "./cli": {
-      "types": "./cli.d.ts",
-      "import": "./cli.js",
-      "default": "./cli.js"
+    "./build-static-site": {
+      "types": "./build-static-site.d.ts",
+      "import": "./build-static-site.js",
+      "default": "./build-static-site.js"
     },
-    "./cli.js": {
-      "types": "./cli.d.ts",
-      "import": "./cli.js",
-      "default": "./cli.js"
+    "./build-static-site.js": {
+      "types": "./build-static-site.d.ts",
+      "import": "./build-static-site.js",
+      "default": "./build-static-site.js"
     },
-    "./content": {
-      "types": "./content.d.ts",
-      "import": "./content.js",
-      "default": "./content.js"
+    "./components": {
+      "types": "./components.d.ts",
+      "import": "./components.js",
+      "default": "./components.js"
     },
-    "./content.js": {
-      "types": "./content.d.ts",
-      "import": "./content.js",
-      "default": "./content.js"
+    "./components.js": {
+      "types": "./components.d.ts",
+      "import": "./components.js",
+      "default": "./components.js"
     },
-    "./html": {
-      "types": "./html.d.ts",
-      "import": "./html.js",
-      "default": "./html.js"
+    "./content-data": {
+      "types": "./content-data.d.ts",
+      "import": "./content-data.js",
+      "default": "./content-data.js"
     },
-    "./html.js": {
-      "types": "./html.d.ts",
-      "import": "./html.js",
-      "default": "./html.js"
+    "./content-data.js": {
+      "types": "./content-data.d.ts",
+      "import": "./content-data.js",
+      "default": "./content-data.js"
+    },
+    "./content-section": {
+      "types": "./content-section.d.ts",
+      "import": "./content-section.js",
+      "default": "./content-section.js"
+    },
+    "./content-section.js": {
+      "types": "./content-section.d.ts",
+      "import": "./content-section.js",
+      "default": "./content-section.js"
     },
     "./index": {
       "types": "./index.d.ts",
@@ -72,15 +79,55 @@
       "import": "./index.js",
       "default": "./index.js"
     },
-    "./markdown": {
-      "types": "./markdown.d.ts",
-      "import": "./markdown.js",
-      "default": "./markdown.js"
+    "./json-ld": {
+      "types": "./json-ld.d.ts",
+      "import": "./json-ld.js",
+      "default": "./json-ld.js"
     },
-    "./markdown.js": {
-      "types": "./markdown.d.ts",
-      "import": "./markdown.js",
-      "default": "./markdown.js"
+    "./json-ld.js": {
+      "types": "./json-ld.d.ts",
+      "import": "./json-ld.js",
+      "default": "./json-ld.js"
+    },
+    "./llm": {
+      "types": "./llm.d.ts",
+      "import": "./llm.js",
+      "default": "./llm.js"
+    },
+    "./llm.js": {
+      "types": "./llm.d.ts",
+      "import": "./llm.js",
+      "default": "./llm.js"
+    },
+    "./markdown-page": {
+      "types": "./markdown-page.d.ts",
+      "import": "./markdown-page.js",
+      "default": "./markdown-page.js"
+    },
+    "./markdown-page.js": {
+      "types": "./markdown-page.d.ts",
+      "import": "./markdown-page.js",
+      "default": "./markdown-page.js"
+    },
+    "./markdown-plain-text": {
+      "types": "./markdown-plain-text.d.ts",
+      "import": "./markdown-plain-text.js",
+      "default": "./markdown-plain-text.js"
+    },
+    "./markdown-plain-text.js": {
+      "types": "./markdown-plain-text.d.ts",
+      "import": "./markdown-plain-text.js",
+      "default": "./markdown-plain-text.js"
+    },
+    "./minify-html": {
+      "types": "./minify-html.d.ts",
+      "import": "./minify-html.js",
+      "default": "./minify-html.js"
+    },
+    "./minify-html.js": {
+      "types": "./minify-html.d.ts",
+      "import": "./minify-html.js",
+      "default": "./minify-html.js"
     },
     "./parse-page": {
       "types": "./parse-page.d.ts",
@@ -92,15 +139,25 @@
       "import": "./parse-page.js",
       "default": "./parse-page.js"
     },
-    "./plain": {
-      "types": "./plain.d.ts",
-      "import": "./plain.js",
-      "default": "./plain.js"
+    "./paths": {
+      "types": "./paths.d.ts",
+      "import": "./paths.js",
+      "default": "./paths.js"
     },
-    "./plain.js": {
-      "types": "./plain.d.ts",
-      "import": "./plain.js",
-      "default": "./plain.js"
+    "./paths.js": {
+      "types": "./paths.d.ts",
+      "import": "./paths.js",
+      "default": "./paths.js"
+    },
+    "./render-page": {
+      "types": "./render-page.d.ts",
+      "import": "./render-page.js",
+      "default": "./render-page.js"
+    },
+    "./render-page.js": {
+      "types": "./render-page.d.ts",
+      "import": "./render-page.js",
+      "default": "./render-page.js"
     },
     "./robots": {
       "types": "./robots.d.ts",
@@ -121,16 +178,6 @@
       "types": "./sitemap.d.ts",
       "import": "./sitemap.js",
       "default": "./sitemap.js"
-    },
-    "./ssg": {
-      "types": "./ssg.d.ts",
-      "import": "./ssg.js",
-      "default": "./ssg.js"
-    },
-    "./ssg.js": {
-      "types": "./ssg.d.ts",
-      "import": "./ssg.js",
-      "default": "./ssg.js"
     }
   }
 }

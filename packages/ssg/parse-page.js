@@ -1,6 +1,4 @@
-import { replaceInlineCode, replaceMarkdownLinks } from './plain.js';
-const markdownSyntaxPattern = /[#>*_~|[\](){}\\-]+/gu;
-const whitespacePattern = /\s+/gu;
+import { replaceInlineCode, replaceMarkdownLinks } from './markdown-plain-text.js';
 const parseMetadata = (metadata) => {
     const entries = {};
     let listKey = '';
@@ -40,13 +38,15 @@ const getNumber = (value) => {
     const number = Number(value);
     return Number.isFinite(number) ? number : undefined;
 };
+const markdownSyntaxPattern = /[#>*_~|[\](){}\\-]+/gu;
+const whitespacePattern = /\s+/gu;
 const getPlainText = (value) => {
     return replaceInlineCode(replaceMarkdownLinks(value))
         .replaceAll(markdownSyntaxPattern, ' ')
         .replaceAll(whitespacePattern, ' ')
         .trim();
 };
-const getFallbackTitle = (markdown, defaultTitle) => {
+const getFallbackTitle = (markdown) => {
     for (const line of markdown.split('\n')) {
         if (!line.startsWith('#')) {
             continue;
@@ -61,7 +61,7 @@ const getFallbackTitle = (markdown, defaultTitle) => {
             return title;
         }
     }
-    return defaultTitle;
+    return 'Vyriy';
 };
 const getFallbackDescription = (markdown) => {
     let insideCodeBlock = false;
@@ -88,7 +88,7 @@ const getFallbackDescription = (markdown) => {
     }
     return '';
 };
-export const parsePage = (markdown, defaultTitle = 'Vyriy') => {
+export const parsePage = (markdown) => {
     const frontmatter = /^---\n(?<metadata>[\s\S]*?)\n---\n(?<content>[\s\S]*)$/u.exec(markdown);
     if (!frontmatter?.groups) {
         return {
@@ -99,7 +99,7 @@ export const parsePage = (markdown, defaultTitle = 'Vyriy') => {
             homePage: false,
             published: true,
             tags: [],
-            title: getFallbackTitle(markdown, defaultTitle),
+            title: getFallbackTitle(markdown),
         };
     }
     const metadata = parseMetadata(frontmatter.groups.metadata);
@@ -107,8 +107,8 @@ export const parsePage = (markdown, defaultTitle = 'Vyriy') => {
     const featured = metadata.featured;
     const homePage = metadata.homePage;
     const homePageOrder = getNumber(metadata.homePageOrder);
-    const published = metadata.published;
     const tags = metadata.tags;
+    const published = metadata.published;
     const updatedAt = getString(metadata.updatedAt);
     return {
         content,
@@ -119,7 +119,7 @@ export const parsePage = (markdown, defaultTitle = 'Vyriy') => {
         ...(homePageOrder === undefined ? {} : { homePageOrder }),
         published: typeof published === 'boolean' ? published : true,
         tags: Array.isArray(tags) ? tags : [],
-        title: getString(metadata.title) || getFallbackTitle(content, defaultTitle),
+        title: getString(metadata.title) || getFallbackTitle(content),
         ...(updatedAt ? { updatedAt } : {}),
     };
 };

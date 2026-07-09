@@ -7,6 +7,7 @@ export const renderRobotsTxt = (siteUrl) => {
         'Allow: /',
         'Disallow: /storybook/',
         `Sitemap: ${getAbsoluteUrl('/sitemap.xml', siteUrl)}`,
+        'Content-Signal: search=yes, ai-input=yes, ai-train=yes',
         '',
     ].join('\n');
 };

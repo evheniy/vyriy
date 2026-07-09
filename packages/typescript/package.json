@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/typescript-config",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Shared TypeScript configs for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/typescript/",
   "type": "module",

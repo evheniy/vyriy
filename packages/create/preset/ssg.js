@@ -294,6 +294,11 @@ NODE_ENV=production npx webpack --config "$PWD/workspaces/ssg/webpack.config.ts"
 
 yarn exec sass packages/components/styles.scss dist/styles.css --no-source-map --style=compressed
 
+cp -R "$PWD/site/public/." dist/
+
+mkdir -p dist/assets
+cp "$PWD/node_modules/minisearch/dist/umd/index.js" dist/assets/minisearch.js
+
 cp "$PWD/workspaces/ssg/package.json" dist/package.json
 npm pkg delete type --prefix dist
 
@@ -356,7 +361,6 @@ import { buildStaticSite } from '@vyriy/ssg';
 
 export const buildWorkspaceStaticSite = async () =>
   buildStaticSite({
-    siteName: 'Site',
     siteUrl: process.env.SITE_URL,
     stylesheetContent: await readFile(join(process.cwd(), 'dist/styles.css'), 'utf8'),
   });
@@ -371,7 +375,7 @@ const mockReadFile = jest.fn<(path: string, encoding: string) => Promise<string>
   Promise.resolve('body { color: #28323c; }'),
 );
 const mockBuildStaticSite = jest.fn<
-  (options: { readonly siteName: string; readonly siteUrl?: string; readonly stylesheetContent: string }) => Promise<void>
+  (options: { readonly siteUrl?: string; readonly stylesheetContent: string }) => Promise<void>
 >(() => Promise.resolve());
 
 jest.mock('node:fs/promises', () => ({
@@ -394,7 +398,6 @@ describe('@w/ssg entry point', () => {
 
       expect(mockReadFile).toHaveBeenCalledWith(join('/project', 'dist/styles.css'), 'utf8');
       expect(mockBuildStaticSite).toHaveBeenCalledWith({
-        siteName: 'Site',
         siteUrl: 'https://example.com',
         stylesheetContent: 'body { color: #28323c; }',
       });

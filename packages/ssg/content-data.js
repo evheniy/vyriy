@@ -1,9 +1,7 @@
-import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
-import { dirname, join, relative, sep } from 'node:path';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
 import MiniSearch from 'minisearch';
-import { renderContentIndex, renderPage } from './html.js';
-import { getPlainTextFromMarkdown } from './markdown.js';
-import { parsePage } from './parse-page.js';
+import { replaceInlineCode, replaceMarkdownLinks, stripFencedCode, stripHtmlTags } from './markdown-plain-text.js';
 const relatedDocumentCount = 4;
 const homePageFeaturedContentCount = 4;
 const minimumRelatedScore = 10;
@@ -35,101 +33,21 @@ export const contentMiniSearchOptions = {
     ],
     searchOptions: contentSearchOptions,
 };
-const isNodeError = (error) => {
-    return typeof error === 'object' && error !== null && 'code' in error;
+const markdownSyntaxPattern = /[#>*_~|[\](){}\\-]+/gu;
+const whitespacePattern = /\s+/gu;
+const wordPattern = /[\p{L}\p{N}]+/gu;
+export const getPlainTextFromMarkdown = (markdown) => {
+    return stripHtmlTags(replaceInlineCode(replaceMarkdownLinks(stripFencedCode(markdown))))
+        .replaceAll(markdownSyntaxPattern, ' ')
+        .replaceAll(whitespacePattern, ' ')
+        .trim();
 };
-export const findReadmePaths = async (directory) => {
-    let entries;
-    try {
-        entries = await readdir(directory, {
-            withFileTypes: true,
-        });
-    }
-    catch (error) {
-        if (isNodeError(error) && error.code === 'ENOENT') {
-            return [];
-        }
-        throw error;
-    }
-    const paths = await Promise.all(entries.map(async (entry) => {
-        const entryPath = join(directory, entry.name);
-        if (entry.isDirectory()) {
-            return findReadmePaths(entryPath);
-        }
-        return entry.name === 'README.md' ? [entryPath] : [];
-    }));
-    return paths.flat();
+export const getContentUrl = (section, slug) => {
+    return slug ? `/${section}/${slug}/` : `/${section}/`;
 };
-const getSlug = (sectionDirectory, readmePath) => {
-    return dirname(relative(sectionDirectory, readmePath))
-        .split(sep)
-        .filter((segment) => segment && segment !== '.')
-        .join('/');
+const getOptionalDate = (date) => {
+    return date || undefined;
 };
-const writeDocument = async (outputPath, document) => {
-    await mkdir(dirname(outputPath), {
-        recursive: true,
-    });
-    await writeFile(outputPath, document);
-};
-const getContentIndexHref = (sectionPath, page) => {
-    return page <= 1 ? `/${sectionPath}/` : `/${sectionPath}/${page}/`;
-};
-const getContentIndexOutputPath = (outputDirectory, sectionPath, page) => {
-    return page <= 1
-        ? join(outputDirectory, sectionPath, 'index.html')
-        : join(outputDirectory, sectionPath, String(page), 'index.html');
-};
-export const buildContentEntries = async (section, contentPath, defaultTitle = 'Vyriy') => {
-    const sectionDirectory = join(contentPath, section.path);
-    const readmePaths = await findReadmePaths(sectionDirectory);
-    const entries = (await Promise.all(readmePaths.map(async (readmePath) => {
-        const slug = getSlug(sectionDirectory, readmePath);
-        const page = parsePage(await readFile(readmePath, 'utf8'), defaultTitle);
-        if (!slug || !page.published) {
-            return undefined;
-        }
-        return {
-            ...page,
-            href: `/${section.path}/${slug}/`,
-            section: section.path,
-            slug,
-        };
-    })))
-        .filter((entry) => Boolean(entry))
-        .sort((left, right) => right.date.localeCompare(left.date) || left.title.localeCompare(right.title));
-    return entries;
-};
-export const buildContentSection = async (section, contentPath, outputDirectory, renderOptions) => {
-    const entries = await buildContentEntries(section, contentPath, renderOptions.defaultTitle);
-    const pageSize = section.pageSize ?? 10;
-    const pages = Math.max(1, Math.ceil(entries.length / pageSize));
-    const indexPaths = Array.from({ length: pages }, (_value, index) => getContentIndexHref(section.path, index + 1));
-    await Promise.all(indexPaths.map((_path, index) => {
-        const page = index + 1;
-        const pageEntries = entries.slice(index * pageSize, page * pageSize);
-        return writeDocument(getContentIndexOutputPath(outputDirectory, section.path, page), renderContentIndex(pageEntries, {
-            ...renderOptions,
-            page,
-            pages,
-            sectionPath: section.path,
-            sectionTitle: section.title,
-        }));
-    }));
-    return {
-        entries,
-        indexPaths,
-    };
-};
-export const writeContentEntryDocuments = async (section, entries, outputDirectory, renderOptions) => {
-    await Promise.all(entries.map((entry) => writeDocument(join(outputDirectory, section.path, entry.slug, 'index.html'), renderPage(entry, {
-        ...renderOptions,
-        canonicalPath: entry.href,
-        related: renderOptions.relatedDocuments?.[`${section.path}:${entry.slug}`] ?? [],
-        showTags: true,
-    }))));
-};
-const getOptionalDate = (date) => date || undefined;
 export const getSearchDocuments = (section, entries) => {
     return entries.map((entry) => ({
         content: getPlainTextFromMarkdown(entry.content),
@@ -141,7 +59,7 @@ export const getSearchDocuments = (section, entries) => {
         tags: entry.tags,
         title: entry.title,
         updatedAt: entry.updatedAt,
-        url: entry.href,
+        url: getContentUrl(section, entry.slug),
     }));
 };
 export const getSiteSearchDocuments = (sections) => {
@@ -152,7 +70,6 @@ export const getMiniSearchIndexJson = (documents) => {
     miniSearch.addAll([...documents]);
     return miniSearch.toJSON();
 };
-const wordPattern = /[\p{L}\p{N}]+/gu;
 const getKeywords = (text) => {
     return new Set((text.toLowerCase().match(wordPattern) ?? []).map((word) => word.trim()).filter((word) => word.length >= 4));
 };
@@ -216,7 +133,7 @@ export const getHomePageFeaturedContent = (sections) => {
         slug: entry.slug,
         tags: entry.tags,
         title: entry.title,
-        url: entry.href,
+        url: getContentUrl(section, entry.slug),
     }))
         .slice(0, homePageFeaturedContentCount);
 };

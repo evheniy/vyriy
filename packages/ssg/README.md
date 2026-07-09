@@ -1,105 +1,55 @@
 # @vyriy/ssg
 
-Part of [Vyriy](https://vyriy.dev) - a calm architecture toolkit for TypeScript, React, SSR, SSG, APIs, and cloud-ready apps.
+Static generation helpers for `vyriy.dev`.
 
-Full documentation: https://vyriy.dev/docs/ssg/
-
-Static Markdown site generator for Vyriy-style content sites.
-
-## Purpose
-
-This package builds a static site from Markdown `README.md` files. It is intended for content-first sites that need HTML pages, section catalogs, MiniSearch data, featured home content, related links, sitemap, robots, and copied public assets without adopting a full framework.
-
-Markdown rendering uses `react-markdown` with GitHub-flavored Markdown and `rehype-highlight`, so content supports tables, task lists, autolinks, and highlighted fenced code blocks.
-
-## CLI
-
-Build a site from `site` into `dist`:
-
-```bash
-vyriy-ssg site --output dist
-```
-
-The package also exposes the short `ssg` command:
-
-```bash
-ssg site -o dist
-```
-
-Useful options:
-
-- `--site-url <url>` sets canonical URLs and sitemap locations.
-- `--site-name <name>` sets the built-in theme name.
-- `--stylesheet <href>` links a stylesheet instead of using the built-in CSS.
-- `--stylesheet-file <path>` inlines a stylesheet file.
-- `--ga <id>` adds a Google Analytics measurement ID.
-
-## Content
-
-By default, the generator expects this shape:
-
-```txt
-site/
-  home/README.md
-  consulting/README.md
-  docs/README.md
-  blog/<slug>/README.md
-  docs/<slug>/README.md
-  examples/<slug>/README.md
-  public/
-```
-
-Markdown files can include simple frontmatter:
-
-```md
----
-title: Calm deployment
-description: Deployment notes for calm static sites.
-date: 2026-06-16
-published: true
-homePage: true
-tags:
-  - ssg
-  - deployment
----
-
-# Calm deployment
-
-Page content.
-```
-
-## API
+## Usage
 
 ```ts
 import { buildStaticSite } from '@vyriy/ssg';
 
-await buildStaticSite({
-  contentPath: 'site',
-  outputPath: 'dist',
-  siteUrl: 'https://vyriy.dev',
-});
+await buildStaticSite();
 ```
 
-Custom sections are supported:
+By default, `buildStaticSite` renders:
 
-```ts
-await buildStaticSite({
-  sections: [
-    {
-      path: 'articles',
-      title: 'Articles',
-    },
-  ],
-});
-```
+- `site/home/README.md` to `dist/index.html`
+- `site/docs/README.md` to `dist/docs/index.html`
+- `site/docs/**/README.md` to `dist/docs/**/index.html`
+- `site/blog/**/README.md` to `dist/blog/**/index.html`
+- `site/examples/**/README.md` to `dist/examples/**/index.html`
+- generated docs, blog, and example entries to sibling `.md` files such as
+  `dist/docs/ssg.md`, `dist/blog/post.md`, and `dist/examples/demo.md`
+- `site/consulting/README.md` to `dist/consulting/index.html`
+- `dist/blog/index.html` and `dist/examples/index.html` catalog pages, plus
+  numbered catalog pages when pagination is needed
+- `dist/404.html`
+- `dist/sitemap.xml`, `dist/robots.txt`, and `dist/llms.txt`
 
-Set `index: false` when a section should generate individual pages and search data without its own paginated catalog.
+When the script is executed from `dist`, it reads content from the parent project
+directory and writes into the current `dist` directory. Blog, documentation, and
+example entries with `published: false` are skipped.
+
+Vyriy SSG can emit `.md` versions of generated content pages next to HTML
+pages. This gives agents, LLM tools, and crawlers a clean text representation of
+docs, blog posts, and examples while preserving the normal human-facing HTML
+site. Generated content HTML pages also include a
+`<link rel="alternate" type="text/markdown">` tag that points to the Markdown
+artifact. The generated home page includes lightweight discovery `<link>` tags
+for `/llms.txt`, `/docs/`, and `/sitemap.xml`.
 
 ## Exports
 
-- `buildStaticSite(options)` builds the static site.
-- `runSsgCli(args)` runs the CLI programmatically.
-- `parsePage(markdown)` parses page frontmatter and fallback metadata.
-- `renderMarkdown(markdown)` renders Markdown through `react-markdown`, `remark-gfm`, and `rehype-highlight`.
-- `renderSitemap(urls, siteUrl)` renders sitemap XML.
-- `renderRobotsTxt(siteUrl)` renders robots.txt.
+- `buildStaticSite` builds the static home page, documentation page, consulting
+  page, 404 page, blog pages, example pages, and section index pages.
+- `renderRobotsTxt` and `writeRobotsTxt` create a crawler policy that allows all
+  indexing, points to the sitemap, and emits permissive content signals for
+  search and AI usage.
+- `renderLlmTxt` and `writeLlmTxt` create a readable LLM index for main pages
+  and published content sections.
+- `getWebPageJsonLd` and `renderJsonLdScript` create safe WebPage JSON-LD for
+  rendered HTML documents.
+- `renderMarkdownPage`, `writeMarkdownPage`, and `getMarkdownOutputPath` create
+  agent-readable Markdown artifacts for generated content pages.
+- `BuildStaticSiteOptions` configures source, output, stylesheet, Google
+  Analytics measurement ID, and current working directory paths.
+- `PageData` describes parsed Markdown page content and metadata.

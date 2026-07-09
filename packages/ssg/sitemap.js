@@ -1,19 +1,39 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 const defaultSiteUrl = 'https://vyriy.dev';
-const xmlCharacterPattern = /[&<>"']/gu;
-const xmlCharacterEntities = {
-    '&': '&amp;',
-    '"': '&quot;',
-    "'": '&apos;',
-    '<': '&lt;',
-    '>': '&gt;',
-};
 const escapeXml = (value) => {
-    return value.replaceAll(xmlCharacterPattern, (character) => xmlCharacterEntities[character]);
+    let escaped = '';
+    for (const character of value) {
+        if (character === '&') {
+            escaped += '&amp;';
+            continue;
+        }
+        if (character === '<') {
+            escaped += '&lt;';
+            continue;
+        }
+        if (character === '>') {
+            escaped += '&gt;';
+            continue;
+        }
+        if (character === '"') {
+            escaped += '&quot;';
+            continue;
+        }
+        if (character === "'") {
+            escaped += '&apos;';
+            continue;
+        }
+        escaped += character;
+    }
+    return escaped;
 };
-const normalizeSiteUrl = (siteUrl) => (siteUrl.endsWith('/') ? siteUrl.slice(0, -1) : siteUrl);
-const normalizePath = (path) => (path.startsWith('/') ? path : `/${path}`);
+const normalizeSiteUrl = (siteUrl) => {
+    return siteUrl.endsWith('/') ? siteUrl.slice(0, -1) : siteUrl;
+};
+const normalizePath = (path) => {
+    return path.startsWith('/') ? path : `/${path}`;
+};
 export const getAbsoluteUrl = (path, siteUrl = defaultSiteUrl) => {
     return `${normalizeSiteUrl(siteUrl)}${normalizePath(path)}`;
 };

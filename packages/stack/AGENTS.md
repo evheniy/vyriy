@@ -85,6 +85,8 @@ Documentation must move with code. Do not finish a package change while docs des
 - Keep `doc.mdx` aligned with the README and package title when packages are added, renamed, or reorganized.
 - Add or update JSDoc for public exports when behavior, parameters, return values, errors, side effects, or usage expectations need explanation.
 - For component packages, include visual documentation, stories, or examples for supported states, variants, and interaction states.
+- Keep reusable components as dumb as practical: push data shaping, stateful orchestration, and demo-specific logic into the entry point or owning composition layer.
+- Store demo data in stories instead of embedding it in reusable component source.
 - Avoid broad architecture essays in package READMEs; keep architectural direction in root-level docs unless it is necessary to use the package.
 
 ## Tests Are Required
@@ -132,6 +134,8 @@ yarn eslint <changed files or package>
 yarn prettier --check <changed files or package>
 yarn jest <changed tests or package> --runInBand
 ```
+
+Run ESLint after YAML/YML changes too, for example `yarn eslint <changed.yml>`, because the repo ESLint setup validates YAML files as well.
 
 Also run `yarn build:dist` for package export, manifest, build-shape, or generated-dist behavior changes. After larger package or library changes, run the full Jest suite with coverage and prefer building the affected library/package as an additional confidence check.
 
