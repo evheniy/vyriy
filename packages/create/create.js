@@ -8,13 +8,29 @@ import { plan } from './plan/index.js';
 import { conflictStrategy as promptConflictStrategy } from './prompt/index.js';
 import { presets } from './preset/index.js';
 const exec = promisify(processExec);
+const dependencyResolutions = {
+    'file-entry-cache': '11.1.5',
+};
+const addDependencyResolutions = (files) => {
+    const packageFile = JSON.parse(String(files['package.json']));
+    return {
+        ...files,
+        'package.json': `${JSON.stringify({
+            ...packageFile,
+            resolutions: {
+                ...packageFile.resolutions,
+                ...dependencyResolutions,
+            },
+        }, null, 2)}\n`,
+    };
+};
 const isPresetName = (preset) => preset in presets;
 const mergeFiles = (planOption) => {
     if (!isPresetName(planOption.preset)) {
         return undefined;
     }
     const preset = presets[planOption.preset].preset;
-    return preset(planOption);
+    return addDependencyResolutions(preset(planOption));
 };
 const getSortedFileNames = (files) => Object.keys(files).sort((a, b) => a.localeCompare(b));
 const logFilePlan = (target, files) => {

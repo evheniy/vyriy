@@ -9,7 +9,7 @@ const agentsPath = [
     resolve(presetDir, '../../../../AGENTS.md'),
 ].find(existsSync) ?? '';
 const agentsContent = agentsPath ? readFileSync(agentsPath, 'utf8') : '';
-const projectFiles = {
+const rawProjectFiles = {
     '.browserslistrc': '[development]\nextends @vyriy/browserslist-config\n\n[ssr]\nextends @vyriy/browserslist-config\n\n[production]\nextends @vyriy/browserslist-config\n\n[modern]\nextends @vyriy/browserslist-config\n',
     'packages/env/doc.mdx': "import { Meta, Markdown } from '@storybook/addon-docs/blocks';\nimport ReadMe from './README.md?raw';\n\n<Meta title=\"Packages/Env\" />\n\n<Markdown>{ReadMe}</Markdown>\n",
     'packages/env/index.ts': "export * from './env.js';\n",
@@ -276,6 +276,12 @@ The tests verify that the entry point mounts into \`#root\` and renders the demo
     'workspaces/ui/index.test.tsx': "import { describe, expect, it, jest } from '@jest/globals';\nimport { isValidElement } from 'react';\nimport type { ReactElement } from 'react';\n\nconst elementMock = jest.fn();\n\njest.mock('@vyriy/render/element', () => ({\n  element: elementMock,\n}));\n\ntype ProfileCardProps = {\n  avatarUrl: string;\n  name: string;\n  title: string;\n};\n\ndescribe('workspaces/ui/index.tsx', () => {\n  const loadEntry = async () => {\n    const root = document.createElement('div');\n    root.id = 'root';\n    document.body.replaceChildren();\n    document.body.append(root);\n\n    await jest.isolateModulesAsync(async () => {\n      await import('./index.js');\n    });\n\n    const [{ component }] = elementMock.mock.calls[0] as [{ component: ReactElement<ProfileCardProps> }];\n\n    return {\n      root,\n      component,\n    };\n  };\n\n  it('mounts the UI into the root element', async () => {\n    const { root, component } = await loadEntry();\n\n    expect(elementMock).toHaveBeenCalledTimes(1);\n    expect(elementMock).toHaveBeenCalledWith({\n      root,\n      component,\n    });\n  });\n\n  it('renders the profile card demo component', async () => {\n    const { component } = await loadEntry();\n\n    expect(isValidElement(component)).toBe(true);\n    expect(typeof component.type).toBe('function');\n    expect((component.type as { name?: string }).name).toBe('ProfileCard');\n    expect(component.props).toEqual({\n      avatarUrl: 'http://localhost:3001/avatar.svg',\n      name: 'Developer',\n      title: 'Senior IT Professional',\n    });\n  });\n});\n",
     'workspaces/ui/index.tsx': "import { element } from '@vyriy/render/element';\n\nimport { ProfileCard } from '@p/components/profile-card';\nimport '@p/components/styles.scss';\n\nelement({\n  root: document.getElementById('root'),\n  component: (\n    <ProfileCard name=\"Developer\" title=\"Senior IT Professional\" avatarUrl=\"http://localhost:3001/avatar.svg\" />\n  ),\n});\n",
     'workspaces/ui/webpack.config.ts': "import { EnvironmentPlugin } from 'webpack';\n\nimport { csr, html } from '@vyriy/webpack-config';\nimport { path } from '@vyriy/path';\n\nexport default csr(\n  '@w/ui',\n  {\n    path: path('dist', 'cdn'),\n    filename: 'index.js',\n  },\n  (config) => ({\n    ...config,\n    plugins: [\n      ...(config.plugins ?? []),\n      new EnvironmentPlugin(['API', 'CDN', 'UI']),\n      html({\n        htmlAttributes: 'lang=\"en\"',\n        title: '<title>Demo</title>',\n        meta: '<meta charset=\"utf-8\" /><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />',\n        body: '<div id=\"root\"></div>',\n      }),\n    ],\n  }),\n);\n",
+};
+const projectFiles = {
+    ...rawProjectFiles,
+    'workspaces/api/index.tsx': String(rawProjectFiles['workspaces/api/index.tsx'])
+        .replace("import { getUi } from '@p/env';\n\nserver(", "import { getUi } from '@p/env';\n\ntype RouterEvent = Parameters<ReturnType<typeof createRouter>['route']>[0];\n\nserver(")
+        .replace('api(async (event) =>', 'api(async (event: RouterEvent) =>'),
 };
 export const fullstack = (options) => ({
     'AGENTS.md': agentsContent,

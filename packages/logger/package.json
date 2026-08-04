@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/logger",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "Shared logger utility for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/logger/",
   "type": "module",

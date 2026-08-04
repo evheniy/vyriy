@@ -1,13 +1,13 @@
 {
   "name": "@vyriy/stylelint-config",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "Shared Stylelint config for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/stylelint/",
   "type": "module",
   "dependencies": {
-    "postcss": "^8.5.16",
+    "postcss": "^8.5.25",
     "postcss-scss": "^4.0.9",
-    "stylelint": "^17.14.0",
+    "stylelint": "^17.14.1",
     "stylelint-config-recess-order": "^7.7.0",
     "stylelint-config-recommended": "^18.0.0",
     "stylelint-config-recommended-scss": "^17.0.1",

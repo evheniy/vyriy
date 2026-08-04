@@ -1,7 +1,7 @@
 import type { StoryObj } from '@storybook/react-webpack5';
 declare const meta: {
     title: string;
-    component: import("react").ComponentType<object>;
+    component: import("node_modules/@types/react/index.js").ComponentType<object>;
 };
 export default meta;
 type Story = StoryObj<typeof meta>;

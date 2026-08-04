@@ -313,7 +313,7 @@ export default ssr(
 import { api } from '@vyriy/handler';
 
 server(
-  api(async (event) =>
+  api(async (event: { path: string }) =>
     Promise.resolve({
       statusCode: 200,
       body: JSON.stringify({

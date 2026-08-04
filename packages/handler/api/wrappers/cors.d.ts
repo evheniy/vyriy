@@ -1,1 +1,1 @@
-export declare const withCors: (options?: unknown) => import("../types.js").Decorator<import("aws-lambda").APIGatewayProxyEvent, import("aws-lambda").APIGatewayProxyResult>;
+export declare const withCors: (options?: unknown) => import("../types.js").Decorator<import("packages/router/types.js").APIGatewayProxyEvent, import("packages/router/types.js").APIGatewayProxyResult>;

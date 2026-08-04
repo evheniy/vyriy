@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/static",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "Static file and SPA serving helpers for Vyriy servers.",
   "homepage": "https://vyriy.dev/docs/static/",
   "type": "module",
@@ -9,9 +9,9 @@
     "vyriy-static": "./bin/index.js"
   },
   "dependencies": {
-    "@vyriy/handler": "0.9.3",
-    "@vyriy/router": "0.9.3",
-    "@vyriy/server": "0.9.3"
+    "@vyriy/handler": "0.9.4",
+    "@vyriy/router": "0.9.4",
+    "@vyriy/server": "0.9.4"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",

@@ -7,4 +7,4 @@ export declare const API_HEADERS: {
     'x-robots-tag': string;
 };
 export declare const createApi: Api;
-export declare const api: import("./types.js").Decorator<import("aws-lambda").APIGatewayProxyEvent, import("aws-lambda").APIGatewayProxyResult>;
+export declare const api: import("./types.js").Decorator<import("packages/router/types.js").APIGatewayProxyEvent, import("packages/router/types.js").APIGatewayProxyResult>;
