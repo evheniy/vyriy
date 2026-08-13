@@ -1,6 +1,6 @@
 {
   "name": "vyriy",
-  "version": "0.9.5",
+  "version": "0.9.6",
   "description": "Interactive project master for calm cloud-ready applications.",
   "homepage": "https://vyriy.dev/docs/vyriy/",
   "type": "module",
@@ -10,11 +10,11 @@
   },
   "packageManager": "yarn@4.18.0",
   "dependencies": {
-    "@vyriy/check": "0.9.5",
-    "@vyriy/create": "0.9.5",
-    "@vyriy/dist": "0.9.5",
-    "@vyriy/static": "0.9.5",
-    "@vyriy/tooling": "0.9.5"
+    "@vyriy/check": "0.9.6",
+    "@vyriy/create": "0.9.6",
+    "@vyriy/dist": "0.9.6",
+    "@vyriy/static": "0.9.6",
+    "@vyriy/tooling": "0.9.6"
   },
   "peerDependencies": {
     "@testing-library/dom": "^10.4.1",
@@ -23,7 +23,7 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "cross-env": "^10.1.0",
-    "eslint": "^10.8.0",
+    "eslint": "^10.8.1",
     "graphql": "^17.0.2",
     "husky": "^9.1.7",
     "jest": "^30.4.2",
@@ -34,9 +34,9 @@
     "rimraf": "^6.1.3",
     "sass": "^1.102.0",
     "serve": "^14.2.6",
-    "storybook": "^10.5.6",
+    "storybook": "^10.5.7",
     "stylelint": "^17.14.1",
-    "tsx": "^4.23.5",
+    "tsx": "^4.23.12",
     "typescript": "^6.0.3",
     "webpack": "^5.109.2",
     "webpack-cli": "^7.2.2"

@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/dist",
-  "version": "0.9.5",
+  "version": "0.9.6",
   "description": "Vyriy distribution build CLI.",
   "homepage": "https://vyriy.dev/docs/dist/",
   "type": "module",
