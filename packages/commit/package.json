@@ -1,12 +1,12 @@
 {
   "name": "@vyriy/commit",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "description": "Shared commit package for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/commit/",
   "type": "module",
   "dependencies": {
-    "@vyriy/logger": "0.9.6",
-    "@vyriy/path": "0.9.6"
+    "@vyriy/logger": "0.9.7",
+    "@vyriy/path": "0.9.7"
   },
   "agents": "./AGENTS.md",
   "license": "MIT",

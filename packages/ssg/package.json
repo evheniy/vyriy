@@ -1,13 +1,13 @@
 {
   "name": "@vyriy/ssg",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "description": "Static Markdown site generator for Vyriy projects.",
   "homepage": "https://vyriy.dev/docs/ssg/",
   "type": "module",
   "dependencies": {
     "@types/react": "^19.2.18",
-    "@vyriy/html": "0.9.6",
-    "@vyriy/render": "0.9.6",
+    "@vyriy/html": "0.9.7",
+    "@vyriy/render": "0.9.7",
     "minisearch": "^7.2.0",
     "react": "^19.2.8",
     "react-markdown": "^10.1.0",
