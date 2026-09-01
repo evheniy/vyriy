@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/request",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "description": "Shared request utility for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/request/",
   "type": "module",

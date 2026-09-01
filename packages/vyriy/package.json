@@ -1,6 +1,6 @@
 {
   "name": "vyriy",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "description": "Interactive project master for calm cloud-ready applications.",
   "homepage": "https://vyriy.dev/docs/vyriy/",
   "type": "module",
@@ -10,36 +10,36 @@
   },
   "packageManager": "yarn@4.18.0",
   "dependencies": {
-    "@vyriy/check": "0.9.7",
-    "@vyriy/create": "0.9.7",
-    "@vyriy/dist": "0.9.7",
-    "@vyriy/static": "0.9.7",
-    "@vyriy/tooling": "0.9.7"
+    "@vyriy/check": "0.9.8",
+    "@vyriy/create": "0.9.8",
+    "@vyriy/dist": "0.9.8",
+    "@vyriy/static": "0.9.8",
+    "@vyriy/tooling": "0.9.8"
   },
   "peerDependencies": {
     "@testing-library/dom": "^10.4.1",
-    "@testing-library/react": "^16.3.2",
+    "@testing-library/react": "^16.3.3",
     "@types/jest": "^30.0.0",
     "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
+    "@types/react-dom": "^19.2.5",
     "cross-env": "^10.1.0",
-    "eslint": "^10.8.1",
+    "eslint": "^10.9.1",
     "graphql": "^17.0.2",
     "husky": "^9.1.7",
-    "jest": "^30.4.2",
+    "jest": "^30.5.1",
     "npm-run-all2": "^9.0.3",
     "prettier": "^3.9.6",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "rimraf": "^6.1.3",
-    "sass": "^1.102.0",
+    "sass": "^1.103.1",
     "serve": "^14.2.6",
-    "storybook": "^10.5.8",
+    "storybook": "^10.5.10",
     "stylelint": "^17.14.1",
-    "tsx": "^4.23.12",
+    "tsx": "^4.23.13",
     "typescript": "^6.0.3",
-    "webpack": "^5.109.2",
-    "webpack-cli": "^7.2.2"
+    "webpack": "^5.110.2",
+    "webpack-cli": "^7.2.3"
   },
   "peerDependenciesMeta": {
     "@testing-library/dom": {

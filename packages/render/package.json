@@ -1,12 +1,12 @@
 {
   "name": "@vyriy/render",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "description": "React rendering adapters for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/render/",
   "type": "module",
   "dependencies": {
     "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
+    "@types/react-dom": "^19.2.5",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },
