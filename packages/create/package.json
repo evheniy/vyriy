@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/create",
-  "version": "0.9.8",
+  "version": "0.9.9",
   "description": "Vyriy project creation CLI.",
   "homepage": "https://vyriy.dev/docs/create/",
   "type": "module",
@@ -13,18 +13,18 @@
     "vyriy-create": "./bin/index.js"
   },
   "dependencies": {
-    "@vyriy/check": "0.9.8",
-    "@vyriy/tooling": "0.9.8"
+    "@vyriy/check": "0.9.9",
+    "@vyriy/tooling": "0.9.9"
   },
   "peerDependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",
-    "@storybook/addon-docs": "^10.5.10",
-    "@storybook/react-webpack5": "^10.5.10",
+    "@storybook/addon-docs": "^10.6.0",
+    "@storybook/react-webpack5": "^10.6.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.3",
     "@types/jest": "^30.0.0",
     "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.5",
+    "@types/react-dom": "^19.2.7",
     "cross-env": "^10.1.0",
     "eslint": "^10.9.1",
     "graphql": "^17.0.2",
@@ -38,11 +38,11 @@
     "react-dom": "^19.2.8",
     "rimraf": "^6.1.3",
     "sass": "^1.103.1",
-    "storybook": "^10.5.10",
+    "storybook": "^10.6.0",
     "stylelint": "^17.14.1",
     "tsx": "^4.23.13",
     "typescript": "^6.0.3",
-    "webpack": "^5.110.2",
+    "webpack": "^5.110.3",
     "webpack-cli": "^7.2.3",
     "zod": "^4.5.4"
   },
