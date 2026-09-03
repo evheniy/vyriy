@@ -1,6 +1,6 @@
 {
   "name": "vyriy-monorepo",
-  "version": "0.9.9",
+  "version": "0.9.10",
   "description": "Calm cloud-oriented React architecture and toolkit",
   "private": true,
   "type": "module",

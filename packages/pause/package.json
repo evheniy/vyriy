@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/pause",
-  "version": "0.9.9",
+  "version": "0.9.10",
   "description": "Shared pause utility for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/pause/",
   "type": "module",

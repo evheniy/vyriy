@@ -1,6 +1,6 @@
 {
   "name": "@vyriy/cn",
-  "version": "0.9.9",
+  "version": "0.9.10",
   "description": "Class name utility for Vyriy projects",
   "homepage": "https://vyriy.dev/docs/cn/",
   "type": "module",
