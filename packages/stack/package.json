@@ -1,13 +1,11 @@
 {
   "name": "@vyriy/stack",
-  "version": "0.9.10",
+  "version": "0.9.11",
   "description": "AWS CDK stack helpers for Vyriy infrastructure",
   "homepage": "https://vyriy.dev/docs/stack/",
   "type": "module",
   "peerDependencies": {
-    "aws-cdk-lib": "^2.268.0"
-  },
-  "devDependencies": {
+    "aws-cdk-lib": "^2.268.0",
     "constructs": "^10.8.1"
   },
   "agents": "./AGENTS.md",

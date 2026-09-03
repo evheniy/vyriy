@@ -208,7 +208,7 @@ consumer
 `,
     '.npmrc': 'engine-strict=true\n',
     '.nvmrc': 'lts/krypton\n',
-    '.yarnrc.yml': 'nodeLinker: node-modules\nnpmMinimalAgeGate: 0\n',
+    '.yarnrc.yml': 'nodeLinker: node-modules\nnpmMinimalAgeGate: 5\n',
     '.husky/commit-msg': '#!/bin/sh\n',
     '.husky/post-checkout': '#!/bin/sh\n\nyarn\n',
     '.husky/post-merge': '#!/bin/sh\n\nyarn\n',
